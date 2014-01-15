@@ -32,6 +32,12 @@ public abstract class SceneNode extends Node<SceneNode> {
 			((SceneNode) node).render(delta);
 		}
 	}
+	
+	public void renderDebug(float delta) {
+		for (Node<SceneNode> node : this.getSubnodes()) {
+			((SceneNode) node).renderDebug(delta);
+		}
+	}
 
 	public void update(float delta) {
 		this.sceneTime += delta;
