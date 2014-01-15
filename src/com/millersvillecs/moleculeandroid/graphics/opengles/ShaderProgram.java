@@ -10,11 +10,13 @@ public class ShaderProgram {
 
 	private int handle;
 
-	public ShaderProgram(String vertexShader, String fragmentShader, Map<Integer, String> attributes) throws GraphicsException {
+	public ShaderProgram(String vertexShader, String fragmentShader,
+			Map<Integer, String> attributes) throws GraphicsException {
 		int vertexHandle, fragmentHandle;
 
 		vertexHandle = compileShader(vertexShader, GLES20.GL_VERTEX_SHADER);
-		fragmentHandle = compileShader(fragmentShader, GLES20.GL_FRAGMENT_SHADER);
+		fragmentHandle = compileShader(fragmentShader,
+				GLES20.GL_FRAGMENT_SHADER);
 
 		handle = GLES20.glCreateProgram();
 
@@ -58,7 +60,7 @@ public class ShaderProgram {
 	}
 
 	private int compileShader(String shader, int type) throws GraphicsException {
-		
+
 		int handle = GLES20.glCreateShader(type);
 		GLES20.glShaderSource(handle, shader);
 		GLES20.glCompileShader(handle);
@@ -76,16 +78,17 @@ public class ShaderProgram {
 
 		return handle;
 	}
-	
+
 	/**
-	 * @param handle The handle of the shader to check
+	 * @param handle
+	 *            The handle of the shader to check
 	 * @return True if there is a compile error
 	 */
 	private boolean checkForCompileError(int handle) {
-		
+
 		int[] linkStatus = new int[1];
 		GLES20.glGetShaderiv(handle, GLES20.GL_COMPILE_STATUS, linkStatus, 0);
-		
+
 		return linkStatus[0] == GLES20.GL_FALSE;
 	}
 }

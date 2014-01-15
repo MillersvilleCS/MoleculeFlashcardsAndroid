@@ -17,11 +17,11 @@ public class VAO {
 		this.ibo = ibo;
 		this.size = size;
 
-		handle = 0;//GLES20.glGenVertexArrays();
+		handle = 0;// GLES20.glGenVertexArrays();
 	}
 
 	public final void init() {
-		//GLES20.glBindVertexArray(handle);
+		// GLES20.glBindVertexArray(handle);
 
 		vbo.bind();
 
@@ -35,9 +35,9 @@ public class VAO {
 					descriptor.getStride(), descriptor.getPointer());
 
 		}
-		
+
 		ibo.bind();
-		//GLES20.glBindVertexArray(0);
+		// GLES20.glBindVertexArray(0);
 	}
 
 	public final void addVertexAttribute(final int index,
@@ -46,7 +46,8 @@ public class VAO {
 	}
 
 	public final void draw() {
-		//GLES20.glBindVertexArray(handle);
-		GLES20.glDrawElements(GLES20.GL_TRIANGLES, size, GLES20.GL_UNSIGNED_INT, 0);
+		// GLES20.glBindVertexArray(handle);
+		GLES20.glDrawElements(GLES20.GL_TRIANGLES, size,
+				GLES20.GL_UNSIGNED_INT, 0);
 	}
 }

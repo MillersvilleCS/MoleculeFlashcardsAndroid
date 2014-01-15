@@ -13,14 +13,19 @@ public class Descriptor {
 	private final boolean normalized;
 	private final int stride;
 	private final int pointer;
-	
+
 	/**
 	 * 
-	 * @param size			The number of components (i.e. 3 for x,y,z coordinates)
-	 * @param type			The type of data being read (i.e. GL_FLOAT)
-	 * @param normalized	Should the data be normalized when read
-	 * @param stride		The number of bytes between attributes
-	 * @param pointer		THe offset of the first component
+	 * @param size
+	 *            The number of components (i.e. 3 for x,y,z coordinates)
+	 * @param type
+	 *            The type of data being read (i.e. GL_FLOAT)
+	 * @param normalized
+	 *            Should the data be normalized when read
+	 * @param stride
+	 *            The number of bytes between attributes
+	 * @param pointer
+	 *            THe offset of the first component
 	 */
 	public Descriptor(final int size, final int type, final boolean normalized,
 			final int stride, final int pointer) {

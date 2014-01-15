@@ -11,14 +11,15 @@ public class VBO {
 	private final int[] handleBuffer = new int[1];
 
 	public VBO(FloatBuffer buffer, int usage) {
-		
-		//create the buffer and grab the handle
+
+		// create the buffer and grab the handle
 		GLES20.glGenBuffers(1, handleBuffer, 0);
-		//bind the newly created buffer
+		// bind the newly created buffer
 		GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, getHandle());
-		//add passed data to the buffer
-		GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, buffer.limit() * DatatypeUtils.FLOAT_SIZE_BYTES, buffer, usage);
-		//unbind the buffer
+		// add passed data to the buffer
+		GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, buffer.limit()
+				* DatatypeUtils.FLOAT_SIZE_BYTES, buffer, usage);
+		// unbind the buffer
 		GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
@@ -29,7 +30,7 @@ public class VBO {
 	public void destroy() {
 		GLES20.glDeleteBuffers(1, handleBuffer, 0);
 	}
-	
+
 	public int getHandle() {
 		return handleBuffer[0];
 	}

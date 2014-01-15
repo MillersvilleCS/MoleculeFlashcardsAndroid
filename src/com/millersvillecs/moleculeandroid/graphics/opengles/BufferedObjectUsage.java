@@ -9,7 +9,7 @@ import android.opengl.GLES20;
 /**
  * 
  * @author william gervasio
- *
+ * 
  */
 public class BufferedObjectUsage {
 	public static final int STATIC_DRAW = GLES20.GL_STATIC_DRAW;

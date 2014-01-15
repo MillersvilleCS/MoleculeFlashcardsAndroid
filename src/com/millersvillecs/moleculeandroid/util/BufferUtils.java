@@ -10,9 +10,10 @@ public class BufferUtils {
 		return ByteBuffer.allocateDirect(size * DatatypeUtils.FLOAT_SIZE_BYTES)
 				.order(ByteOrder.nativeOrder()).asFloatBuffer();
 	}
-	
+
 	public static final IntBuffer createIntBuffer(int size) {
-		return ByteBuffer.allocateDirect(size * DatatypeUtils.INTEGER_SIZE_BYTES)
+		return ByteBuffer
+				.allocateDirect(size * DatatypeUtils.INTEGER_SIZE_BYTES)
 				.order(ByteOrder.nativeOrder()).asIntBuffer();
 	}
 }
