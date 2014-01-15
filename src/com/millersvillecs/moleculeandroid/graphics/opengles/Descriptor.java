@@ -25,7 +25,7 @@ public class Descriptor {
 	 * @param stride
 	 *            The number of bytes between attributes
 	 * @param pointer
-	 *            THe offset of the first component
+	 *            The offset of the first component
 	 */
 	public Descriptor(final int size, final int type, final boolean normalized,
 			final int stride, final int pointer) {
