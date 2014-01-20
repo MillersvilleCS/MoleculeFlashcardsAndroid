@@ -1,7 +1,6 @@
 package com.millersvillecs.moleculeandroid.graphics.opengles;
 
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 
 import android.opengl.GLES20;
 

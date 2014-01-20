@@ -12,7 +12,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/exscitech_action_bar_theme" >
         <activity
             android:name="com.millersvillecs.moleculeandroid.MainActivity"
             android:label="@string/app_name" >
@@ -21,6 +21,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity 
+            android:name="com.millersvillecs.moleculeandroid.CategoryActivity" 
+            android:label="@string/category_header" 
+            android:parentActivityName="com.millersvillecs.moleculeandroid.MainActivity">
         </activity>
     </application>
 

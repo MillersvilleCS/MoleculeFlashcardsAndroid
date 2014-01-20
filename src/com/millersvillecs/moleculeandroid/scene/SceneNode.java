@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.millersvillecs.moleculeandroid.scene.behaviors.IBehavior;
-import com.millersvillecs.moleculeandroid.util.NList;
 import com.millersvillecs.moleculeandroid.util.Node;
 import com.millersvillecs.moleculeandroid.util.math.Vector3;
 

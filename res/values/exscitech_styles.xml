@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="exscitech_action_bar_theme"
+           parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/blue_action_bar</item>
+        <item name="android:actionBarWidgetTheme">@style/blue_menu_background</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="blue_action_bar"
+           parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@drawable/action_bar_background</item>
+        <!--  Thank you: http://stackoverflow.com/a/11006931 -->
+    </style>
+    <style name="blue_menu_background"
+           parent="@android:style/Widget.Holo.ListView.DropDown">
+    </style>
+</resources>
+

@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">MoleculeAndroid</string>
+	<!-- Main Screen -->
+    <string name="app_name">Molecule Flashcards</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="start_button">Start</string>
+    <string name="tutorial_button">Tutorial</string>
+    <string name="credits_button">Credits</string>
+    <!-- Login Screen -->
+    <string name="email_hint">Email Address</string>
+    <string name="password_hint">Password</string>
+    <string name="login">Login</string>
+    
+    <!-- Selection Screens -->
+    <string name="image_accessibility_desc">Image of Selection</string>
+    <string name="category_header">Select a Category</string>
+    
+    <!-- Game Screen -->
+    <string name="error_gl">Error: Could not create openGL 2.0 context!</string>
+    
+    <!-- Test -->
+    <string name="hide_me">hidden</string>
+    <string name="visibility_1_vis">vis</string>
+    <string name="visibility_1_invis">invis</string>
+    <string name="visibility_1_gone">gone</string>
 
 </resources>
