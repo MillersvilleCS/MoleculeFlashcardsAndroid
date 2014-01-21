@@ -3,6 +3,7 @@
 	<!-- Main Screen -->
     <string name="app_name">Molecule Flashcards</string>
     <string name="error_title">Error!</string>
+    <string name="empty"></string>
     <string name="action_logout">Logout</string>
     <string name="start_button">Start</string>
     <string name="tutorial_button">Tutorial</string>
@@ -17,6 +18,9 @@
     <string name="image_accessibility_desc">Image of Selection</string>
     <string name="category_header">Select a Category</string>
     <string name="selection_header">Select a Game</string>
+    
+    <!-- Description Screens -->
+    <string name="high_scores_button">High Scores</string>
     
     <!-- Game Screen -->
     <string name="error_gl">Error: Could not create openGL 2.0 context!</string>

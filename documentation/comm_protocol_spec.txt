@@ -1,0 +1,167 @@
+############################
+# Communication Protocol
+############################
+Brief Client Side: The request object is encoded in JSON and posted to the /request_handler.php page, then the response text is an object encoded in JSON, which can be evaluated as a JavaScript object.
+
+
+NOTE: TO TEST THIS LOCALLY, you must run chromium-browser --disable-web-security
+
+Google Chrome and Firefox probably have different commands. Make sure the browser is entirely
+off before you try this. This allows the browser to make requests to the exscitech server
+from a different domain (i.e. your local one).
+
+Example code:
+	
+    function send_request(request_object, request_URL){
+		//Make request
+		var response= $.ajax({
+		    url: request_URL,
+		    type: 'POST',
+		    data: JSON.stringify(request_object),
+		    async: false
+		}).responseText;
+	
+		//Turn the JSON response into an object and return it
+		try{
+		    return JSON.parse(response);
+		} catch(err){
+		    var ret = Object();
+		    ret.success = false;
+		    ret.error = "JSON syntax error, invalid server response";
+		    return ret;
+		}
+    }
+    
+    var request_obj = Object();
+	request_obj.request_type = "login";
+	request_obj.email = "sam@lol.com";
+	request_obj.pw_hash = "1234dinosaur";
+	send_request(request_obj, "/request_handler.php");
+
+#########################
+# Request Types
+#########################
+Note:
+	- All requests must include the "request_type" field which is the name of the request (see example above).
+	- All responses include a "success" field, which contains the string "true" when the request was successful and "false" when the request failed
+	- Anything preceded with a # is not implemented
+
+Name:
+	Register
+Description:
+	Register a new account
+Request Fields:
+	email
+	password
+	username
+Response Fields:
+	username
+	authenticator
+
+
+Name:
+	login
+Description:
+	login and get basic user data
+Request Fields:
+	email
+	pw_hash - md5 hash of email concatenated with password
+Response Fields:
+	username
+	authenticator
+
+Name:
+	get_avail_flashcard_games
+Description:
+	get a list of games available for a given user to play
+Request Fields:
+	authenticator
+Response Fields:
+	available_games - array of game_info objects (defined below)
+		game_info object properties:
+			id
+			q_count
+			image
+			name
+			description
+			time_limit
+			high_scores - array of high_score objects (defined below)
+				high_score object properties:
+					rank
+					username
+					score
+Name:
+	get_high_scores
+Description:
+	get additional high scores for a specific game
+Request Fields:
+	game_id
+	starting_rank
+	range
+Response Fields:
+	scores - array of scores (defined below)
+		score properties:
+			rank
+			score
+			username
+	
+Name: 
+	load_flashcard_game
+Description:
+	load the flashcard game data
+Request Fields:
+	authenticator
+	game_id
+Response Fields:
+	game_session_id
+	questions - array of question objects (defined below)
+		question object properties:
+			id
+			text
+			answers - array of answer objects - possible answers - can be between 2 and 5 strings long
+				id
+				text
+
+Name:
+	end_flashcard_game
+Description:
+	Submitted when the game is over or the user goes back to the main menu (the server will automatically clean up old sessions, this just keeps the table from getting too big). Also computes the final score 
+Request Fields:
+	authenticator
+	game_session_id
+	game_time
+Response Fields:
+	rank
+	score
+
+Name:
+	submit_flashcard_answer
+Description:
+	Submitted when a user answers a question - submit  -1 when the user hits the "start" button
+Request Fields:
+	game_session_id
+	authenticator
+	question_id
+	answer
+	game_time
+Response Fields:
+	score
+	correct
+	
+Name:
+	get_media
+Description:
+	get a single piece of media (image/pdb). This is a GET request is sent to ./game_session.php
+Request Fields:
+	gsi - game_session_id
+	mt - media_type (0 for pdbs, 1 for images)
+	qid - question_id
+Example:
+	if:
+	 game_session_id = 5203f94a9f4b2
+	 media_type = pdb
+	 question_id = 1
+	then:
+	 GET ./get_media.php?gsi=5203f94a9f4b2&mt=0&qid=1
+Response:
+	Media 

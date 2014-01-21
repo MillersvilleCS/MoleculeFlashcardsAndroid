@@ -1,5 +1,9 @@
 package com.millersvillecs.moleculeandroid;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +17,7 @@ public class SelectionActivity extends Activity implements OnItemClickListener {
 	
 	private SelectionItem[] games;
 	private String username, auth;
+	private JSONArray gamesJSON;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,16 +30,24 @@ public class SelectionActivity extends Activity implements OnItemClickListener {
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);//no need to check, 4.0+ req on app
 		
-		//testing
-		games = new SelectionItem[8];
-		games[0] = new SelectionItem(null, "Game 1");
-		games[1] = new SelectionItem(null, "Game 2");
-		games[2] = new SelectionItem(null, "Game 3");
-		games[3] = new SelectionItem(null, "Game 4");
-		games[4] = new SelectionItem(null, "Game 5");
-		games[5] = new SelectionItem(null, "Game 6");
-		games[6] = new SelectionItem(null, "Game 7");
-		games[7] = new SelectionItem(null, "Game 8");
+		FileHandler fileHandler = new FileHandler(this);
+		String[] gamesJSONTextArray = fileHandler.readTemp("games");
+		String gamesJSONText = "";
+		for(int i = 0; i < gamesJSONTextArray.length; i++) {
+			gamesJSONText += gamesJSONTextArray[i];
+		}
+		try{
+			this.gamesJSON = new JSONArray(gamesJSONText);
+			
+			games = new SelectionItem[this.gamesJSON.length()];
+			for(int i = 0; i < this.gamesJSON.length(); i++) {
+				games[i] = new SelectionItem(null, ((JSONObject)this.gamesJSON.get(i)).getString("name") );
+			}
+		} catch(JSONException e) {
+			e.printStackTrace();
+			finish();
+			return;
+		}
 		
 		ListView gameListView = (ListView) findViewById(R.id.game_list);
 		SelectionBaseAdapter listHandler = new SelectionBaseAdapter(this, games);
@@ -59,11 +72,10 @@ public class SelectionActivity extends Activity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		System.out.println(this.games[position].getDescription());
-		/*
-		Intent intent = new Intent(this, SelectionActivity.class);
+		Intent intent = new Intent(this, DescriptionActivity.class);
 	    intent.putExtra(MainActivity.USERNAME, this.username);
 	    intent.putExtra(MainActivity.AUTH, this.auth);
+	    intent.putExtra(MainActivity.GAME_INDEX, position);
 	    startActivity(intent);
-	    */
 	}
 }

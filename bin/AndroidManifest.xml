@@ -29,6 +29,7 @@
             android:parentActivityName="com.millersvillecs.moleculeandroid.MainActivity">
         </activity>
         <activity android:name="com.millersvillecs.moleculeandroid.SelectionActivity" android:label="@string/selection_header" android:parentActivityName="com.millersvillecs.moleculeandroid.CategoryActivity"></activity>
+        <activity android:name="com.millersvillecs.moleculeandroid.DescriptionActivity" android:parentActivityName="com.millersvillecs.moleculeandroid.SelectionActivity" android:label="@string/empty"></activity>
     </application>
 
 </manifest>

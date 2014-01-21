@@ -94,7 +94,7 @@ public class CommunicationManager {
 		
 		@Override
 		protected void onPostExecute(JSONObject response) {
-			commRef.setResults(response);
+			commRef.setJSONResults(response);
 		}
 	}
 	
@@ -102,7 +102,7 @@ public class CommunicationManager {
 		this.callback = callback;
 	}
 	
-	public void setResults(JSONObject response) {
+	public void setJSONResults(JSONObject response) {
 		this.callback.onRequestResponse(response);
 	}
 	
@@ -134,5 +134,94 @@ public class CommunicationManager {
 		}
 		
 		new ExecutePost(this).execute(request);
+	}
+	
+	public void availableGames(String auth) {
+		Request request = new Request();
+		request.url = this.REQUEST_HANDLER_URL;
+		try {
+			request.params.put("request_type", "get_avail_flashcard_games");
+			request.params.put("authenticator", auth);
+		} catch(JSONException e) {
+			e.printStackTrace();
+		}
+		
+		new ExecutePost(this).execute(request);
+	}
+	
+	public void loadFlashcardGame(String auth, int gameId) {
+		Request request = new Request();
+		request.url = this.REQUEST_HANDLER_URL;
+		try {
+			request.params.put("request_type", "load_flashcard_game");
+			request.params.put("authenticator", auth);
+			request.params.put("game_id", gameId);
+		} catch(JSONException e) {
+			e.printStackTrace();
+		}
+		
+		new ExecutePost(this).execute(request);
+	}
+	
+	public void endFlashcardGame(String auth, String gameSessionId, String gameTime) {
+		Request request = new Request();
+		request.url = this.REQUEST_HANDLER_URL;
+		try {
+			request.params.put("request_type", "end_flashcard_game");
+			request.params.put("authenticator", auth);
+			request.params.put("game_session_id", gameSessionId);
+			request.params.put("game_time", gameTime);
+		} catch(JSONException e) {
+			e.printStackTrace();
+		}
+		
+		new ExecutePost(this).execute(request);
+	}
+	
+	public void submitFlashcardAnswer(String auth, String gameSessionId, int questionId, int answer, int gameTime) {
+		Request request = new Request();
+		request.url = this.REQUEST_HANDLER_URL;
+		try {
+			request.params.put("request_type", "submit_flashcard_answer");
+			request.params.put("authenticator", auth);
+			request.params.put("game_session_id", gameSessionId);
+			request.params.put("question_id", questionId);
+			request.params.put("answer", answer);
+			request.params.put("game_time", gameTime);
+		} catch(JSONException e) {
+			e.printStackTrace();
+		}
+		
+		new ExecutePost(this).execute(request);
+	}
+	
+	public void getHighScores(String gameId, int startingRank, int range) {
+		Request request = new Request();
+		request.url = this.REQUEST_HANDLER_URL;
+		try {
+			request.params.put("request_type", "get_high_scores");
+			request.params.put("game_id", gameId);
+			request.params.put("starting_rank", startingRank);
+			request.params.put("range", range);
+		} catch(JSONException e) {
+			e.printStackTrace();
+		}
+		
+		new ExecutePost(this).execute(request);
+	}
+	
+	public void getMedia(String gameSessionId, int mediaType, int questionId) {
+		Request request = new Request();
+		request.url = this.REQUEST_HANDLER_URL;
+		try {
+			request.params.put("gsi", gameSessionId);
+			request.params.put("mt", mediaType);
+			request.params.put("qid", questionId);
+		} catch(JSONException e) {
+			e.printStackTrace();
+		}
+		
+		//TODO: should execute GET
+		//new ExecutePost(this).execute(request);
 	}
 }

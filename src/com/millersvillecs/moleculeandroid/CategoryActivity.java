@@ -1,5 +1,9 @@
 package com.millersvillecs.moleculeandroid;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -12,11 +16,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class CategoryActivity extends Activity implements OnItemClickListener, OnDismissListener {
+public class CategoryActivity extends Activity implements OnItemClickListener, 
+														  OnDismissListener, OnCommunicationListener {
 	
 	private SelectionItem[] categories;
 	private ProgressDialog progress;
 	private String username, auth;
+	private boolean wantedDismiss = false;
 	
 	
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,24 +36,18 @@ public class CategoryActivity extends Activity implements OnItemClickListener, O
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);//no need to check, 4.0+ req on app
 		
-		/*
+		CommunicationManager comm = new CommunicationManager(this);
+		comm.availableGames(this.auth);
+		
 		this.progress = new ProgressDialog(this);
 		this.progress.setCanceledOnTouchOutside(false);
 		this.progress.setMessage("Loading Categories...");
 		this.progress.setOnDismissListener(this);
 		this.progress.show();
-		*/
 		
-		//testing with dummy data, can click off "loading" screen to play with it
-		this.categories = new SelectionItem[8];
-		this.categories[0] = new SelectionItem(null, "Category 1");
-		this.categories[1] = new SelectionItem(null, "Category 2");
-		this.categories[2] = new SelectionItem(null, "Category 3");
-		this.categories[3] = new SelectionItem(null, "Category 4");
-		this.categories[4] = new SelectionItem(null, "Category 5");
-		this.categories[5] = new SelectionItem(null, "Category 6");
-		this.categories[6] = new SelectionItem(null, "Category 7");
-		this.categories[7] = new SelectionItem(null, "Category 8");
+		//Until API has categories, we create a fake one
+		this.categories = new SelectionItem[1];
+		this.categories[0] = new SelectionItem(null, "No Categories");
 		
 		ListView categoryListView = (ListView) findViewById(R.id.category_list);
 		SelectionBaseAdapter listHandler = new SelectionBaseAdapter(this, categories);
@@ -82,8 +82,32 @@ public class CategoryActivity extends Activity implements OnItemClickListener, O
 
 	@Override
 	public void onDismiss(DialogInterface dialog) {
-		//if use hits back on loading screen, go back up - removed for testing
-		//finish();
+		//should make a way to cancel loading
+		if(this.wantedDismiss) {
+			this.wantedDismiss = false;
+		} else {
+			finish();
+		}
+	}
+
+	@Override
+	public void onRequestResponse(JSONObject response) {
+		FileHandler fileHandler = new FileHandler(this);
+		try{
+			if(response.getBoolean("success")) {
+				JSONArray avail = response.getJSONArray("available_games");
+				fileHandler.writeTemp("games", avail.toString().split("\n"));
+				this.wantedDismiss = true;
+				this.progress.dismiss();
+			} else {
+				fileHandler.deleteTemp("games");
+				new ErrorDialog(getFragmentManager(), response.getString("error")).show();
+			}
+		} catch(JSONException e) {
+			e.printStackTrace();
+			fileHandler.deleteTemp("games");
+			new ErrorDialog(getFragmentManager(), "Invalid Server Response").show();
+		}
 	}
 	
 	/* 

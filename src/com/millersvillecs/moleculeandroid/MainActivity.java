@@ -16,7 +16,8 @@ import android.widget.EditText;
 public class MainActivity extends Activity implements OnCommunicationListener {
 	
 	public static final String USERNAME = "com.millersvillecs.moleculeandroid.USERNAME",
-							   AUTH = "com.millersvillecs.moleculeandroid.USERNAME";
+							   AUTH = "com.millersvillecs.moleculeandroid.USERNAME",
+							   GAME_INDEX = "com.millersvillecs.moleculeandroid.GAME_INDEX";
 	
 	private String username, auth;
 	private ProgressDialog progress;

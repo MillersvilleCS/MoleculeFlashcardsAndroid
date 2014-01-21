@@ -16,6 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/image"
         android:paddingBottom="10dp"
-        android:textSize="40sp" />
+        android:textSize="36sp" />
  
 </RelativeLayout>
