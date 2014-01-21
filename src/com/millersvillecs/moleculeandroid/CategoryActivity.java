@@ -1,5 +1,7 @@
 package com.millersvillecs.moleculeandroid;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +11,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +22,13 @@ import android.widget.ListView;
 public class CategoryActivity extends Activity implements OnItemClickListener, 
 														  OnDismissListener, OnCommunicationListener {
 	
+	private FileHandler fileHandler;
+	private CommunicationManager comm;
 	private SelectionItem[] categories;
 	private ProgressDialog progress;
 	private String username, auth;
+	private ArrayList<String> ids;
+	private ArrayList<String> urls;
 	private boolean wantedDismiss = false;
 	
 	
@@ -36,8 +43,8 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);//no need to check, 4.0+ req on app
 		
-		CommunicationManager comm = new CommunicationManager(this);
-		comm.availableGames(this.auth);
+		this.comm = new CommunicationManager(this);
+		this.comm.availableGames(this.auth);
 		
 		this.progress = new ProgressDialog(this);
 		this.progress.setCanceledOnTouchOutside(false);
@@ -92,21 +99,44 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 
 	@Override
 	public void onRequestResponse(JSONObject response) {
-		FileHandler fileHandler = new FileHandler(this);
+		this.fileHandler = new FileHandler(this);
 		try{
 			if(response.getBoolean("success")) {
 				JSONArray avail = response.getJSONArray("available_games");
-				fileHandler.writeTemp("games", avail.toString().split("\n"));
-				this.wantedDismiss = true;
-				this.progress.dismiss();
+				this.fileHandler.writeTemp("games", avail.toString().split("\n"));
+				this.urls = new ArrayList<String>();
+				this.ids = new ArrayList<String>();
+				for(int i = 0; i < avail.length(); i++) {
+					this.urls.add("http://exscitech.gcl.cis.udel.edu" + 
+								   avail.getJSONObject(i).getString("image").substring(1));
+					this.ids.add(avail.getJSONObject(i).getString("id"));
+				}
+				this.comm.downloadImage(this.urls.remove(0));
 			} else {
-				fileHandler.deleteTemp("games");
+				this.fileHandler.deleteTemp("games");
 				new ErrorDialog(getFragmentManager(), response.getString("error")).show();
 			}
 		} catch(JSONException e) {
 			e.printStackTrace();
-			fileHandler.deleteTemp("games");
+			this.fileHandler.deleteTemp("games");
 			new ErrorDialog(getFragmentManager(), "Invalid Server Response").show();
+		}
+	}
+
+	@Override
+	public void onResourceResponse(Bitmap bitmap) {}
+
+	@Override
+	public void onImageResponse(Bitmap bitmap) {
+		String id = this.ids.remove(0);
+		
+		this.fileHandler.writeTempImage(bitmap, id + ".jpg");
+		
+		if(this.urls.size() == 0) {
+			this.wantedDismiss = true;
+			this.progress.dismiss();
+		} else {
+			this.comm.downloadImage(this.urls.remove(0));
 		}
 	}
 	

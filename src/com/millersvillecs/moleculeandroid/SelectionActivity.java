@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,7 +42,9 @@ public class SelectionActivity extends Activity implements OnItemClickListener {
 			
 			games = new SelectionItem[this.gamesJSON.length()];
 			for(int i = 0; i < this.gamesJSON.length(); i++) {
-				games[i] = new SelectionItem(null, ((JSONObject)this.gamesJSON.get(i)).getString("name") );
+				String image = ((JSONObject)this.gamesJSON.get(i)).getString("id") + ".jpg";
+				Bitmap bitmap = fileHandler.readTempImage(image);
+				games[i] = new SelectionItem(bitmap, ((JSONObject)this.gamesJSON.get(i)).getString("name") );
 			}
 		} catch(JSONException e) {
 			e.printStackTrace();
@@ -71,7 +74,6 @@ public class SelectionActivity extends Activity implements OnItemClickListener {
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		System.out.println(this.games[position].getDescription());
 		Intent intent = new Intent(this, DescriptionActivity.class);
 	    intent.putExtra(MainActivity.USERNAME, this.username);
 	    intent.putExtra(MainActivity.AUTH, this.auth);

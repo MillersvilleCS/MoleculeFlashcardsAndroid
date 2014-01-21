@@ -3,14 +3,20 @@ package com.millersvillecs.moleculeandroid;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 public class FileHandler {
+	
+	public static final String IMAGE_PNG = Bitmap.CompressFormat.PNG.name(),
+							   IMAGE_JPEG = Bitmap.CompressFormat.JPEG.name();
 	
 	private String directory, tempDirectory;
 	
@@ -84,5 +90,37 @@ public class FileHandler {
 	
 	public boolean deleteTemp(String filename) {
 		return new File(this.tempDirectory + filename).delete();
+	}
+	
+	/* Images */
+	
+	public boolean writeTempImage(Bitmap bitmap, String filename) {
+		return writeTempImage(bitmap, filename, FileHandler.IMAGE_JPEG, 90);
+	}
+	
+	public boolean writeTempImage(Bitmap bitmap, String filename, String type) {
+		return writeTempImage(bitmap, filename, type, 90);
+	}
+	
+	public boolean writeTempImage(Bitmap bitmap, String filename, String type, int compressionAmount) {
+		Bitmap.CompressFormat format = Bitmap.CompressFormat.valueOf(type);
+		try {
+			FileOutputStream out = new FileOutputStream(this.tempDirectory + filename);
+		    bitmap.compress(format, compressionAmount, out);
+		    out.close();
+		    return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Bitmap readTempImage(String filename) {
+		//possibly have issues with clear PNG's?
+		//BitmapFactory.Options options = new BitmapFactory.Options();
+		//options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+		//Bitmap bitmap = BitmapFactory.decodeFile(this.tempDirectory + filename, options);
+		
+		return BitmapFactory.decodeFile(this.tempDirectory + filename);
 	}
 }

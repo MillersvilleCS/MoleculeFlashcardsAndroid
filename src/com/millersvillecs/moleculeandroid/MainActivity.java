@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -118,6 +119,12 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 			new ErrorDialog(getFragmentManager(), "Invalid Server Response").show();
 		}
 	}
+
+	@Override
+	public void onResourceResponse(Bitmap bitmap) {}
+
+	@Override
+	public void onImageResponse(Bitmap bitmap) {}
 	
 	/* 
 	 * see: http://developer.android.com/reference/android/app/Activity.html#ActivityLifecycle
