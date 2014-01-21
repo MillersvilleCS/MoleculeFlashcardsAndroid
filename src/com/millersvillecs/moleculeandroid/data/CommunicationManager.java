@@ -1,4 +1,4 @@
-package com.millersvillecs.moleculeandroid;
+package com.millersvillecs.moleculeandroid.data;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 import android.graphics.Bitmap;
 

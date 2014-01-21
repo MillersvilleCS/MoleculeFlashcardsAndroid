@@ -1,38 +1,35 @@
-package com.millersvillecs.moleculeandroid;
+package com.millersvillecs.moleculeandroid.data;
 
 import java.io.IOException;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
-import org.json.JSONObject;
 
+
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
-//http://www.androidsnippets.com/executing-a-http-post-request-with-httpclient
-public class ExecutePost extends AsyncTask<Request, Void, JSONObject>{
+/* NOT COMPLETE */
+public class ExecuteGet extends AsyncTask<Request, Void, Bitmap>{
 	
 	private CommunicationManager commRef;
 	
-	public ExecutePost(CommunicationManager cm) {
+	public ExecuteGet(CommunicationManager cm) {
 		this.commRef = cm;
 	}
 	
@@ -52,22 +49,23 @@ public class ExecutePost extends AsyncTask<Request, Void, JSONObject>{
 	}
 	
 	@Override
-	protected JSONObject doInBackground(Request... params) {
-		if(params.length != 1) {
+	protected Bitmap doInBackground(Request... requests) {
+		if(requests.length != 1) {
 			return null;
 		}
-		Request request = params[0];
+		Request request = requests[0];
 		HttpClient client = createHttpClient();
-		HttpPost post = new HttpPost(request.url);
-		JSONObject responseJSON = null;
+		HttpGet get = new HttpGet(request.url);
+		HttpParams params = client.getParams();
+		Bitmap bitmap = null;
 		try {
-			StringEntity json = new StringEntity(request.params.toString());
-			json.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-	        post.setEntity(json);
-	        HttpResponse response = client.execute(post);
-	        HttpEntity entity = response.getEntity();
-	        String responseText = EntityUtils.toString(entity);
-	        responseJSON = new JSONObject(responseText);
+			params.setParameter("gsi", request.params.getString("gsi"));
+			params.setParameter("mt", request.params.getString("mt"));
+			params.setParameter("qid", request.params.getString("qid"));
+			
+			HttpResponse response = client.execute(get);
+			
+			System.out.println("Ran OK!");
 	    } catch (ClientProtocolException e) {
 	    	e.printStackTrace();
 	    } catch (IOException e) {
@@ -75,11 +73,11 @@ public class ExecutePost extends AsyncTask<Request, Void, JSONObject>{
 	    } catch (JSONException e) {
 	    	e.printStackTrace();
 	    }
-		return responseJSON;
+		return bitmap;
 	}
 	
 	@Override
-	protected void onPostExecute(JSONObject response) {
-		commRef.setJSONResults(response);
+	protected void onPostExecute(Bitmap bitmap) {
+		this.commRef.setResourceresults(bitmap);
 	}
 }

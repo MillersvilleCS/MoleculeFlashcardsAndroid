@@ -1,4 +1,7 @@
-package com.millersvillecs.moleculeandroid;
+package com.millersvillecs.moleculeandroid.helper;
+
+import com.millersvillecs.moleculeandroid.R;
+import com.millersvillecs.moleculeandroid.R.string;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

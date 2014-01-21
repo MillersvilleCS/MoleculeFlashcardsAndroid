@@ -1,4 +1,8 @@
-package com.millersvillecs.moleculeandroid;
+package com.millersvillecs.moleculeandroid.helper;
+
+import com.millersvillecs.moleculeandroid.R;
+import com.millersvillecs.moleculeandroid.R.id;
+import com.millersvillecs.moleculeandroid.R.layout;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.millersvillecs.moleculeandroid;
+package com.millersvillecs.moleculeandroid.helper;
 
 import android.app.DialogFragment;
 import android.app.FragmentManager;

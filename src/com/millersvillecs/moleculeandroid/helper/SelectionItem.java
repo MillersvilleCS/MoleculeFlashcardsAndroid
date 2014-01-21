@@ -1,4 +1,4 @@
-package com.millersvillecs.moleculeandroid;
+package com.millersvillecs.moleculeandroid.helper;
 
 import android.graphics.Bitmap;
 

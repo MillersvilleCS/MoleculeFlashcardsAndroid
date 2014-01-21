@@ -1,4 +1,4 @@
-package com.millersvillecs.moleculeandroid;
+package com.millersvillecs.moleculeandroid.data;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

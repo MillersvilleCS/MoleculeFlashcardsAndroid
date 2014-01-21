@@ -1,4 +1,4 @@
-package com.millersvillecs.moleculeandroid;
+package com.millersvillecs.moleculeandroid.data;
 
 import org.json.JSONObject;
 

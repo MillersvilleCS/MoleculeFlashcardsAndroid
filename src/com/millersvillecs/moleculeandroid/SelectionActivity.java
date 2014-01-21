@@ -4,6 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.millersvillecs.moleculeandroid.data.FileHandler;
+import com.millersvillecs.moleculeandroid.helper.SelectionBaseAdapter;
+import com.millersvillecs.moleculeandroid.helper.SelectionItem;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;

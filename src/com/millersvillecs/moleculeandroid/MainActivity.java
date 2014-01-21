@@ -3,6 +3,11 @@ package com.millersvillecs.moleculeandroid;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.millersvillecs.moleculeandroid.data.CommunicationManager;
+import com.millersvillecs.moleculeandroid.data.FileHandler;
+import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
+import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
