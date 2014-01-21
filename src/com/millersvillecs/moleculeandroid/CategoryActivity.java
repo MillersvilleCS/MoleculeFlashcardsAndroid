@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,34 +15,39 @@ import android.widget.ListView;
 public class CategoryActivity extends Activity implements OnItemClickListener, OnDismissListener {
 	
 	private SelectionItem[] categories;
+	private ProgressDialog progress;
+	private String username, auth;
 	
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		Intent intent = getIntent();
+		this.username = intent.getStringExtra(MainActivity.USERNAME);
+		this.auth = intent.getStringExtra(MainActivity.AUTH);
+		
 		setContentView(R.layout.activity_category);
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);//no need to check, 4.0+ req on app
 		
-		ProgressDialog progress = new ProgressDialog(this);
-		progress.setCanceledOnTouchOutside(true); //temp, set to false in production
-		progress.setMessage("Loading Categories...");
-		progress.setOnDismissListener(this);
-		progress.show();
-		
-		//load categories over SSL, parse JSON, create SelectionItem's
-		//HTTPS POST on Android? http://stackoverflow.com/questions/11504467/how-to-https-post-in-android
+		/*
+		this.progress = new ProgressDialog(this);
+		this.progress.setCanceledOnTouchOutside(false);
+		this.progress.setMessage("Loading Categories...");
+		this.progress.setOnDismissListener(this);
+		this.progress.show();
+		*/
 		
 		//testing with dummy data, can click off "loading" screen to play with it
-		categories = new SelectionItem[8];
-		categories[0] = new SelectionItem(null, "Test 1");
-		categories[1] = new SelectionItem(null, "Test 2");
-		categories[2] = new SelectionItem(null, "Test 3");
-		categories[3] = new SelectionItem(null, "Test 4");
-		categories[4] = new SelectionItem(null, "Test 5");
-		categories[5] = new SelectionItem(null, "Test 6");
-		categories[6] = new SelectionItem(null, "Test 7");
-		categories[7] = new SelectionItem(null, "Test 8");
+		this.categories = new SelectionItem[8];
+		this.categories[0] = new SelectionItem(null, "Category 1");
+		this.categories[1] = new SelectionItem(null, "Category 2");
+		this.categories[2] = new SelectionItem(null, "Category 3");
+		this.categories[3] = new SelectionItem(null, "Category 4");
+		this.categories[4] = new SelectionItem(null, "Category 5");
+		this.categories[5] = new SelectionItem(null, "Category 6");
+		this.categories[6] = new SelectionItem(null, "Category 7");
+		this.categories[7] = new SelectionItem(null, "Category 8");
 		
 		ListView categoryListView = (ListView) findViewById(R.id.category_list);
 		SelectionBaseAdapter listHandler = new SelectionBaseAdapter(this, categories);
@@ -56,7 +62,7 @@ public class CategoryActivity extends Activity implements OnItemClickListener, O
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
-            //NavUtils.navigateUpFromSameTask(this);
+        	//NavUtils.navigateUpFromSameTask(this);
         	finish();//so "up" looks like "back"
             return true;
         }
@@ -65,8 +71,13 @@ public class CategoryActivity extends Activity implements OnItemClickListener, O
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		System.out.println(categories[position].getDescription());
+		//System.out.println(this.categories[position].getDescription());
 		//spawn activity to pick game from category
+		//no categories yet - just advance
+		Intent intent = new Intent(this, SelectionActivity.class);
+	    intent.putExtra(MainActivity.USERNAME, this.username);
+	    intent.putExtra(MainActivity.AUTH, this.auth);
+	    startActivity(intent);
 	}
 
 	@Override

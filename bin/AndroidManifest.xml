@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="19" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -27,6 +28,7 @@
             android:label="@string/category_header" 
             android:parentActivityName="com.millersvillecs.moleculeandroid.MainActivity">
         </activity>
+        <activity android:name="com.millersvillecs.moleculeandroid.SelectionActivity" android:label="@string/selection_header" android:parentActivityName="com.millersvillecs.moleculeandroid.CategoryActivity"></activity>
     </application>
 
 </manifest>
