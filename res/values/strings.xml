@@ -20,7 +20,13 @@
     <string name="selection_header">Select a Game</string>
     
     <!-- Description Screens -->
+    <string name="time_limit_label">Time Limit:</string>
+    <string name="num_q_label">Number of Questions:</string>
+    <string name="description_label">Description:</string>
     <string name="high_scores_button">High Scores</string>
+    
+    <!-- High Score Screen -->
+    <string name="high_scores_header">High Scores</string>
     
     <!-- Game Screen -->
     <string name="error_gl">Error: Could not create openGL 2.0 context!</string>

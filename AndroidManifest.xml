@@ -30,6 +30,7 @@
         </activity>
         <activity android:name="com.millersvillecs.moleculeandroid.SelectionActivity" android:label="@string/selection_header" android:parentActivityName="com.millersvillecs.moleculeandroid.CategoryActivity"></activity>
         <activity android:name="com.millersvillecs.moleculeandroid.DescriptionActivity" android:parentActivityName="com.millersvillecs.moleculeandroid.SelectionActivity" android:label="@string/empty"></activity>
+        <activity android:name="com.millersvillecs.moleculeandroid.HighScoreActivity" android:label="@string/high_scores_header" android:parentActivityName="com.millersvillecs.moleculeandroid.DescriptionActivity"></activity>
     </application>
 
 </manifest>

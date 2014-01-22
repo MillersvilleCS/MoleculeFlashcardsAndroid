@@ -30,30 +30,38 @@ public final class R {
         public static final int ic_menu_close_clear_cancel=0x7f020002;
     }
     public static final class id {
-        public static final int action_logout=0x7f09000e;
+        public static final int action_logout=0x7f090014;
         public static final int category_list=0x7f090000;
-        public static final int email=0x7f090009;
-        public static final int game_description=0x7f090001;
-        public static final int game_list=0x7f09000b;
-        public static final int glsurfaceview=0x7f090002;
-        public static final int gone=0x7f090008;
-        public static final int hidecontainer=0x7f090003;
-        public static final int hideme1=0x7f090004;
-        public static final int hideme2=0x7f090005;
-        public static final int image=0x7f09000c;
-        public static final int invis=0x7f090007;
-        public static final int password=0x7f09000a;
-        public static final int title=0x7f09000d;
-        public static final int vis=0x7f090006;
+        public static final int email=0x7f09000c;
+        public static final int game_description=0x7f090003;
+        public static final int game_list=0x7f09000e;
+        public static final int glsurfaceview=0x7f090004;
+        public static final int gone=0x7f09000a;
+        public static final int hidecontainer=0x7f090005;
+        public static final int hideme1=0x7f090006;
+        public static final int hideme2=0x7f090007;
+        public static final int high_score_list=0x7f09000b;
+        public static final int image=0x7f090012;
+        public static final int invis=0x7f090009;
+        public static final int number_of_questions=0x7f090002;
+        public static final int password=0x7f09000d;
+        public static final int rank=0x7f09000f;
+        public static final int score=0x7f090011;
+        public static final int time_limit=0x7f090001;
+        public static final int title=0x7f090013;
+        public static final int username=0x7f090010;
+        public static final int vis=0x7f090008;
     }
     public static final class layout {
         public static final int activity_category=0x7f030000;
         public static final int activity_description=0x7f030001;
         public static final int activity_game=0x7f030002;
-        public static final int activity_main=0x7f030003;
-        public static final int activity_main_login=0x7f030004;
-        public static final int activity_selection=0x7f030005;
-        public static final int selection_item=0x7f030006;
+        public static final int activity_high_score=0x7f030003;
+        public static final int activity_main=0x7f030004;
+        public static final int activity_main_login=0x7f030005;
+        public static final int activity_selection=0x7f030006;
+        public static final int score_item=0x7f030007;
+        public static final int selection_item=0x7f030008;
     }
     public static final class menu {
         public static final int main=0x7f080000;
@@ -65,31 +73,37 @@ public final class R {
         public static final int app_name=0x7f060000;
         public static final int category_header=0x7f06000b;
         public static final int credits_button=0x7f060006;
+        public static final int description_label=0x7f06000f;
         /**  Login Screen 
          */
         public static final int email_hint=0x7f060007;
         public static final int empty=0x7f060002;
         /**  Game Screen 
          */
-        public static final int error_gl=0x7f06000e;
+        public static final int error_gl=0x7f060012;
         public static final int error_title=0x7f060001;
         /**  Test 
          */
-        public static final int hide_me=0x7f06000f;
-        /**  Description Screens 
+        public static final int hide_me=0x7f060013;
+        public static final int high_scores_button=0x7f060010;
+        /**  High Score Screen 
          */
-        public static final int high_scores_button=0x7f06000d;
+        public static final int high_scores_header=0x7f060011;
         /**  Selection Screens 
          */
         public static final int image_accessibility_desc=0x7f06000a;
         public static final int login=0x7f060009;
+        public static final int num_q_label=0x7f06000e;
         public static final int password_hint=0x7f060008;
         public static final int selection_header=0x7f06000c;
         public static final int start_button=0x7f060004;
+        /**  Description Screens 
+         */
+        public static final int time_limit_label=0x7f06000d;
         public static final int tutorial_button=0x7f060005;
-        public static final int visibility_1_gone=0x7f060012;
-        public static final int visibility_1_invis=0x7f060011;
-        public static final int visibility_1_vis=0x7f060010;
+        public static final int visibility_1_gone=0x7f060016;
+        public static final int visibility_1_invis=0x7f060015;
+        public static final int visibility_1_vis=0x7f060014;
     }
     public static final class style {
         /** 

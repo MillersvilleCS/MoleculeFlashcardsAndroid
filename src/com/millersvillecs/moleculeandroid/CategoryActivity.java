@@ -51,13 +51,13 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 		getActionBar().setDisplayHomeAsUpEnabled(true);//no need to check, 4.0+ req on app
 		
 		this.comm = new CommunicationManager(this);
-		this.comm.availableGames(this.auth);
+		this.comm.availableGames(this.auth);//comment out for testing without polling network - one below too
 		
 		this.progress = new ProgressDialog(this);
 		this.progress.setCanceledOnTouchOutside(false);
-		this.progress.setMessage("Loading Categories...");
+		this.progress.setMessage("Loading Games...");
 		this.progress.setOnDismissListener(this);
-		this.progress.show();
+		this.progress.show();//comment out for testing without polling network
 		
 		//Until API has categories, we create a fake one
 		this.categories = new SelectionItem[1];

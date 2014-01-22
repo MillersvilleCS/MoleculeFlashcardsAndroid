@@ -17,6 +17,7 @@ import android.widget.TextView;
 public class DescriptionActivity extends Activity {
 	
 	private String username, auth;
+	private int position;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -24,7 +25,7 @@ public class DescriptionActivity extends Activity {
 		Intent intent = getIntent();
 		this.username = intent.getStringExtra(MainActivity.USERNAME);
 		this.auth = intent.getStringExtra(MainActivity.AUTH);
-		int position = intent.getIntExtra(MainActivity.GAME_INDEX, -1);
+		this.position = intent.getIntExtra(MainActivity.GAME_INDEX, -1);
 		
 		setContentView(R.layout.activity_description);
 		
@@ -39,10 +40,14 @@ public class DescriptionActivity extends Activity {
 		}
 		try{
 			JSONArray gamesJSON = new JSONArray(gamesJSONText);
-			JSONObject game = (JSONObject)gamesJSON.get(position);
+			JSONObject game = (JSONObject)gamesJSON.get(this.position);
 			actionBar.setTitle(game.getString("name"));
 			TextView description = (TextView)findViewById(R.id.game_description);
 			description.setText(game.getString("description"));
+			TextView time = (TextView)findViewById(R.id.time_limit);
+			time.setText(time.getText() + " " + formatTime(game.getString("time_limit")));
+			TextView numberOfQuestions = (TextView)findViewById(R.id.number_of_questions);
+            numberOfQuestions.setText(numberOfQuestions.getText() + " " + game.getString("q_count"));
 		} catch(JSONException e) {
 			e.printStackTrace();
 			finish();
@@ -74,11 +79,23 @@ public class DescriptionActivity extends Activity {
 	}
 	
 	public void onHighScoresButton(View view) {
-		/*
-		Intent intent = new Intent(this, CategoryActivity.class);
-	    intent.putExtra(MainActivity.USERNAME, this.username);
-	    intent.putExtra(MainActivity.AUTH, this.auth);
+		Intent intent = new Intent(this, HighScoreActivity.class);
+	    intent.putExtra(MainActivity.GAME_INDEX, this.position);
 	    startActivity(intent);
-	    */
+	}
+	
+	private String formatTime(String timeString) {
+	    int time = Integer.parseInt(timeString);
+	    time /= 1000;
+	    int seconds = time % 60;
+	    time /= 60;
+	    String secondsString;
+	    if(seconds < 10) {
+	        secondsString = "0" + seconds;
+	    } else {
+	        secondsString = String.valueOf(seconds);
+	    }
+	    
+	    return time + ":" + secondsString;
 	}
 }
