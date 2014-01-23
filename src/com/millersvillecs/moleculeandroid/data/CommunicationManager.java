@@ -1,12 +1,12 @@
 package com.millersvillecs.moleculeandroid.data;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 
 import android.graphics.Bitmap;
 
@@ -28,8 +28,8 @@ public class CommunicationManager {
 		this.callback.onResourceResponse(bitmap);
 	}
 	
-	public void setImageResults(Bitmap bitmap) {
-		this.callback.onImageResponse(bitmap);
+	public void setImageResults(Bitmap bitmap, boolean error) {
+		this.callback.onImageResponse(bitmap, error);
 	}
 	
 	//http://www.mail-archive.com/android-beginners@googlegroups.com/msg18680.html
@@ -150,7 +150,7 @@ public class CommunicationManager {
 		new ExecuteGet(this).execute(request);
 	}
 	
-	public void downloadImage(String url) {
-		new ExecuteImageDownload(this).execute(url);
+	public void downloadImage(String url, File imageFile) {
+		new ExecuteImageDownload(this, imageFile).execute(url);
 	}
 }

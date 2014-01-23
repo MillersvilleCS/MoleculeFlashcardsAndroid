@@ -70,12 +70,11 @@ public class DescriptionActivity extends Activity {
     }
 	
 	public void onStartButton(View view) {
-		/*
-		Intent intent = new Intent(this, CategoryActivity.class);
+		Intent intent = new Intent(this, GameActivity.class);
 	    intent.putExtra(MainActivity.USERNAME, this.username);
 	    intent.putExtra(MainActivity.AUTH, this.auth);
+	    intent.putExtra(MainActivity.GAME_INDEX, this.position);
 	    startActivity(intent);
-	    */
 	}
 	
 	public void onHighScoresButton(View view) {

@@ -1,9 +1,5 @@
 package com.millersvillecs.moleculeandroid.helper;
 
-import com.millersvillecs.moleculeandroid.R;
-import com.millersvillecs.moleculeandroid.R.id;
-import com.millersvillecs.moleculeandroid.R.layout;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.millersvillecs.moleculeandroid.R;
 
 public class SelectionBaseAdapter extends BaseAdapter{
 	

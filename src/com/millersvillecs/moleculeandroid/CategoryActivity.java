@@ -58,15 +58,6 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 		this.progress.setMessage("Loading Games...");
 		this.progress.setOnDismissListener(this);
 		this.progress.show();//comment out for testing without polling network
-		
-		//Until API has categories, we create a fake one
-		this.categories = new SelectionItem[1];
-		this.categories[0] = new SelectionItem(null, "No Categories");
-		
-		ListView categoryListView = (ListView) findViewById(R.id.category_list);
-		SelectionBaseAdapter listHandler = new SelectionBaseAdapter(this, categories);
-		categoryListView.setAdapter(listHandler);
-		categoryListView.setOnItemClickListener(this);
 	}
 	
 	/*
@@ -116,9 +107,10 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 				for(int i = 0; i < avail.length(); i++) {
 					this.urls.add("http://exscitech.gcl.cis.udel.edu" + 
 								   avail.getJSONObject(i).getString("image").substring(1));
-					this.ids.add(avail.getJSONObject(i).getString("id"));
+					this.ids.add(avail.getJSONObject(i).getString("id"));//.13
 				}
-				this.comm.downloadImage(this.urls.remove(0));
+				this.comm.downloadImage(this.urls.remove(0), 
+				                        this.fileHandler.createFileTemp(ids.get(0) + ".jpg"));
 			} else {
 				this.fileHandler.deleteTemp("games");
 				new ErrorDialog(getFragmentManager(), response.getString("error")).show();
@@ -134,17 +126,42 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 	public void onResourceResponse(Bitmap bitmap) {}
 
 	@Override
-	public void onImageResponse(Bitmap bitmap) {
+	public void onImageResponse(Bitmap bitmap, boolean error) {
 		String id = this.ids.remove(0);
 		
-		this.fileHandler.writeTempImage(bitmap, id + ".jpg");
+		if(bitmap == null) {
+		    if(error) {
+		        this.ids.clear();
+		        this.urls.clear();
+		        this.wantedDismiss = true;
+                this.progress.dismiss();
+                new ErrorDialog(getFragmentManager(), "Could not connect to network!").show();
+                return;
+		    }
+		} else {
+		    this.fileHandler.writeTempImage(bitmap, id + ".jpg");  
+		}
 		
 		if(this.urls.size() == 0) {
-			this.wantedDismiss = true;
-			this.progress.dismiss();
-		} else {
-			this.comm.downloadImage(this.urls.remove(0));
-		}
+            createCategories();
+        } else {
+            this.comm.downloadImage(this.urls.remove(0), 
+                                    this.fileHandler.createFileTemp(ids.get(0) + ".jpg"));
+        }
+	}
+	
+	private void createCategories() {
+    	//Until API has categories, we create a fake one
+        this.categories = new SelectionItem[1];
+        this.categories[0] = new SelectionItem(null, "No Categories");
+        
+        ListView categoryListView = (ListView) findViewById(R.id.category_list);
+        SelectionBaseAdapter listHandler = new SelectionBaseAdapter(this, categories);
+        categoryListView.setAdapter(listHandler);
+        categoryListView.setOnItemClickListener(this);
+        
+        this.wantedDismiss = true;
+        this.progress.dismiss();
 	}
 	
 	/* 

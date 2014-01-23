@@ -30,11 +30,5 @@
     
     <!-- Game Screen -->
     <string name="error_gl">Error: Could not create openGL 2.0 context!</string>
-    
-    <!-- Test -->
-    <string name="hide_me">hidden</string>
-    <string name="visibility_1_vis">vis</string>
-    <string name="visibility_1_invis">invis</string>
-    <string name="visibility_1_gone">gone</string>
 
 </resources>

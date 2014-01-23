@@ -1,12 +1,11 @@
 package com.millersvillecs.moleculeandroid.helper;
 
-import com.millersvillecs.moleculeandroid.R;
-import com.millersvillecs.moleculeandroid.R.string;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+
+import com.millersvillecs.moleculeandroid.R;
 
 public class ErrorDialogFragment extends DialogFragment {
 	

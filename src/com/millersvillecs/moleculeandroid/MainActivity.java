@@ -129,7 +129,7 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 	public void onResourceResponse(Bitmap bitmap) {}
 
 	@Override
-	public void onImageResponse(Bitmap bitmap) {}
+	public void onImageResponse(Bitmap bitmap, boolean error) {}
 	
 	/* 
 	 * see: http://developer.android.com/reference/android/app/Activity.html#ActivityLifecycle

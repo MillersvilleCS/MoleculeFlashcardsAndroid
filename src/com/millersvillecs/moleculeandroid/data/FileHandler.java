@@ -74,6 +74,10 @@ public class FileHandler {
 		return readParent(file);
 	}
 	
+	public File createFile(String filename) {
+	    return new File(this.directory + filename);
+	}
+	
 	public boolean delete(String filename) {
 		return new File(this.directory + filename).delete();
 	}
@@ -87,6 +91,10 @@ public class FileHandler {
 		File file = new File(this.tempDirectory + filename);
 		return readParent(file);
 	}
+	
+	public File createFileTemp(String filename) {
+        return new File(this.tempDirectory + filename);
+    }
 	
 	public boolean deleteTemp(String filename) {
 		return new File(this.tempDirectory + filename).delete();

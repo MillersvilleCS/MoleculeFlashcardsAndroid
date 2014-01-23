@@ -6,11 +6,13 @@ import java.nio.IntBuffer;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.millersvillecs.moleculeandroid.graphics.opengles.BufferedObjectUsage;
 import com.millersvillecs.moleculeandroid.graphics.opengles.Descriptor;
@@ -20,19 +22,23 @@ import com.millersvillecs.moleculeandroid.graphics.opengles.VBO;
 import com.millersvillecs.moleculeandroid.util.BufferUtils;
 
 public class GameActivity extends Activity{
-	private GLSurfaceView mGLSurfaceView;
+	private GLSurfaceView gLSurfaceView;
 	private VAO vao;
+	private String username, auth;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		//SEE layouts over GL: http://www.java2s.com/Code/Android/UI/DemonstrationofoverlaysplacedontopofaSurfaceView.htm
-		//SEE JSON parsing: http://stackoverflow.com/questions/9605913/how-to-parse-json-in-android
+		Intent intent = getIntent();
+        this.username = intent.getStringExtra(MainActivity.USERNAME);
+        this.auth = intent.getStringExtra(MainActivity.AUTH);
+        int position = intent.getIntExtra(MainActivity.GAME_INDEX, -1);
 		
 		setContentView(R.layout.activity_game);
+		getActionBar().setDisplayHomeAsUpEnabled(true);//no need to check, 4.0+ req on app
 
-		mGLSurfaceView = (GLSurfaceView) findViewById(R.id.glsurfaceview);
+		this.gLSurfaceView = (GLSurfaceView) findViewById(R.id.glsurfaceview);
 
 		final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		final ConfigurationInfo configurationInfo = activityManager
@@ -40,8 +46,8 @@ public class GameActivity extends Activity{
 		final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
 
 		if (supportsEs2) {
-			mGLSurfaceView.setEGLContextClientVersion(2);
-			mGLSurfaceView.setRenderer(new AndroidRenderer());
+			this.gLSurfaceView.setEGLContextClientVersion(2);
+			this.gLSurfaceView.setRenderer(new AndroidRenderer());
 		} else {
 			//error?
 		}
@@ -76,12 +82,18 @@ public class GameActivity extends Activity{
 		vao.addVertexAttribute(0, des);
 		vao.init();
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
+	
+	/*
+     * Handles 'Up' Menu press (does the same thing as the back button)
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            //NavUtils.navigateUpFromSameTask(this);
+            finish();//so "up" looks like "back"
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
