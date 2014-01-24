@@ -22,7 +22,7 @@ public class SelectionActivity extends Activity implements OnItemClickListener {
 	
 	private SelectionItem[] games;
 	private String username, auth;
-	private JSONArray gamesJSON;
+	private JSONArray fullGameJSON;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,25 +30,22 @@ public class SelectionActivity extends Activity implements OnItemClickListener {
 		Intent intent = getIntent();
 		this.username = intent.getStringExtra(MainActivity.USERNAME);
 		this.auth = intent.getStringExtra(MainActivity.AUTH);
+		String gamesJSONText = intent.getStringExtra(MainActivity.GAME_JSON);
+		
+		FileHandler fileHandler = new FileHandler(this);
 		
 		setContentView(R.layout.activity_selection);
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);//no need to check, 4.0+ req on app
-		
-		FileHandler fileHandler = new FileHandler(this);
-		String[] gamesJSONTextArray = fileHandler.readTemp("games");
-		String gamesJSONText = "";
-		for(int i = 0; i < gamesJSONTextArray.length; i++) {
-			gamesJSONText += gamesJSONTextArray[i];
-		}
+		 
 		try{
-			this.gamesJSON = new JSONArray(gamesJSONText);
+		    this.fullGameJSON = new JSONArray(gamesJSONText);
 			
-			games = new SelectionItem[this.gamesJSON.length()];
-			for(int i = 0; i < this.gamesJSON.length(); i++) {
-				String image = ((JSONObject)this.gamesJSON.get(i)).getString("id") + ".jpg";
+			games = new SelectionItem[this.fullGameJSON.length()];
+			for(int i = 0; i < this.fullGameJSON.length(); i++) {
+				String image = ((JSONObject)this.fullGameJSON.get(i)).getString("id") + ".jpg";
 				Bitmap bitmap = fileHandler.readTempImage(image);
-				games[i] = new SelectionItem(bitmap, ((JSONObject)this.gamesJSON.get(i)).getString("name") );
+				games[i] = new SelectionItem(bitmap, ((JSONObject)this.fullGameJSON.get(i)).getString("name") );
 			}
 		} catch(JSONException e) {
 			e.printStackTrace();
@@ -82,6 +79,7 @@ public class SelectionActivity extends Activity implements OnItemClickListener {
 	    intent.putExtra(MainActivity.USERNAME, this.username);
 	    intent.putExtra(MainActivity.AUTH, this.auth);
 	    intent.putExtra(MainActivity.GAME_INDEX, position);
+	    intent.putExtra(MainActivity.GAME_JSON, this.fullGameJSON.toString());
 	    startActivity(intent);
 	}
 }

@@ -4,8 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.millersvillecs.moleculeandroid.data.FileHandler;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -18,6 +16,7 @@ public class DescriptionActivity extends Activity {
 	
 	private String username, auth;
 	private int position;
+	private JSONArray fullGameJSON;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,21 +25,16 @@ public class DescriptionActivity extends Activity {
 		this.username = intent.getStringExtra(MainActivity.USERNAME);
 		this.auth = intent.getStringExtra(MainActivity.AUTH);
 		this.position = intent.getIntExtra(MainActivity.GAME_INDEX, -1);
+		String gamesJSONText = intent.getStringExtra(MainActivity.GAME_JSON);
 		
 		setContentView(R.layout.activity_description);
 		
 		ActionBar actionBar = getActionBar();//no need to check, 4.0+ req on app
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
-		FileHandler fileHandler = new FileHandler(this);
-		String[] gamesJSONTextArray = fileHandler.readTemp("games");
-		String gamesJSONText = "";
-		for(int i = 0; i < gamesJSONTextArray.length; i++) {
-			gamesJSONText += gamesJSONTextArray[i];
-		}
 		try{
-			JSONArray gamesJSON = new JSONArray(gamesJSONText);
-			JSONObject game = (JSONObject)gamesJSON.get(this.position);
+			this.fullGameJSON = new JSONArray(gamesJSONText);
+			JSONObject game = (JSONObject)this.fullGameJSON.get(this.position);
 			actionBar.setTitle(game.getString("name"));
 			TextView description = (TextView)findViewById(R.id.game_description);
 			description.setText(game.getString("description"));
@@ -74,12 +68,14 @@ public class DescriptionActivity extends Activity {
 	    intent.putExtra(MainActivity.USERNAME, this.username);
 	    intent.putExtra(MainActivity.AUTH, this.auth);
 	    intent.putExtra(MainActivity.GAME_INDEX, this.position);
+	    intent.putExtra(MainActivity.GAME_JSON, this.fullGameJSON.toString());
 	    startActivity(intent);
 	}
 	
 	public void onHighScoresButton(View view) {
 		Intent intent = new Intent(this, HighScoreActivity.class);
 	    intent.putExtra(MainActivity.GAME_INDEX, this.position);
+	    intent.putExtra(MainActivity.GAME_JSON, this.fullGameJSON.toString());
 	    startActivity(intent);
 	}
 	
