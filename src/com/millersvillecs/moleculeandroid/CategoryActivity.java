@@ -57,7 +57,8 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 		this.progress.setCanceledOnTouchOutside(false);
 		this.progress.setMessage("Loading Games...");
 		this.progress.setOnDismissListener(this);
-		this.progress.show();//comment out for testing without polling network
+		this.progress.show();
+		//createCategories(); //uncomment to test without polling network
 	}
 	
 	/*
@@ -114,11 +115,20 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 			} else {
 				this.fileHandler.deleteTemp("games");
 				new ErrorDialog(getFragmentManager(), response.getString("error")).show();
+				this.wantedDismiss = true;
+		        this.progress.dismiss();
 			}
 		} catch(JSONException e) {
 			e.printStackTrace();
 			this.fileHandler.deleteTemp("games");
 			new ErrorDialog(getFragmentManager(), "Invalid Server Response").show();
+			this.wantedDismiss = true;
+	        this.progress.dismiss();
+		} catch(NullPointerException e) {
+		    e.printStackTrace();
+            new ErrorDialog(getFragmentManager(), "Could not connect to network").show();
+            this.wantedDismiss = true;
+            this.progress.dismiss();
 		}
 	}
 
