@@ -75,7 +75,7 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 	}
 	
 	public void onTutorialButton(View view) {
-		
+	    
 	}
 
 	public void onCreditsButton(View view) {

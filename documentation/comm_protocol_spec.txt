@@ -132,7 +132,7 @@ Request Fields:
 	game_time
 Response Fields:
 	rank
-	score
+	final_score
 
 Name:
 	submit_flashcard_answer

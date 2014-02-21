@@ -30,25 +30,32 @@ public final class R {
         public static final int ic_menu_close_clear_cancel=0x7f020002;
     }
     public static final class id {
-        public static final int action_logout=0x7f090012;
-        public static final int answer_container=0x7f090006;
-        public static final int answer_wrapper=0x7f090005;
+        public static final int action_logout=0x7f090019;
+        public static final int button_separator=0x7f090007;
         public static final int category_list=0x7f090000;
-        public static final int email=0x7f09000a;
+        public static final int email=0x7f090011;
+        public static final int game_button_0=0x7f090008;
+        public static final int game_button_1=0x7f09000c;
+        public static final int game_button_2=0x7f090009;
+        public static final int game_button_3=0x7f09000d;
+        public static final int game_button_4=0x7f09000a;
+        public static final int game_button_5=0x7f09000e;
+        public static final int game_button_6=0x7f09000b;
+        public static final int game_button_7=0x7f09000f;
         public static final int game_description=0x7f090003;
-        public static final int game_list=0x7f09000c;
+        public static final int game_list=0x7f090013;
         public static final int glsurfaceview=0x7f090004;
-        public static final int high_score_list=0x7f090009;
-        public static final int image=0x7f090010;
+        public static final int high_score_list=0x7f090010;
+        public static final int image=0x7f090017;
         public static final int number_of_questions=0x7f090002;
-        public static final int password=0x7f09000b;
-        public static final int rank=0x7f09000d;
-        public static final int score=0x7f09000f;
-        public static final int test1=0x7f090007;
-        public static final int test2=0x7f090008;
+        public static final int password=0x7f090012;
+        public static final int question_scrollbar=0x7f090006;
+        public static final int question_text=0x7f090005;
+        public static final int rank=0x7f090014;
+        public static final int score=0x7f090016;
         public static final int time_limit=0x7f090001;
-        public static final int title=0x7f090011;
-        public static final int username=0x7f09000e;
+        public static final int title=0x7f090018;
+        public static final int username=0x7f090015;
     }
     public static final class layout {
         public static final int activity_category=0x7f030000;

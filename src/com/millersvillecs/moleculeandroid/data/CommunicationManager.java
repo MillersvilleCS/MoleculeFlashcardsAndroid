@@ -75,7 +75,7 @@ public class CommunicationManager {
 		new ExecutePost(this).execute(request);
 	}
 	
-	public void loadFlashcardGame(String auth, int gameId) {
+	public void loadFlashcardGame(String auth, String gameId) {
 		Request request = new Request();
 		request.url = this.REQUEST_HANDLER_URL;
 		try {
@@ -89,7 +89,7 @@ public class CommunicationManager {
 		new ExecutePost(this).execute(request);
 	}
 	
-	public void endFlashcardGame(String auth, String gameSessionId, String gameTime) {
+	public void endFlashcardGame(String auth, String gameSessionId, int gameTime) {
 		Request request = new Request();
 		request.url = this.REQUEST_HANDLER_URL;
 		try {
@@ -104,7 +104,7 @@ public class CommunicationManager {
 		new ExecutePost(this).execute(request);
 	}
 	
-	public void submitFlashcardAnswer(String auth, String gameSessionId, int questionId, int answer, int gameTime) {
+	public void submitFlashcardAnswer(String auth, String gameSessionId, String questionId, String answer, int gameTime) {
 		Request request = new Request();
 		request.url = this.REQUEST_HANDLER_URL;
 		try {
