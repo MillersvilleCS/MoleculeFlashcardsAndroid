@@ -46,6 +46,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
         this.username = intent.getStringExtra(MainActivity.USERNAME);
         this.auth = intent.getStringExtra(MainActivity.AUTH);
         int position = intent.getIntExtra(MainActivity.GAME_INDEX, -1);
+        //String gamesJSONText = intent.getStringExtra(MainActivity.GAME_JSON);
 		
 		setContentView(R.layout.activity_game);
 		getActionBar().setDisplayHomeAsUpEnabled(false);//no need to check, 4.0+ req on app

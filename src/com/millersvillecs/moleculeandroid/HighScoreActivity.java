@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.millersvillecs.moleculeandroid.data.FileHandler;
 import com.millersvillecs.moleculeandroid.helper.ScoreBaseAdapter;
 import com.millersvillecs.moleculeandroid.helper.ScoreItem;
 
@@ -21,17 +20,12 @@ public class HighScoreActivity extends Activity {
         
         Intent intent = getIntent();
         int position = intent.getIntExtra(MainActivity.GAME_INDEX, -1);
+        String gamesJSONText = intent.getStringExtra(MainActivity.GAME_JSON);
         
         setContentView(R.layout.activity_high_score);
         
         getActionBar().setDisplayHomeAsUpEnabled(true);//no need to check, 4.0+ req on app
         
-        FileHandler fileHandler = new FileHandler(this);
-        String[] gamesJSONTextArray = fileHandler.readTemp("games");
-        String gamesJSONText = "";
-        for(int i = 0; i < gamesJSONTextArray.length; i++) {
-            gamesJSONText += gamesJSONTextArray[i];
-        }
         ScoreItem[] scores;
         try{
             JSONArray gamesJSON = new JSONArray(gamesJSONText);

@@ -37,6 +37,7 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 	private ArrayList<String> ids;
 	private ArrayList<String> urls;
 	private boolean wantedDismiss = false;
+	private JSONArray fullGameJSON;
 	
 	
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +52,13 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 		getActionBar().setDisplayHomeAsUpEnabled(true);//no need to check, 4.0+ req on app
 		
 		this.comm = new CommunicationManager(this);
-		this.comm.availableGames(this.auth);//comment out for testing without polling network - one below too
+		this.comm.availableGames(this.auth);
 		
 		this.progress = new ProgressDialog(this);
 		this.progress.setCanceledOnTouchOutside(false);
 		this.progress.setMessage("Loading Games...");
 		this.progress.setOnDismissListener(this);
-		this.progress.show();//comment out for testing without polling network
+		this.progress.show();
 	}
 	
 	/*
@@ -82,6 +83,7 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 		Intent intent = new Intent(this, SelectionActivity.class);
 	    intent.putExtra(MainActivity.USERNAME, this.username);
 	    intent.putExtra(MainActivity.AUTH, this.auth);
+	    intent.putExtra(MainActivity.GAME_JSON, this.fullGameJSON.toString());
 	    startActivity(intent);
 	}
 
@@ -101,7 +103,8 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 		try{
 			if(response.getBoolean("success")) {
 				JSONArray avail = response.getJSONArray("available_games");
-				this.fileHandler.writeTemp("games", avail.toString().split("\n"));
+				this.fullGameJSON = avail;
+				//this.fileHandler.writeTemp("games", avail.toString().split("\n"));
 				this.urls = new ArrayList<String>();
 				this.ids = new ArrayList<String>();
 				for(int i = 0; i < avail.length(); i++) {
@@ -114,11 +117,20 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 			} else {
 				this.fileHandler.deleteTemp("games");
 				new ErrorDialog(getFragmentManager(), response.getString("error")).show();
+				this.wantedDismiss = true;
+		        this.progress.dismiss();
 			}
 		} catch(JSONException e) {
 			e.printStackTrace();
 			this.fileHandler.deleteTemp("games");
 			new ErrorDialog(getFragmentManager(), "Invalid Server Response").show();
+			this.wantedDismiss = true;
+	        this.progress.dismiss();
+		} catch(NullPointerException e) {
+		    e.printStackTrace();
+            new ErrorDialog(getFragmentManager(), "Could not connect to network").show();
+            this.wantedDismiss = true;
+            this.progress.dismiss();
 		}
 	}
 
