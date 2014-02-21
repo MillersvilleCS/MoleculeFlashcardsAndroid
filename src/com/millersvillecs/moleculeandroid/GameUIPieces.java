@@ -8,11 +8,13 @@ import android.widget.TextView;
 
 public class GameUIPieces {
     
+    private GameActivity gameActivity;
     private Button[] buttons;
-    private TextView questionText;
+    private TextView questionText, gameFinishScore, gameFinishRank;
     private ScrollView scrollView;
     
-    public GameUIPieces (GameActivity gameActivity) {        
+    public GameUIPieces (GameActivity gameActivity) {
+        this.gameActivity = gameActivity;
         this.buttons = new Button[8];
         this.buttons[0] = (Button) gameActivity.findViewById(R.id.game_button_0);
         this.buttons[1] = (Button) gameActivity.findViewById(R.id.game_button_1);
@@ -24,6 +26,8 @@ public class GameUIPieces {
         this.buttons[7] = (Button) gameActivity.findViewById(R.id.game_button_7);
         
         this.questionText = (TextView) gameActivity.findViewById(R.id.question_text);
+        this.gameFinishScore = (TextView) gameActivity.findViewById(R.id.game_finish_score);
+        this.gameFinishRank = (TextView) gameActivity.findViewById(R.id.game_finish_rank);
         this.scrollView = (ScrollView) gameActivity.findViewById(R.id.question_scrollbar);
         //this.scrollView.setScrollBarStyle(ScrollView.SCROLLBARS_INSIDE_INSET);
         
@@ -71,6 +75,16 @@ public class GameUIPieces {
             this.questionText.setText(message);
             this.questionText.setVisibility(View.VISIBLE);
         }
+    }
+    
+    public void displayFinishScreen(double score, int rank) {
+        this.gameActivity.setContentView(R.layout.activity_game_finish);
+        
+        TextView scoreView = (TextView) this.gameActivity.findViewById(R.id.game_finish_score);
+        TextView rankView = (TextView) this.gameActivity.findViewById(R.id.game_finish_rank);
+        
+        scoreView.setText("Score: " + score);
+        rankView.setText("Rank: #" + rank);
     }
 }
 

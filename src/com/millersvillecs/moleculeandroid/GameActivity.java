@@ -67,7 +67,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 		
 		this.progress = new ProgressDialog(this);
         this.progress.setCanceledOnTouchOutside(false);
-        this.progress.setMessage("Downloading Molecules...");
+        this.progress.setMessage("Loading questions...");
         this.progress.setOnDismissListener(this);
         this.progress.show();
 		
@@ -165,7 +165,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
                 this.score = response.getDouble("final_score");
                 int rank = response.getInt("rank");
                 System.out.println("#" + rank + " " + this.score);
-                finish();
+                this.gameUIPieces.displayFinishScreen(this.score, rank);
             } catch(JSONException e) {
                 e.printStackTrace();
                 finish();
@@ -193,6 +193,10 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
         } else {
             finish();
         }
+    }
+    
+    public void onFinishBack(View view) {
+        finish();
     }
     
     public void onAnswerButton(View view) {
