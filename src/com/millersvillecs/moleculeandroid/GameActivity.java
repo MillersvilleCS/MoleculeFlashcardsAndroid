@@ -46,7 +46,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
         this.username = intent.getStringExtra(MainActivity.USERNAME);
         this.auth = intent.getStringExtra(MainActivity.AUTH);
         int position = intent.getIntExtra(MainActivity.GAME_INDEX, -1);
-        //String gamesJSONText = intent.getStringExtra(MainActivity.GAME_JSON);
+        String gamesJSONText = intent.getStringExtra(MainActivity.GAME_JSON);
 		
 		setContentView(R.layout.activity_game);
 		getActionBar().setDisplayHomeAsUpEnabled(false);//no need to check, 4.0+ req on app
@@ -87,12 +87,6 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 		this.gameUIPieces.displayQuestionText("This is where a question goes.");
 		*/
 		
-		FileHandler fileHandler = new FileHandler(this);
-        String[] gamesJSONTextArray = fileHandler.readTemp("games");
-        String gamesJSONText = "";
-        for(int i = 0; i < gamesJSONTextArray.length; i++) {
-            gamesJSONText += gamesJSONTextArray[i];
-        }
         try{
             JSONArray gamesJSON = new JSONArray(gamesJSONText);
             JSONObject game = (JSONObject)gamesJSON.get(position);
