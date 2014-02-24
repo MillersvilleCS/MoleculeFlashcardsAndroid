@@ -46,17 +46,16 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 	final String vertexShader =
 		    "uniform mat4 u_MVPMatrix;      \n"     // A constant representing the combined model/view/projection matrix.
 		 
-		  + "attribute vec4 a_Position;     \n"     // Per-vertex position information we will pass in.
-		  + "attribute vec4 a_Color;        \n"     // Per-vertex color information we will pass in.
+		  + "attribute vec4 in_Position;     \n"     // Per-vertex position information we will pass in.
+		  + "attribute vec4 in_Color;        \n"     // Per-vertex color information we will pass in.
 		 
 		  + "varying vec4 v_Color;          \n"     // This will be passed into the fragment shader.
 		 
 		  + "void main()                    \n"     // The entry point for our vertex shader.
 		  + "{                              \n"
-		  + "   v_Color = a_Color;          \n"     // Pass the color through to the fragment shader.
+		  + "   v_Color = in_Color;          \n"     // Pass the color through to the fragment shader.
 		                                            // It will be interpolated across the triangle.
-		  + "   gl_Position = u_MVPMatrix   \n"     // gl_Position is a special variable used to store the final position.
-		  + "               * a_Position;   \n"     // Multiply the vertex by the matrix to get the final point in
+		  + "   gl_Position = in_Position;   \n"     // gl_Position is a special variable used to store the final position
 		  + "}                              \n";    // normalized screen coordinates.
 						
 	final String fragmentShader =

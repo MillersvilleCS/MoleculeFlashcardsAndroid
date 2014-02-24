@@ -22,7 +22,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        //scene.render(0, camera);
+        scene.render(0, camera);
     }
 
     @Override
