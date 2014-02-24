@@ -5,49 +5,46 @@ import java.util.Map;
 
 import android.opengl.GLES20;
 
+
+/**
+* @author William Gervasio
+*/
+
 public class VAO {
-	private final Map<Integer, Descriptor> descriptors = new HashMap<Integer, Descriptor>();
+   private final Map<Integer, Descriptor> descriptors = new HashMap<Integer, Descriptor>();
 
-	private final VBO vbo;
-	private final IBO ibo;
-	private final int handle, size;
+   private final VBO vbo;
+   private final IBO ibo;
+   private final int size;
 
-	public VAO(VBO vbo, IBO ibo, int size) {
-		this.vbo = vbo;
-		this.ibo = ibo;
-		this.size = size;
+   public VAO(VBO vbo, IBO ibo, int size) {
+       this.vbo = vbo;
+       this.ibo = ibo;
+       this.size = size;
+   }
 
-		handle = 0;// GLES20.glGenVertexArrays();
-	}
+   public void init() {
 
-	public final void init() {
-		// GLES20.glBindVertexArray(handle);
+       vbo.bind();
 
-		vbo.bind();
+       for (int i : descriptors.keySet()) {
 
-		for (final int i : descriptors.keySet()) {
+           final Descriptor descriptor = descriptors.get(i);
 
-			final Descriptor descriptor = descriptors.get(i);
+           GLES20.glEnableVertexAttribArray(i);
+           GLES20.glVertexAttribPointer(i, descriptor.getSize(),
+                   descriptor.getType(), descriptor.isNormalized(),
+                   descriptor.getStride(), descriptor.getPointer());
 
-			GLES20.glEnableVertexAttribArray(i);
-			GLES20.glVertexAttribPointer(i, descriptor.getSize(),
-					descriptor.getType(), descriptor.isNormalized(),
-					descriptor.getStride(), descriptor.getPointer());
+       }
+       ibo.bind();
+   }
 
-		}
+   public final void addVertexAttribute(final int index, final Descriptor descriptor) {
+       descriptors.put(index, descriptor);
+   }
 
-		ibo.bind();
-		// GLES20.glBindVertexArray(0);
-	}
-
-	public final void addVertexAttribute(final int index,
-			final Descriptor descriptor) {
-		descriptors.put(index, descriptor);
-	}
-
-	public final void draw() {
-		// GLES20.glBindVertexArray(handle);
-		GLES20.glDrawElements(GLES20.GL_TRIANGLES, size,
-				GLES20.GL_UNSIGNED_INT, 0);
-	}
+   public void draw() {
+       GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, size);
+   }
 }

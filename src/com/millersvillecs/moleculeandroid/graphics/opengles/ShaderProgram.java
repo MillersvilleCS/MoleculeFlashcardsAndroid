@@ -12,11 +12,9 @@ public class ShaderProgram {
 
 	public ShaderProgram(String vertexShader, String fragmentShader,
 			Map<Integer, String> attributes) throws GraphicsException {
-		int vertexHandle, fragmentHandle;
 
-		vertexHandle = compileShader(vertexShader, GLES20.GL_VERTEX_SHADER);
-		fragmentHandle = compileShader(fragmentShader,
-				GLES20.GL_FRAGMENT_SHADER);
+		int vertexHandle = compileShader(vertexShader, GLES20.GL_VERTEX_SHADER);
+		int fragmentHandle = compileShader(fragmentShader, GLES20.GL_FRAGMENT_SHADER);
 
 		handle = GLES20.glCreateProgram();
 
@@ -62,19 +60,24 @@ public class ShaderProgram {
 	private int compileShader(String shader, int type) throws GraphicsException {
 
 		int handle = GLES20.glCreateShader(type);
+		if (handle == 0)
+		{
+			throw new GraphicsException(
+					"Failed to create shader handle ");
+		}
 		GLES20.glShaderSource(handle, shader);
 		GLES20.glCompileShader(handle);
 
-		if (checkForCompileError(handle)) {
-			switch (type) {
-			case GLES20.GL_VERTEX_SHADER:
-				throw new GraphicsException(
-						"Failed to compiling vertex shader: " + shader);
-			case GLES20.GL_FRAGMENT_SHADER:
-				throw new GraphicsException(
-						"Failed to compiling fragment shader: " + shader);
-			}
-		}
+		// Get the compilation status.
+	    final int[] compileStatus = new int[1];
+	    GLES20.glGetShaderiv(handle, GLES20.GL_COMPILE_STATUS, compileStatus, 0);
+	 
+	    // If the compilation failed, delete the shader.
+	    if (compileStatus[0] == 0)
+	    {
+	        GLES20.glDeleteShader(handle);
+	        handle = 0;
+	    }
 
 		return handle;
 	}
@@ -86,9 +89,18 @@ public class ShaderProgram {
 	 */
 	private boolean checkForCompileError(int handle) {
 
-		int[] linkStatus = new int[1];
-		GLES20.glGetShaderiv(handle, GLES20.GL_COMPILE_STATUS, linkStatus, 0);
+		final int[] linkStatus = new int[1];
+	    GLES20.glGetProgramiv(handle, GLES20.GL_LINK_STATUS, linkStatus, 0);
+	 
+	    // If the link failed, delete the program.
+	    if (linkStatus[0] == 0)
+	    {
+	        GLES20.glDeleteProgram(handle);
+	        handle = 0;
+	        
+	        return true;
+	    }
 
-		return linkStatus[0] == GLES20.GL_FALSE;
+		return false;
 	}
 }
