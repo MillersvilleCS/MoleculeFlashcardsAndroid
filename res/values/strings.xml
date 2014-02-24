@@ -30,5 +30,6 @@
     
     <!-- Game Screen -->
     <string name="error_gl">Error: Could not create openGL 2.0 context!</string>
+    <string name="back">Back</string>
 
 </resources>
