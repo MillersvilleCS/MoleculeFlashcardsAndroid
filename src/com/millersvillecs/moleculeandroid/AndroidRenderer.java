@@ -14,9 +14,9 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
 	private Scene scene;
 	private Camera camera;
 	
-	public AndroidRenderer(Scene scene, Camera camera) {
+	public AndroidRenderer(Scene scene) {
 		this.scene = scene;
-		this.camera = camera;
+		camera = new Camera(5, 5, 1, 100);
 	}
 	
     @Override

@@ -42,6 +42,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 	
 	private Scene scene;
 	private Camera camera;
+	private TestRenderer renderer;
 	
 	final String vertexShader =
 		    "uniform mat4 u_MVPMatrix;      \n"     // A constant representing the combined model/view/projection matrix.
@@ -99,10 +100,23 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 		Map<Integer, String> attributes = new HashMap<Integer, String>();
         attributes.put(0, "in_Position");
         attributes.put(1, "in_Color");
-        attributes.put(2, "in_TextureCoord");
         ShaderProgram shader;
         SceneObject so;
-        scene = new Scene();
+        scene = new Scene();   
+		
+		final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+		final ConfigurationInfo configurationInfo = activityManager
+				.getDeviceConfigurationInfo();
+		final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
+		
+		if (supportsEs2) {
+			this.gLSurfaceView.setEGLContextClientVersion(2);
+			renderer = new TestRenderer();
+			this.gLSurfaceView.setRenderer(renderer);
+		} else {
+			//error?
+		}
+		
         try {
             shader = new ShaderProgram(vertexShader, fragmentShader, attributes);
             so =new Quad(0.5f, 1, shader);
@@ -110,22 +124,6 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
         } catch (Exception e) {
             System.out.println("ERRRRRRRRRROOOOOOOOOOORRRR");
         }
-        
-        camera = new Camera(5, 5, 1, 100);
-		
-		
-		
-		final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-		final ConfigurationInfo configurationInfo = activityManager
-				.getDeviceConfigurationInfo();
-		final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
-
-		if (supportsEs2) {
-			this.gLSurfaceView.setEGLContextClientVersion(2);
-			this.gLSurfaceView.setRenderer(new AndroidRenderer(scene, camera));
-		} else {
-			//error?
-		}
 		
 		this.progress = new ProgressDialog(this);
         this.progress.setCanceledOnTouchOutside(false);
