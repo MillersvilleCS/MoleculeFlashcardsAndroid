@@ -24,8 +24,8 @@ public class CommunicationManager {
 		this.callback.onRequestResponse(response);
 	}
 	
-	public void setResourceresults(Bitmap bitmap) {
-		this.callback.onResourceResponse(bitmap);
+	public void setMoleculeResponse(String[] data) {
+		this.callback.onMoleculeResponse(data);
 	}
 	
 	public void setImageResults(Bitmap bitmap, boolean error) {
@@ -136,7 +136,7 @@ public class CommunicationManager {
 		new ExecutePost(this).execute(request);
 	}
 	
-	public void getMedia(String gameSessionId, int mediaType, int questionId) {
+	public void getMedia(String gameSessionId, int mediaType, String questionId) {
 		Request request = new Request();
 		request.url = this.GET_MEDIA_URL;
 		try {

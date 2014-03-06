@@ -1,17 +1,13 @@
 package com.millersvillecs.moleculeandroid;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
-import android.opengl.GLES20;
 
 import com.millersvillecs.moleculeandroid.graphics.Camera;
 import com.millersvillecs.moleculeandroid.graphics.Mesh;
 import com.millersvillecs.moleculeandroid.graphics.VertexAttribute;
 import com.millersvillecs.moleculeandroid.graphics.opengles.ShaderProgram;
 import com.millersvillecs.moleculeandroid.scene.SceneObject;
-import com.millersvillecs.moleculeandroid.util.BufferUtils;
 import com.millersvillecs.moleculeandroid.util.math.Vector2;
 
 /**

@@ -135,7 +135,7 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 	}
 
 	@Override
-	public void onResourceResponse(Bitmap bitmap) {}
+	public void onMoleculeResponse(String[] data) {}
 
 	@Override
 	public void onImageResponse(Bitmap bitmap, boolean error) {

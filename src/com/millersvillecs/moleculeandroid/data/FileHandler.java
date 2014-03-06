@@ -40,7 +40,7 @@ public class FileHandler {
 		    return true;
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+		    System.err.println("IOException writing " + file.getName());
 			return false;
 		}
 	}
@@ -59,7 +59,7 @@ public class FileHandler {
 		    return result.split("\n");
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+		    System.err.println("IOException reading " + file.getName());
 			return null;
 		}
 	}
