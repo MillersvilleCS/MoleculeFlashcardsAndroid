@@ -35,10 +35,10 @@ public class ShaderProgram {
 		}
 
 		// detach shaders that aren't needed
-		GLES20.glDetachShader(handle, vertexHandle);
-		GLES20.glDetachShader(handle, fragmentHandle);
-		GLES20.glDeleteShader(vertexHandle);
-		GLES20.glDeleteShader(fragmentHandle);
+		//GLES20.glDetachShader(handle, vertexHandle);
+		//GLES20.glDetachShader(handle, fragmentHandle);
+		//GLES20.glDeleteShader(vertexHandle);
+		//GLES20.glDeleteShader(fragmentHandle);
 	}
 
 	public void bind() {
