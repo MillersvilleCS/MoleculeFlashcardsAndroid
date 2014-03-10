@@ -37,7 +37,8 @@ public class VAO {
                    descriptor.getStride(), descriptor.getPointer());
 
        }
-       ibo.bind();
+       vbo.unbind();
+       //ibo.bind();
    }
 
    public final void addVertexAttribute(final int index, final Descriptor descriptor) {

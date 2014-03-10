@@ -26,6 +26,10 @@ public class VBO {
 	public void bind() {
 		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, getHandle());
 	}
+	
+	public void unbind() {
+		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+	}
 
 	public void destroy() {
 		GLES20.glDeleteBuffers(1, handleBuffer, 0);

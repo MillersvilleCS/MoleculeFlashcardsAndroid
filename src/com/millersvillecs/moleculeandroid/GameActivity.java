@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
 import android.view.View;
 
@@ -44,7 +45,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 	
 	private Scene scene;
 	private Camera camera;
-	private TestRenderer renderer;
+	private Renderer renderer;
 
 	private String username, auth, gameId, gameSessionId;
 	private CommunicationManager comm;
@@ -71,17 +72,6 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 		this.gLSurfaceView = (GLSurfaceView) findViewById(R.id.glsurfaceview);
 		
 		
-		
-		/*
-		 * Test render code
-		 */
-		Map<Integer, String> attributes = new HashMap<Integer, String>();
-        attributes.put(0, "in_Position");
-        attributes.put(1, "in_Color");
-        ShaderProgram shader;
-        SceneObject so;
-        scene = new Scene();   
-		
 		final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		final ConfigurationInfo configurationInfo = activityManager
 				.getDeviceConfigurationInfo();
@@ -89,19 +79,11 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 		
 		if (supportsEs2) {
 			this.gLSurfaceView.setEGLContextClientVersion(2);
-			renderer = new TestRenderer();
+			renderer = new AndroidRenderer();
 			this.gLSurfaceView.setRenderer(renderer);
 		} else {
 			//error?
 		}
-		
-        try {
-          //  shader = new ShaderProgram(vertexShader, fragmentShader, attributes);
-         //   so =new Quad(0.5f, 1, shader);
-          //  scene.attach(so);
-        } catch (Exception e) {
-            System.out.println("ERRRRRRRRRROOOOOOOOOOORRRR");
-        }
 		
 		this.progress = new ProgressDialog(this);
         this.progress.setCanceledOnTouchOutside(false);
