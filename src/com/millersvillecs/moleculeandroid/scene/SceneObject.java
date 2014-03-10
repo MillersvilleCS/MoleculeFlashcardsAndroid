@@ -44,8 +44,10 @@ public class SceneObject extends SceneNode {
 	@Override
 	public void render(int delta, Camera camera) {
 		shader.bind();
-		int modelViewHandle = shader.getUniformLocation("u_MVPMatrix");
-		GLES20.glUniformMatrix4fv(modelViewHandle, 1, false, camera.getViewProjection(), 0);
+		int viewHandle = shader.getUniformLocation("u_view");
+		int projectionHandle = shader.getUniformLocation("u_projection");
+		GLES20.glUniformMatrix4fv(viewHandle, 1, false, camera.getView(), 0);
+		GLES20.glUniformMatrix4fv(projectionHandle, 1, false, camera.getProjection(), 0);
 		mesh.draw();
         shader.unbind();
 	}

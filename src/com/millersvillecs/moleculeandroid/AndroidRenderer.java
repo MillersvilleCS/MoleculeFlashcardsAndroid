@@ -28,8 +28,9 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
 	private Camera camera;
 	
 	final String vertexShader =
-            "uniform mat4 u_MVPMatrix;      \n"     // A constant representing the combined model/view/projection matrix.
-            
+            "uniform mat4 u_view;      \n"     // A constant representing the combined model/view/projection matrix.
+		  + "uniform mat4 u_projection; 	\n"
+		
           + "attribute vec4 in_Position;     \n"     // Per-vertex position information we will pass in.
           + "attribute vec4 in_Color;        \n"     // Per-vertex color information we will pass in.              
           
@@ -39,7 +40,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
           + "{                              \n"
           + "   pass_Color = in_Color;          \n"     // Pass the color through to the fragment shader. 
                                                     // It will be interpolated across the triangle.
-          + "   gl_Position = u_MVPMatrix   \n"     // gl_Position is a special variable used to store the final position.
+          + "   gl_Position = u_projection * u_view  \n"     // gl_Position is a special variable used to store the final position.
           + "               * in_Position;   \n"     // Multiply the vertex by the matrix to get the final point in                                                                   
           + "}                              \n";    // normalized screen coordinates.
         
@@ -102,5 +103,6 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         
         Mesh mesh  =new Mesh(triangle1IndicesData, meshDescriptor);
         scene.attach(new SceneObject(mesh, shader));
+        scene.attach(new Quad(5, 5, shader));
     }
 }

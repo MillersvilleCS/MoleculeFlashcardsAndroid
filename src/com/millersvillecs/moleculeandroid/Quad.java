@@ -59,7 +59,7 @@ public class Quad extends SceneObject {
     }
 
     public void render(int delta, Camera camera) {
-        super.beginRendering();
+      //  super.beginRendering();
        // int viewUniform = shader.getUniformLocation("view");
        // int projectionUniform = shader.getUniformLocation("projection");
        // int scaleUniform = shader.getUniformLocation("scale");
@@ -71,7 +71,8 @@ public class Quad extends SceneObject {
        // matrix44Buffer.flip();
         //GLES20.glUniform4fv(projectionUniform, false, matrix44Buffer);
         //GLES20.glUniform2f(scaleUniform, scale.x, scale.y);
-        super.endRendering();
+        //super.endRendering();
+        super.render(delta, camera);
         super.renderChildren(delta, camera);
     }
 }
