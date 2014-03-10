@@ -10,7 +10,7 @@ public class GameUIPieces {
     
     private GameActivity gameActivity;
     private Button[] buttons;
-    private TextView questionText, gameFinishScore, gameFinishRank;
+    private TextView questionText;
     private ScrollView scrollView;
     
     public GameUIPieces (GameActivity gameActivity) {
@@ -26,8 +26,6 @@ public class GameUIPieces {
         this.buttons[7] = (Button) gameActivity.findViewById(R.id.game_button_7);
         
         this.questionText = (TextView) gameActivity.findViewById(R.id.question_text);
-        this.gameFinishScore = (TextView) gameActivity.findViewById(R.id.game_finish_score);
-        this.gameFinishRank = (TextView) gameActivity.findViewById(R.id.game_finish_rank);
         this.scrollView = (ScrollView) gameActivity.findViewById(R.id.question_scrollbar);
         //this.scrollView.setScrollBarStyle(ScrollView.SCROLLBARS_INSIDE_INSET);
         

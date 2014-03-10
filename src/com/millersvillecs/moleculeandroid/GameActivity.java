@@ -23,7 +23,9 @@ import com.millersvillecs.moleculeandroid.graphics.Camera;
 import com.millersvillecs.moleculeandroid.graphics.opengles.ShaderProgram;
 
 import com.millersvillecs.moleculeandroid.data.CommunicationManager;
+import com.millersvillecs.moleculeandroid.data.Molecule;
 import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
+import com.millersvillecs.moleculeandroid.data.SDFParser;
 
 import com.millersvillecs.moleculeandroid.graphics.opengles.VAO;
 
@@ -49,6 +51,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 	private ProgressDialog progress;
 	private boolean wantedDismiss = false;
 	private Question[] questions;
+	private Molecule[] molecules;
 	private int currentQuestion = 0, lastAnswerIndex = -1, gameState;
 	private double score = 0.0;
 
@@ -93,9 +96,9 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 		}
 		
         try {
-            shader = new ShaderProgram(vertexShader, fragmentShader, attributes);
-            so =new Quad(0.5f, 1, shader);
-            scene.attach(so);
+          //  shader = new ShaderProgram(vertexShader, fragmentShader, attributes);
+         //   so =new Quad(0.5f, 1, shader);
+          //  scene.attach(so);
         } catch (Exception e) {
             System.out.println("ERRRRRRRRRROOOOOOOOOOORRRR");
         }
@@ -156,6 +159,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
                 this.gameSessionId = response.getString("game_session_id");
                 JSONArray jQuestions = response.getJSONArray("questions");
                 this.questions = new Question[jQuestions.length()];
+                this.molecules = new Molecule[jQuestions.length()];
                 for(int i = 0; i < jQuestions.length(); i++) {
                     JSONObject currentQ = jQuestions.getJSONObject(i);
                     JSONArray currentAs = currentQ.getJSONArray("answers");
@@ -174,11 +178,10 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
                 return;
             }
             
-            this.gameState = GameActivity.PLAYING;
-            this.wantedDismiss = true;
-            this.progress.dismiss();
-            this.currentQuestion = -1;
-            nextQuestion();
+            this.currentQuestion = 0;
+            this.progress.setMessage("Loading molecule models...");
+            this.comm.getMedia(this.gameSessionId, 0, this.questions[0].getId());
+            
         } else if(this.gameState == GameActivity.PLAYING) {
             try{
                 this.score = response.getDouble("score");
@@ -211,14 +214,22 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
     }
 
     @Override
-    public void onResourceResponse(Bitmap bitmap) {
-        // TODO Auto-generated method stub
+    public void onMoleculeResponse(String[] data) {
+        this.molecules[this.currentQuestion] = SDFParser.parse(data);
+        this.currentQuestion++;
+        if(this.currentQuestion < this.molecules.length) {
+            this.comm.getMedia(this.gameSessionId, 0, this.questions[0].getId());
+        } else {
+            this.gameState = GameActivity.PLAYING;
+            this.wantedDismiss = true;
+            this.progress.dismiss();
+            this.currentQuestion = -1;
+            nextQuestion();
+        }
     }
 
     @Override
-    public void onImageResponse(Bitmap bitmap, boolean error) {
-        // TODO Auto-generated method stub
-    }
+    public void onImageResponse(Bitmap bitmap, boolean error) {}
 
     @Override
     public void onDismiss(DialogInterface dialog) {
@@ -267,7 +278,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
             Question question = this.questions[this.currentQuestion];
             String answerId = question.getAnswer(index).getId();
             
-            this.comm.submitFlashcardAnswer(this.auth, this.gameSessionId, question.getId(), answerId, 1000);//TODO
+            this.comm.submitFlashcardAnswer(this.auth, this.gameSessionId, question.getId(), answerId, 1000);//TODO, actual time
         }
         
     }
@@ -284,40 +295,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
             }
         } else {
             this.gameState = GameActivity.FINISHING;
-            this.comm.endFlashcardGame(this.auth, this.gameSessionId, 120000);//TODO
+            this.comm.endFlashcardGame(this.auth, this.gameSessionId, 120000);//TODO, actual time
         }
     }
-	
-	/*
-
-	public void load() { //not used?
-		float[] vertices = {
-				// Left bottom triangle
-				-0.5f, 0.5f, 0f, -0.5f, -0.5f, 0f, 0.5f, -0.5f, 0f,
-				// Right top triangle
-
-				0.5f, 0.5f, 0f,
-
-		};
-
-		FloatBuffer verticesBuffer = BufferUtils
-				.createFloatBuffer(vertices.length);
-		verticesBuffer.put(vertices);
-		verticesBuffer.flip();
-		VBO vbo = new VBO(verticesBuffer, BufferedObjectUsage.STATIC_DRAW);
-
-		int[] indices = { 0, 1, 2, 0, 2, 3, };
-
-		IntBuffer indicesBuffer = BufferUtils.createIntBuffer(indices.length);
-		indicesBuffer.put(indices);
-		indicesBuffer.flip();
-
-		IBO ibo = new IBO(indicesBuffer, BufferedObjectUsage.STATIC_DRAW);
-
-		vao = new VAO(vbo, ibo, 6);
-		Descriptor des = new Descriptor(3, GLES20.GL_FLOAT, false, 0, 0);
-		vao.addVertexAttribute(0, des);
-		vao.init();
-	}
-	*/
 }

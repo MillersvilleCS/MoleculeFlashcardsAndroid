@@ -1,35 +1,23 @@
 package com.millersvillecs.moleculeandroid;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.millersvillecs.moleculeandroid.data.CommunicationManager;
-import com.millersvillecs.moleculeandroid.data.FileHandler;
-import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
-import com.millersvillecs.moleculeandroid.graphics.Camera;
-import com.millersvillecs.moleculeandroid.graphics.opengles.ShaderProgram;
-import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
-import com.millersvillecs.moleculeandroid.scene.Scene;
-import com.millersvillecs.moleculeandroid.scene.SceneObject;
-import com.millersvillecs.moleculeandroid.util.FileUtil;
-
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ConfigurationInfo;
 import android.graphics.Bitmap;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
+import com.millersvillecs.moleculeandroid.data.CommunicationManager;
+import com.millersvillecs.moleculeandroid.data.FileHandler;
+import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
+import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
 
 public class MainActivity extends Activity implements OnCommunicationListener {
 	
@@ -141,7 +129,7 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 	}
 
 	@Override
-	public void onResourceResponse(Bitmap bitmap) {}
+	public void onMoleculeResponse(String[] data) {}
 
 	@Override
 	public void onImageResponse(Bitmap bitmap, boolean error) {}

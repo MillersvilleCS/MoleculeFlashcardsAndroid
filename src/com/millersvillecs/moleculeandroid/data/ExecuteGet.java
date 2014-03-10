@@ -1,7 +1,10 @@
 package com.millersvillecs.moleculeandroid.data;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.ClientProtocolException;
@@ -20,12 +23,9 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 
-
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
-/* NOT COMPLETE */
-public class ExecuteGet extends AsyncTask<Request, Void, Bitmap>{
+public class ExecuteGet extends AsyncTask<Request, Void, String[]>{
 	
 	private CommunicationManager commRef;
 	
@@ -49,23 +49,30 @@ public class ExecuteGet extends AsyncTask<Request, Void, Bitmap>{
 	}
 	
 	@Override
-	protected Bitmap doInBackground(Request... requests) {
+	protected String[] doInBackground(Request... requests) {
 		if(requests.length != 1) {
 			return null;
 		}
 		Request request = requests[0];
+		String[] data = new String[0];
 		HttpClient client = createHttpClient();
-		HttpGet get = new HttpGet(request.url);
-		HttpParams params = client.getParams();
-		Bitmap bitmap = null;
 		try {
-			params.setParameter("gsi", request.params.getString("gsi"));
-			params.setParameter("mt", request.params.getString("mt"));
-			params.setParameter("qid", request.params.getString("qid"));
-			
+    		HttpGet get = new HttpGet(request.url + "?gsi=" + request.params.getString("gsi") +
+    		                                        "&mt=" + request.params.getString("mt") +
+    		                                        "&qid=" + request.params.getString("qid"));
 			HttpResponse response = client.execute(get);
-			
-			System.out.println("Ran OK!");
+			HttpEntity entity = response.getEntity();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
+			/* TODO: Switch to passing StringBuffer and using in-line scanning methods? - Performance? */
+            StringBuffer content = new StringBuffer();
+            String line = " ";
+            while(line != null && !line.contains("M  END")){
+                content.append(line);
+                content.append("\n");
+                line = reader.readLine();
+            }
+            reader.close();
+            data = content.substring(0, content.length()).split("\n");
 	    } catch (ClientProtocolException e) {
 	    	e.printStackTrace();
 	    } catch (IOException e) {
@@ -73,11 +80,11 @@ public class ExecuteGet extends AsyncTask<Request, Void, Bitmap>{
 	    } catch (JSONException e) {
 	    	e.printStackTrace();
 	    }
-		return bitmap;
+		return data;
 	}
 	
 	@Override
-	protected void onPostExecute(Bitmap bitmap) {
-		this.commRef.setResourceresults(bitmap);
+	protected void onPostExecute(String[] data) {
+		this.commRef.setMoleculeResponse(data);
 	}
 }
