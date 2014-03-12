@@ -71,7 +71,6 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 
 		this.gLSurfaceView = (GLSurfaceView) findViewById(R.id.glsurfaceview);
 		
-		
 		final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		final ConfigurationInfo configurationInfo = activityManager
 				.getDeviceConfigurationInfo();
@@ -79,7 +78,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 		
 		if (supportsEs2) {
 			this.gLSurfaceView.setEGLContextClientVersion(2);
-			renderer = new AndroidRenderer();
+			renderer = new AndroidRenderer(this.getApplicationContext());
 			this.gLSurfaceView.setRenderer(renderer);
 		} else {
 			//error?

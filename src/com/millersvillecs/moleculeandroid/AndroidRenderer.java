@@ -1,5 +1,6 @@
 package com.millersvillecs.moleculeandroid;
 
+import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,10 @@ import com.millersvillecs.moleculeandroid.scene.Scene;
 import com.millersvillecs.moleculeandroid.scene.SceneNode;
 import com.millersvillecs.moleculeandroid.scene.SceneObject;
 import com.millersvillecs.moleculeandroid.util.BufferUtils;
+import com.millersvillecs.moleculeandroid.util.FileUtil;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
@@ -26,6 +30,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
 	
 	private Scene scene;
 	private Camera camera;
+	private Context context;
 	
 	final String vertexShader =
             "uniform mat4 u_view;      \n"     // A constant representing the combined model/view/projection matrix.
@@ -65,9 +70,10 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         final int[] triangle1IndicesData = {
                 0,1,1};
         
-	public AndroidRenderer() {
+	public AndroidRenderer(Context context) {
 		camera = new Camera(5, 5, 1, 100);
 		scene = new Scene();
+		this.context = context;
 	}
 	
     @Override
@@ -78,31 +84,41 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-    	// Set the OpenGL viewport to the same size as the surface.
         GLES20.glViewport(0, 0, width, height);
+        
+        
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
+        AssetManager assetManager = context.getAssets();
         
         ShaderProgram shader = null;
         try {
             Map<Integer, String> attributes = new HashMap<Integer, String>();
             attributes.put(0, "in_Position");
             attributes.put(1, "in_Color");
-              shader = new ShaderProgram(vertexShader, fragmentShader, attributes);
+            
+            String sphereVertShader = FileUtil.convertStreamToString(assetManager.open("shaders/SphereShader.vert"));
+            String sphereFragShader = FileUtil.convertStreamToString(assetManager.open("shaders/SphereShader.frag"));
+            shader = new ShaderProgram(vertexShader, fragmentShader, attributes);
               
-          } catch (Exception e) {
+          } catch (IOException e) {
               System.out.println("Could not create the shader");
-          }
+          } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
         List<VertexAttribute> meshDescriptor = new ArrayList<VertexAttribute>();
         meshDescriptor.add(new VertexAttribute(triangle1PositionData, 3));
         meshDescriptor.add(new VertexAttribute(triangle1ColorData, 4));
         
         Mesh mesh  =new Mesh(triangle1IndicesData, meshDescriptor);
         scene.attach(new SceneObject(mesh, shader));
-        scene.attach(new Quad(5, 5, shader));
+
+        //scene.attach(new SceneObject(mesh, shader));
+        //scene.attach(new Quad(5, 5, shader));
     }
 }

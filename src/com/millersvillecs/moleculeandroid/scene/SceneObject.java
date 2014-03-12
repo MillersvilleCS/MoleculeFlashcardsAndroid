@@ -32,15 +32,6 @@ public class SceneObject extends SceneNode {
         this.shader = shader;
     }
 
-    protected void beginRendering() {
-        shader.bind();
-    }
-
-    protected void endRendering() {
-        mesh.draw();
-        shader.unbind();
-    }
-
 	@Override
 	public void render(int delta, Camera camera) {
 		shader.bind();
