@@ -1,6 +1,6 @@
 package com.millersvillecs.moleculeandroid;
 
-import android.opengl.GLES20;
+/*import android.opengl.GLES20;
 
 import com.millersvillecs.moleculeandroid.graphics.Camera;
 import com.millersvillecs.moleculeandroid.graphics.Mesh;
@@ -35,3 +35,4 @@ public class Sphere extends SceneObject {
 		shader.unbind();
 	}
 }
+*/

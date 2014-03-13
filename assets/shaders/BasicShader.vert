@@ -1,15 +1,17 @@
-#version 150 core
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_model;
 
-in vec4 in_Position;
-in vec4 in_Color;
-in vec2 in_TextureCoord;
+attribute vec4 in_position;
+attribute vec4 in_color;
+attribute vec2 in_textureCoord;
 
-out vec4 pass_Color;
-out vec2 pass_TextureCoord;
+varying vec4 pass_color;
+varying vec2 pass_textureCoord;
 
 void main(void) {
-	gl_Position = in_Position;
+	gl_Position = u_projection * u_view * u_model * in_position;
 	
-	pass_Color = in_Color;
-	pass_TextureCoord = in_TextureCoord;
+	pass_color = in_color;
+	pass_textureCoord = in_textureCoord;
 }

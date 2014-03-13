@@ -9,6 +9,7 @@ import com.millersvillecs.moleculeandroid.graphics.VertexAttribute;
 import com.millersvillecs.moleculeandroid.graphics.opengles.ShaderProgram;
 import com.millersvillecs.moleculeandroid.scene.SceneObject;
 import com.millersvillecs.moleculeandroid.util.math.Vector2;
+import com.millersvillecs.moleculeandroid.util.math.Vector3;
 
 /**
  * Created by Will on 2/8/14.
@@ -55,7 +56,7 @@ public class Quad extends SceneObject {
     }
 
     public Quad(float x, float y, float width, float height, ShaderProgram shader) {
-        super(new Vector2(0,0), new Vector2(width,height), new Mesh(indices ,meshDescriptor), shader);
+        super(new Vector3(0, 0, 0), new Vector3(1, 1, 1), new Mesh(indices ,meshDescriptor), shader);
     }
 
     public void render(int delta, Camera camera) {
@@ -72,6 +73,7 @@ public class Quad extends SceneObject {
         //GLES20.glUniform4fv(projectionUniform, false, matrix44Buffer);
         //GLES20.glUniform2f(scaleUniform, scale.x, scale.y);
         //super.endRendering();
+    	
         super.render(delta, camera);
         super.renderChildren(delta, camera);
     }

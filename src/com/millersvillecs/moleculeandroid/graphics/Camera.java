@@ -4,16 +4,17 @@ import android.opengl.Matrix;
 import android.renderscript.Matrix4f;
 
 import com.millersvillecs.moleculeandroid.util.math.Vector2;
+import com.millersvillecs.moleculeandroid.util.math.Vector3;
 
 public class Camera {
 
     private float[] view = new float[16];
     private float[] projection = new float[16];
-    private Vector2 translation;
+    private Vector3 translation;
     private float width, height, near, far;
 
     public Camera(float width, float height, float near, float far) {
-        translation = new Vector2();
+        translation = new Vector3();
         this.width = width;
         this.height = height;
         this.near = near;
@@ -21,30 +22,34 @@ public class Camera {
         
         float ratio = (float) width / height;
         
-        Matrix.frustumM(projection, 0, -ratio, ratio, -1, 1, 3, 7);
-        Matrix.setLookAtM(view, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.frustumM(projection, 0, -ratio, ratio, -1, 1, near, far);
+
+    }
+    
+    public void lookAt(float x, float y, float z) {
+    	Matrix.setLookAtM(view, 0, translation.x, translation.y, translation.z, x, y, z, 0f, 1.0f, 0.0f);
     }
 
-    public Camera setTranslation(Vector2 translation) {
+    public Camera setTranslation(Vector3 translation) {
         this.translation = translation;
 
         return this;
     }
 
-    public Camera setTranslation(float x, float y) {
-        translation = new Vector2(x, y);
+    public Camera setTranslation(float x, float y, float z) {
+        translation = new Vector3(x, y, z);
 
         return this;
     }
 
-    public Camera translate(Vector2 translation) {
+    public Camera translate(Vector3 translation) {
         this.translation.add(translation);
 
         return this;
     }
 
-    public Camera translate(float x, float y) {
-        translation.add(x, y);
+    public Camera translate(float x, float y, float z) {
+        translation.add(x, y, z);
 
         return this;
     }

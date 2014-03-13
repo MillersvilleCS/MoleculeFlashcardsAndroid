@@ -17,18 +17,18 @@ public abstract class SceneNode extends Node<SceneNode> {
 
     private List<IBehavior> behaviors = new ArrayList<IBehavior>();
 
-    protected Vector2 translation, scale;
+    protected Vector3 translation, scale;
     protected float sceneTime;
 
     public SceneNode() {
-        this(new Vector2());
+        this(new Vector3());
     }
 
-    public SceneNode(Vector2 translation) {
-        this(translation, new Vector2(1, 1));
+    public SceneNode(Vector3 translation) {
+        this(translation, new Vector3(1, 1, 1));
     }
 
-    public SceneNode(Vector2 translation, Vector2 scale) {
+    public SceneNode(Vector3 translation, Vector3 scale) {
         this.translation = translation;
         this.scale = scale;
     }
@@ -53,46 +53,46 @@ public abstract class SceneNode extends Node<SceneNode> {
         }
     }
 
-    public SceneNode setTranslation(Vector2 translation) {
-        return setTranslation(translation.x, translation.y);
+    public SceneNode setTranslation(Vector3 translation) {
+        return setTranslation(translation.x, translation.y, translation.z);
     }
 
-    public SceneNode setTranslation(float x, float y) {
+    public SceneNode setTranslation(float x, float y, float z) {
         for (Node<SceneNode> node : this.getSubnodes()) {
-            Vector2 offset = ((SceneNode) node).getTranslation().sub(x, y);
-            ((SceneNode) node).setTranslation(offset.add(x, y));
+            Vector3 offset = ((SceneNode) node).getTranslation().sub(x, y, z);
+            ((SceneNode) node).setTranslation(offset.add(x, y, z));
         }
-        translation.set(x, y);
+        translation.set(x, y, z);
 
         return this;
     }
 
-    public SceneNode translate(Vector2 translation) {
-        return translate(translation.x, translation.y);
+    public SceneNode translate(Vector3 translation) {
+        return translate(translation.x, translation.y, translation.z);
     }
 
-    public SceneNode translate(float x, float y) {
+    public SceneNode translate(float x, float y, float z) {
         for (Node<SceneNode> node : this.getSubnodes()) {
-            ((SceneNode) node).getTranslation().add(x, y);
+            ((SceneNode) node).getTranslation().add(x, y, z);
         }
-        translation.add(x, y);
+        translation.add(x, y, z);
 
         return this;
     }
 
-    public SceneNode scale(float scalarX, float scalarY) {
-        scale.mul(scalarX, scalarY);
+    public SceneNode scale(float scalarX, float scalarY, float scalarZ) {
+        scale.mul(scalarX, scalarY, scalarZ);
 
         return this;
     }
 
     public SceneNode scale(float scalar) {
-        scale.mul(scalar, scalar);
+        scale.mul(scalar, scalar, scalar);
 
         return this;
     }
 
-    public Vector2 getTranslation() {
+    public Vector3 getTranslation() {
         return translation;
     }
 
@@ -102,6 +102,10 @@ public abstract class SceneNode extends Node<SceneNode> {
 
     public float getY() {
         return translation.y;
+    }
+    
+    public float getZ() {
+        return translation.z;
     }
 
     public float getSceneTime() {

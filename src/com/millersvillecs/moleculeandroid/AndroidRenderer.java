@@ -68,10 +68,12 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
                 0.0f, 0.0f, 1.0f, 1.0f,
                 0.0f, 1.0f, 0.0f, 1.0f};
         final int[] triangle1IndicesData = {
-                0,1,1};
+                0,1,2};
         
 	public AndroidRenderer(Context context) {
 		camera = new Camera(5, 5, 1, 100);
+		camera.setTranslation(0, 0, -3);
+		camera.lookAt(0, 0, 1);
 		scene = new Scene();
 		this.context = context;
 	}
@@ -97,12 +99,12 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         ShaderProgram shader = null;
         try {
             Map<Integer, String> attributes = new HashMap<Integer, String>();
-            attributes.put(0, "in_Position");
-            attributes.put(1, "in_Color");
+            attributes.put(0, "in_position");
+            attributes.put(1, "in_color");
             
-            String sphereVertShader = FileUtil.convertStreamToString(assetManager.open("shaders/SphereShader.vert"));
-            String sphereFragShader = FileUtil.convertStreamToString(assetManager.open("shaders/SphereShader.frag"));
-            shader = new ShaderProgram(vertexShader, fragmentShader, attributes);
+            String sphereVertShader = FileUtil.convertStreamToString(assetManager.open("shaders/BasicShader.vert"));
+            String sphereFragShader = FileUtil.convertStreamToString(assetManager.open("shaders/BasicShader.frag"));
+            shader = new ShaderProgram(sphereVertShader, sphereFragShader, attributes);
               
           } catch (IOException e) {
               System.out.println("Could not create the shader");
@@ -116,9 +118,16 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         meshDescriptor.add(new VertexAttribute(triangle1ColorData, 4));
         
         Mesh mesh  =new Mesh(triangle1IndicesData, meshDescriptor);
-        scene.attach(new SceneObject(mesh, shader));
-
+        
+        SceneObject so = new SceneObject(mesh, shader);
+        so.translate(0f, 0, 0);
+        //scene.attach(so);
+        Quad quad = new Quad(5, 5, shader);
+        Quad quad2 = new Quad(2, 2, shader);
+        quad.translate(1f, 0.2f, 0);
+        scene.attach(quad);
+        scene.attach(quad2);
         //scene.attach(new SceneObject(mesh, shader));
-        //scene.attach(new Quad(5, 5, shader));
+        
     }
 }

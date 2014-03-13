@@ -1,35 +1,35 @@
 package com.millersvillecs.moleculeandroid.util;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
- * @author William Gervasio
+ * @author Stack Overflow guy
  */
 public class FileUtil {
 
-    /**
-     * Parses a file for the text
-     * @param fileLocation
-     * @return The text as a String
-     */
-    public static String readText(String fileLocation) {
-        StringBuilder shaderString = new StringBuilder();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(fileLocation));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                shaderString.append(line).append("\n");
-            }
-            reader.close();
-        } catch (FileNotFoundException e) {
-            
-        } catch (IOException e) {
-            
-        }
+	public static String convertStreamToString(InputStream is) throws Exception {
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+	    StringBuilder sb = new StringBuilder();
+	    String line = null;
+	    while ((line = reader.readLine()) != null) {
+	      sb.append(line).append("\n");
+	    }
+	    reader.close();
+	    return sb.toString();
+	}
 
-        return shaderString.toString();
-    }
+	public static String getStringFromFile (String filePath) throws Exception {
+	    File fl = new File(filePath);
+	    FileInputStream fin = new FileInputStream(fl);
+	    String ret = convertStreamToString(fin);
+	    fin.close();        
+	    return ret;
+	}
 }
