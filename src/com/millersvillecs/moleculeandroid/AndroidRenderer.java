@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.millersvillecs.moleculeandroid.data.Atom;
+import com.millersvillecs.moleculeandroid.data.Molecule;
 import com.millersvillecs.moleculeandroid.graphics.Camera;
 import com.millersvillecs.moleculeandroid.graphics.Mesh;
 import com.millersvillecs.moleculeandroid.graphics.VertexAttribute;
@@ -19,9 +21,11 @@ import com.millersvillecs.moleculeandroid.scene.SceneNode;
 import com.millersvillecs.moleculeandroid.scene.SceneObject;
 import com.millersvillecs.moleculeandroid.util.BufferUtils;
 import com.millersvillecs.moleculeandroid.util.FileUtil;
+import com.millersvillecs.moleculeandroid.util.math.Vector3;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
@@ -69,18 +73,42 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
                 0.0f, 1.0f, 0.0f, 1.0f};
         final int[] triangle1IndicesData = {
                 0,1,2};
-        
-	public AndroidRenderer(Context context) {
+        ShaderProgram shader = null;
+        private GameActivity activity;
+        private Molecule currentMolecule;
+        SceneNode moleculeNode;
+	public AndroidRenderer(Context context, GameActivity activity) {
 		camera = new Camera(5, 5, 1, 100);
 		camera.setTranslation(0, 0, -3);
 		camera.lookAt(0, 0, 1);
 		scene = new Scene();
 		this.context = context;
+		this.activity = activity;
 	}
 	
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        Molecule mol = activity.getCurrentMolecule();
+        if(mol != null && !mol.equals(currentMolecule)) {
+        	if(moleculeNode != null) {
+            	scene.detach(moleculeNode);
+            }
+        	moleculeNode = new SceneNode();
+        	
+        	for(Atom atom : mol.getAtoms()) {
+        		Cube cube = new Cube(atom.color);
+        		SceneObject atomObject = new SceneObject(cube, shader);
+        		atomObject.translate((float) atom.x, (float) atom.y, (float) atom.z);
+        		//scene.attach(atomObject);
+        		moleculeNode.attach(atomObject);
+        	}
+        	currentMolecule = mol;
+        	scene.attach(moleculeNode);
+        }
+        if(moleculeNode != null) {
+        	moleculeNode.rotate(1f, 1, 0);
+        }
         scene.render(0, camera);
     }
 
@@ -96,7 +124,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         AssetManager assetManager = context.getAssets();
         
-        ShaderProgram shader = null;
+        
         try {
             Map<Integer, String> attributes = new HashMap<Integer, String>();
             attributes.put(0, "in_position");
@@ -124,10 +152,21 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         //scene.attach(so);
         Quad quad = new Quad(5, 5, shader);
         Quad quad2 = new Quad(2, 2, shader);
+        Cube cube = new Cube(Color.GREEN);
+        SceneObject cubeSO = new SceneObject(cube, shader);
+        SceneObject cubeSO2 = new SceneObject(cube, shader);
+        cubeSO.translate(1.28f, -0.2f, 0);
+        //scene.attach(cubeSO);
+        //scene.attach(cubeSO2);
         quad.translate(1f, 0.2f, 0);
-        scene.attach(quad);
-        scene.attach(quad2);
+        //scene.attach(quad);
+        //scene.attach(quad2);
         //scene.attach(new SceneObject(mesh, shader));
         
+        
+    }
+    
+    public void setMolecule(Molecule molecule) {
+    	
     }
 }

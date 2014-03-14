@@ -13,102 +13,119 @@ import com.millersvillecs.moleculeandroid.util.math.Vector3;
  * @author william
  * 
  */
-public abstract class SceneNode extends Node<SceneNode> {
+public class SceneNode extends Node<SceneNode> {
 
-    private List<IBehavior> behaviors = new ArrayList<IBehavior>();
+	private List<IBehavior> behaviors = new ArrayList<IBehavior>();
 
-    protected Vector3 translation, scale;
-    protected float sceneTime;
+	protected Vector3 translation, scale, rotation;
+	protected float sceneTime;
 
-    public SceneNode() {
-        this(new Vector3());
-    }
+	public SceneNode() {
+		this(new Vector3());
+	}
 
-    public SceneNode(Vector3 translation) {
-        this(translation, new Vector3(1, 1, 1));
-    }
+	public SceneNode(Vector3 translation) {
+		this(translation, new Vector3(1, 1, 1));
+	}
 
-    public SceneNode(Vector3 translation, Vector3 scale) {
-        this.translation = translation;
-        this.scale = scale;
-    }
+	public SceneNode(Vector3 translation, Vector3 scale) {
+		this.translation = translation;
+		this.scale = scale;
+		this.rotation = new Vector3();
+	}
 
-    public abstract void render(int delta, Camera camera);
+	public void render(int delta, Camera camera) {
+		for (Node<SceneNode> node : this.getSubnodes()) {
+			((SceneNode) node).render(delta, camera);
+		}
+	}
 
-    public void renderChildren(int delta, Camera camera) {
-        for (Node<SceneNode> node : this.getSubnodes()) {
-            ((SceneNode) node).render(delta, camera);
-        }
-    }
+	public void update(int delta) {
+		this.sceneTime += delta;
 
-    public void update(int delta) {
-        this.sceneTime += delta;
+		for (IBehavior behavior : behaviors) {
+			behavior.act(this);
+		}
 
-        for (IBehavior behavior : behaviors) {
-            behavior.act(this);
-        }
+		for (Node<SceneNode> node : this.getSubnodes()) {
+			((SceneNode) node).update(delta);
+		}
+	}
 
-        for (Node<SceneNode> node : this.getSubnodes()) {
-            ((SceneNode) node).update(delta);
-        }
-    }
+	public SceneNode setTranslation(Vector3 translation) {
+		return setTranslation(translation.x, translation.y, translation.z);
+	}
 
-    public SceneNode setTranslation(Vector3 translation) {
-        return setTranslation(translation.x, translation.y, translation.z);
-    }
+	public SceneNode setTranslation(float x, float y, float z) {
+		for (Node<SceneNode> node : this.getSubnodes()) {
+			Vector3 offset = ((SceneNode) node).getTranslation().sub(x, y, z);
+			((SceneNode) node).setTranslation(offset.add(x, y, z));
+		}
+		translation.set(x, y, z);
 
-    public SceneNode setTranslation(float x, float y, float z) {
-        for (Node<SceneNode> node : this.getSubnodes()) {
-            Vector3 offset = ((SceneNode) node).getTranslation().sub(x, y, z);
-            ((SceneNode) node).setTranslation(offset.add(x, y, z));
-        }
-        translation.set(x, y, z);
+		return this;
+	}
 
-        return this;
-    }
+	public SceneNode translate(Vector3 translation) {
+		return translate(translation.x, translation.y, translation.z);
+	}
 
-    public SceneNode translate(Vector3 translation) {
-        return translate(translation.x, translation.y, translation.z);
-    }
+	public SceneNode translate(float x, float y, float z) {
+		for (Node<SceneNode> node : this.getSubnodes()) {
+			((SceneNode) node).getTranslation().add(x, y, z);
+		}
+		translation.add(x, y, z);
 
-    public SceneNode translate(float x, float y, float z) {
-        for (Node<SceneNode> node : this.getSubnodes()) {
-            ((SceneNode) node).getTranslation().add(x, y, z);
-        }
-        translation.add(x, y, z);
+		return this;
+	}
 
-        return this;
-    }
+	public SceneNode scale(float scalarX, float scalarY, float scalarZ) {
+		for (Node<SceneNode> node : this.getSubnodes()) {
+			((SceneNode) node).scale(scalarX, scalarY, scalarZ);
+		}
+		scale.mul(scalarX, scalarY, scalarZ);
 
-    public SceneNode scale(float scalarX, float scalarY, float scalarZ) {
-        scale.mul(scalarX, scalarY, scalarZ);
+		return this;
+	}
 
-        return this;
-    }
+	public SceneNode scale(float scalar) {
+		scale.mul(scalar, scalar, scalar);
 
-    public SceneNode scale(float scalar) {
-        scale.mul(scalar, scalar, scalar);
+		return this;
+	}
+	
+	public SceneNode rotate(float rx, float ry, float rz) {
+		for (Node<SceneNode> node : this.getSubnodes()) {
+			((SceneNode) node).rotate(rx, ry, rz);
+		}
+		this.rotation.add(rx, ry, rz);
+		return this;
+	}
 
-        return this;
-    }
+	public Vector3 getTranslation() {
+		return translation;
+	}
 
-    public Vector3 getTranslation() {
-        return translation;
-    }
+	public float getX() {
+		return translation.x;
+	}
 
-    public float getX() {
-        return translation.x;
-    }
+	public float getY() {
+		return translation.y;
+	}
 
-    public float getY() {
-        return translation.y;
-    }
-    
-    public float getZ() {
-        return translation.z;
-    }
-
-    public float getSceneTime() {
-        return sceneTime;
-    }
+	public float getZ() {
+		return translation.z;
+	}
+	
+	public Vector3 getScale() {
+		return scale;
+	}
+	
+	public Vector3 getRotation() {
+		return rotation;
+	}
+	public float getSceneTime() {
+		return sceneTime;
+	}
 }

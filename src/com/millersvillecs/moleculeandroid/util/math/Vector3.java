@@ -100,6 +100,14 @@ public class Vector3 implements Cloneable {
 	public Vector3 inverse() {
 		return clone().invert();
 	}
+	
+	public Vector3 normalize() {
+		float length = length();
+		x /= length;
+		y /= length;
+		z /= length;
+		return this;
+	}
 
 	public Vector3 clone() {
 		return new Vector3(x, y, z);

@@ -75,6 +75,5 @@ public class Quad extends SceneObject {
         //super.endRendering();
     	
         super.render(delta, camera);
-        super.renderChildren(delta, camera);
     }
 }

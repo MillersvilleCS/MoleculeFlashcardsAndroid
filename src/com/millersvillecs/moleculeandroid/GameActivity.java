@@ -45,7 +45,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 	
 	private Scene scene;
 	private Camera camera;
-	private Renderer renderer;
+	private AndroidRenderer renderer;
 
 	private String username, auth, gameId, gameSessionId;
 	private CommunicationManager comm;
@@ -78,7 +78,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 		
 		if (supportsEs2) {
 			this.gLSurfaceView.setEGLContextClientVersion(2);
-			renderer = new AndroidRenderer(this.getApplicationContext());
+			renderer = new AndroidRenderer(this.getApplicationContext(), this);
 			this.gLSurfaceView.setRenderer(renderer);
 		} else {
 			//error?
@@ -167,6 +167,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
             try{
                 this.score = response.getDouble("score");
                 boolean correct = response.getBoolean("correct");
+                
                 if(correct) {
                     this.lastAnswerIndex = -1;
                     nextQuestion();
@@ -266,6 +267,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
     
     private void nextQuestion() {
         this.currentQuestion++;
+        
         if(this.currentQuestion < this.questions.length) {
             Question question = this.questions[this.currentQuestion];
             this.gameUIPieces.displayQuestionText(question.getQuestionText());
@@ -277,6 +279,14 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
         } else {
             this.gameState = GameActivity.FINISHING;
             this.comm.endFlashcardGame(this.auth, this.gameSessionId, 120000);//TODO, actual time
+        }
+    }
+    public Molecule getCurrentMolecule() {
+
+        if(this.gameState == GameActivity.PLAYING) {
+            return this.molecules[this.currentQuestion];
+        } else {
+            return null;
         }
     }
 }
