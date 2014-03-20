@@ -22,16 +22,16 @@ import android.widget.ListView;
 import com.millersvillecs.moleculeandroid.data.CommunicationManager;
 import com.millersvillecs.moleculeandroid.data.FileHandler;
 import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
+import com.millersvillecs.moleculeandroid.helper.CategoryBaseAdapter;
+import com.millersvillecs.moleculeandroid.helper.CategoryItem;
 import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
-import com.millersvillecs.moleculeandroid.helper.SelectionBaseAdapter;
-import com.millersvillecs.moleculeandroid.helper.SelectionItem;
 
 public class CategoryActivity extends Activity implements OnItemClickListener, 
 														  OnDismissListener, OnCommunicationListener {
 	
 	private FileHandler fileHandler;
 	private CommunicationManager comm;
-	private SelectionItem[] categories;
+	private CategoryItem[] categories;
 	private ProgressDialog progress;
 	private String username, auth;
 	private ArrayList<String> ids;
@@ -101,14 +101,27 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
     }
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		//System.out.println(this.categories[position].getDescription());
-		//spawn activity to pick game from category
-		//no categories yet - just advance
+	public void onItemClick(AdapterView<?> parent, View view, int position, long clickId) {
+		int id = this.categories[position].getID();
+		JSONArray newGamesJSON = new JSONArray();
+		try{
+			int index = 0;
+			for(int i = 0; i < this.gamesJSON.length(); i++) {
+				if(id == this.gamesJSON.getJSONObject(i).getInt("category")) {
+					newGamesJSON.put(index, this.gamesJSON.getJSONObject(i));
+					index++;
+				}
+			}
+		} catch(JSONException e) {
+			e.printStackTrace();
+			new ErrorDialog(getFragmentManager(), "Could not parse games.").show();
+		}
+		
+		
 		Intent intent = new Intent(this, SelectionActivity.class);
 	    intent.putExtra(MainActivity.USERNAME, this.username);
 	    intent.putExtra(MainActivity.AUTH, this.auth);
-	    intent.putExtra(MainActivity.GAME_JSON, this.gamesJSON.toString());
+	    intent.putExtra(MainActivity.GAME_JSON, newGamesJSON.toString());
 	    startActivity(intent);
 	}
 
@@ -139,7 +152,7 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 					this.ids.add(gamesJSON.getJSONObject(i).getString("id"));//.13
 				}
 				this.comm.downloadImage(this.urls.remove(0), 
-				                        this.fileHandler.createFileTemp(ids.get(0) + ".jpg"));
+				                        this.fileHandler.createFileTemp(ids.get(0) + ".png"));
 			} else {
 				//this.fileHandler.deleteTemp("games");
 				new ErrorDialog(getFragmentManager(), response.getString("error")).show();
@@ -184,16 +197,18 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
             createCategories();
         } else {
             this.comm.downloadImage(this.urls.remove(0), 
-                                    this.fileHandler.createFileTemp(ids.get(0) + ".jpg"));
+                                    this.fileHandler.createFileTemp(ids.get(0) + ".png"));
         }
 	}
 	
 	private void createCategories() {
-        this.categories = new SelectionItem[this.categoriesJSON.length()];
+        this.categories = new CategoryItem[this.categoriesJSON.length()];
         try{
         	for(int i = 0; i < this.categoriesJSON.length(); i++) {
             	JSONObject category = this.categoriesJSON.getJSONObject(i);
-            	this.categories[i] = new SelectionItem(null, category.getString("name"));
+            	this.categories[i] = new CategoryItem(category.getString("name"), 
+            										  category.getString("description"),
+            										  category.getInt("ID"));
             }
         } catch(JSONException e) {
         	new ErrorDialog(getFragmentManager(), "Invalid Categories").show();
@@ -205,7 +220,7 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
         
         
         ListView categoryListView = (ListView) findViewById(R.id.category_list);
-        SelectionBaseAdapter listHandler = new SelectionBaseAdapter(this, categories);
+        CategoryBaseAdapter listHandler = new CategoryBaseAdapter(this, categories);
         categoryListView.setAdapter(listHandler);
         categoryListView.setOnItemClickListener(this);
         

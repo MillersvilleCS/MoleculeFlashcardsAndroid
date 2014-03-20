@@ -1,9 +1,6 @@
 package com.millersvillecs.moleculeandroid.data;
 
 import java.io.File;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +29,7 @@ public class CommunicationManager {
 		this.callback.onImageResponse(bitmap, error);
 	}
 	
+	/* TODO - Remove?
 	//http://www.mail-archive.com/android-beginners@googlegroups.com/msg18680.html
 	private static String md5Hash(String s) {
         MessageDigest m = null;
@@ -46,6 +44,7 @@ public class CommunicationManager {
         String hash = new BigInteger(1, m.digest()).toString(16);
         return hash;
 	}
+	*/
 	
 	public void login(String login, String password) {
 		Request request = new Request();

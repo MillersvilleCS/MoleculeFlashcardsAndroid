@@ -6,22 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.millersvillecs.moleculeandroid.R;
 
-public class SelectionBaseAdapter extends BaseAdapter{
+public class CategoryBaseAdapter extends BaseAdapter {
 	
 	private Context context;
-	private SelectionItem[] data;
+	private CategoryItem[] data;
 	
-	private class SelectionHolder {
-		ImageView image;
-		TextView text;
+	private class CategoryHolder {
+		TextView title, description;
 	}
 	
-	public SelectionBaseAdapter(Context context, SelectionItem[] data) {
+	public CategoryBaseAdapter(Context context, CategoryItem[] data) {
 		this.context = context;
 		this.data = data;
 	}
@@ -40,25 +38,25 @@ public class SelectionBaseAdapter extends BaseAdapter{
 	public long getItemId(int position) {
 		return position;
 	}
-	
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater layoutInflater = (LayoutInflater)
 	            context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-		SelectionHolder holder;
+		CategoryHolder holder;
         if (convertView == null) {
-        	holder = new SelectionHolder();
-        	convertView = layoutInflater.inflate(R.layout.selection_item, null);
-        	holder.image = (ImageView) convertView.findViewById(R.id.selection_item_image);
-        	holder.text = (TextView) convertView.findViewById(R.id.selection_item_title);
+        	holder = new CategoryHolder();
+        	convertView = layoutInflater.inflate(R.layout.category_item, null);
+        	holder.title = (TextView) convertView.findViewById(R.id.category_item_title);
+        	holder.description = (TextView) convertView.findViewById(R.id.category_item_description);
         	convertView.setTag(holder);
         } else {
-        	holder = (SelectionHolder) convertView.getTag();
+        	holder = (CategoryHolder) convertView.getTag();
         }
         
-        SelectionItem item = (SelectionItem) getItem(position);
-        holder.image.setImageBitmap(item.getImage());
-        holder.text.setText(item.getDescription());
+        CategoryItem item = (CategoryItem) getItem(position);
+        holder.title.setText(item.getTitle());
+        holder.description.setText(item.getDescription());
         
         return convertView;
 	}
