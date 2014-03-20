@@ -202,10 +202,10 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
         if(this.currentQuestion < this.molecules.length) {
             this.comm.getMedia(this.gameSessionId, 0, this.questions[0].getId());
         } else {
-            this.gameState = GameActivity.PLAYING;
             this.wantedDismiss = true;
             this.progress.dismiss();
             this.currentQuestion = -1;
+            this.gameState = GameActivity.PLAYING;
             nextQuestion();
         }
     }
@@ -281,9 +281,10 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
             this.comm.endFlashcardGame(this.auth, this.gameSessionId, 120000);//TODO, actual time
         }
     }
+    
     public Molecule getCurrentMolecule() {
 
-        if(this.gameState == GameActivity.PLAYING) {
+        if(this.gameState == GameActivity.PLAYING && this.currentQuestion != -1) {
             return this.molecules[this.currentQuestion];
         } else {
             return null;

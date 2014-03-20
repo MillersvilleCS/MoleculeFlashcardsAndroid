@@ -7,7 +7,7 @@
 	
 	<ScrollView
 		android:layout_width="fill_parent"
-		android:layout_height="250dp"
+		android:layout_height="220dp"
 		android:fadeScrollbars="false">		
 		<LinearLayout 
 			android:layout_width="fill_parent"
@@ -21,7 +21,7 @@
 				android:text="@string/time_limit_label"
 				android:textSize="20sp"
 				android:textStyle="bold"
-				android:paddingTop="20dp"
+				android:paddingTop="10dp"
 				android:paddingLeft="20dp" />
 			
 			<TextView android:id="@+id/number_of_questions"
@@ -49,21 +49,25 @@
 		</LinearLayout>
 	</ScrollView>
 	
-	<Button
-		android:layout_height="80dp"
-		android:layout_width="250dp"
-		android:layout_marginTop="30dp"
-		android:layout_marginBottom="30dp"
-		android:textSize="40sp"
-		android:text="@string/start_button"
-		android:onClick="onStartButton" />
-	
-	<Button
-		android:layout_height="80dp"
-		android:layout_width="250dp"
-		android:layout_marginBottom="30dp"
-		android:textSize="34sp"
-		android:text="@string/high_scores_button"
-		android:onClick="onHighScoresButton" />
+	<LinearLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+		<Button
+			android:layout_height="80dp"
+			android:layout_width="250dp"
+			android:textSize="40sp"
+			android:text="@string/start_button"
+			android:layout_gravity="left"
+			android:onClick="onStartButton" />
+		
+		<Button
+			android:layout_height="80dp"
+			android:layout_width="250dp"
+			android:textSize="34sp"
+			android:text="@string/high_scores_button"
+			android:layout_gravity="right"
+			android:onClick="onHighScoresButton" />
+	</LinearLayout>
 
 </LinearLayout>

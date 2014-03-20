@@ -6,18 +6,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.millersvillecs.moleculeandroid.data.CommunicationManager;
-import com.millersvillecs.moleculeandroid.data.FileHandler;
-import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
-import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
-import com.millersvillecs.moleculeandroid.helper.SelectionBaseAdapter;
-import com.millersvillecs.moleculeandroid.helper.SelectionItem;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -25,6 +19,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+
+import com.millersvillecs.moleculeandroid.data.CommunicationManager;
+import com.millersvillecs.moleculeandroid.data.FileHandler;
+import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
+import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
+import com.millersvillecs.moleculeandroid.helper.SelectionBaseAdapter;
+import com.millersvillecs.moleculeandroid.helper.SelectionItem;
 
 public class CategoryActivity extends Activity implements OnItemClickListener, 
 														  OnDismissListener, OnCommunicationListener {
@@ -51,14 +52,35 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);//no need to check, 4.0+ req on app
 		
-		this.comm = new CommunicationManager(this);
-		this.comm.availableGames(this.auth);
-		
-		this.progress = new ProgressDialog(this);
-		this.progress.setCanceledOnTouchOutside(false);
-		this.progress.setMessage("Loading Games...");
-		this.progress.setOnDismissListener(this);
-		this.progress.show();
+		if(savedInstanceState == null) {
+			
+			this.comm = new CommunicationManager(this);
+			this.comm.availableGames(this.auth);
+			
+			this.progress = new ProgressDialog(this);
+			this.progress.setCanceledOnTouchOutside(false);
+			this.progress.setMessage("Loading Games...");
+			this.progress.setOnDismissListener(this);
+			this.progress.show();
+			
+		} else {
+			try {
+				this.fullGameJSON = new JSONArray(savedInstanceState.getString("fullGameJSON"));
+				this.urls = new ArrayList<String>();
+				this.ids = new ArrayList<String>();
+				for(int i = 0; i < this.fullGameJSON.length(); i++) {
+					this.urls.add("http://exscitech.gcl.cis.udel.edu" + 
+								   this.fullGameJSON.getJSONObject(i).getString("image").substring(1));
+					this.ids.add(this.fullGameJSON.getJSONObject(i).getString("id"));//.13
+				}
+				
+				createCategories();
+			
+			} catch (JSONException e) {
+				e.printStackTrace();
+				new ErrorDialog(getFragmentManager(), "Could not restore state.").show();
+			}
+		}
 	}
 	
 	/*
@@ -115,14 +137,14 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 				this.comm.downloadImage(this.urls.remove(0), 
 				                        this.fileHandler.createFileTemp(ids.get(0) + ".jpg"));
 			} else {
-				this.fileHandler.deleteTemp("games");
+				//this.fileHandler.deleteTemp("games");
 				new ErrorDialog(getFragmentManager(), response.getString("error")).show();
 				this.wantedDismiss = true;
 		        this.progress.dismiss();
 			}
 		} catch(JSONException e) {
 			e.printStackTrace();
-			this.fileHandler.deleteTemp("games");
+			//this.fileHandler.deleteTemp("games");
 			new ErrorDialog(getFragmentManager(), "Invalid Server Response").show();
 			this.wantedDismiss = true;
 	        this.progress.dismiss();
@@ -172,8 +194,15 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
         categoryListView.setAdapter(listHandler);
         categoryListView.setOnItemClickListener(this);
         
-        this.wantedDismiss = true;
-        this.progress.dismiss();
+        if(this.progress != null) {
+        	this.wantedDismiss = true;
+            this.progress.dismiss();
+        }
+	}
+	
+	@Override
+	protected void onSaveInstanceState (Bundle outState) {
+		outState.putString("fullGameJSON", this.fullGameJSON.toString());
 	}
 	
 	/* 
