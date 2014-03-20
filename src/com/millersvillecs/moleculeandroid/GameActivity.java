@@ -1,7 +1,5 @@
 package com.millersvillecs.moleculeandroid;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,22 +14,13 @@ import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
 import android.view.View;
-
-import com.millersvillecs.moleculeandroid.graphics.Camera;
-import com.millersvillecs.moleculeandroid.graphics.opengles.ShaderProgram;
 
 import com.millersvillecs.moleculeandroid.data.CommunicationManager;
 import com.millersvillecs.moleculeandroid.data.Molecule;
 import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
 import com.millersvillecs.moleculeandroid.data.SDFParser;
-
-import com.millersvillecs.moleculeandroid.graphics.opengles.VAO;
-
-import com.millersvillecs.moleculeandroid.scene.Scene;
-import com.millersvillecs.moleculeandroid.scene.SceneObject;
 import com.millersvillecs.moleculeandroid.helper.Answer;
 import com.millersvillecs.moleculeandroid.helper.Question;
 
@@ -41,13 +30,10 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
     
     private GameUIPieces gameUIPieces;
 	private GLSurfaceView gLSurfaceView;
-	private VAO vao;
 	
-	private Scene scene;
-	private Camera camera;
 	private AndroidRenderer renderer;
 
-	private String username, auth, gameId, gameSessionId;
+	private String auth, gameId, gameSessionId;
 	private CommunicationManager comm;
 	private ProgressDialog progress;
 	private boolean wantedDismiss = false;
@@ -61,7 +47,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 		super.onCreate(savedInstanceState);
 		
 		Intent intent = getIntent();
-        this.username = intent.getStringExtra(MainActivity.USERNAME);
+        //this.username = intent.getStringExtra(MainActivity.USERNAME);
         this.auth = intent.getStringExtra(MainActivity.AUTH);
         int position = intent.getIntExtra(MainActivity.GAME_INDEX, -1);
         String gamesJSONText = intent.getStringExtra(MainActivity.GAME_JSON);

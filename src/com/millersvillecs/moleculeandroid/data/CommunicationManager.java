@@ -12,8 +12,8 @@ import android.graphics.Bitmap;
 
 public class CommunicationManager {
 	
-	private final String REQUEST_HANDLER_URL = "http://docktest.gcl.cis.udel.edu/exscitech_sam/request_handler.php",
-						 GET_MEDIA_URL = "http://docktest.gcl.cis.udel.edu/exscitech_sam/get_media.php";
+	private final String REQUEST_HANDLER_URL = "https://exscitech.org/request_handler.php",
+						 GET_MEDIA_URL = "https://exscitech.org/get_media.php";
 	private OnCommunicationListener callback;
 	
 	public CommunicationManager(OnCommunicationListener callback) {
@@ -47,14 +47,13 @@ public class CommunicationManager {
         return hash;
 	}
 	
-	public void login(String email, String password) {
+	public void login(String login, String password) {
 		Request request = new Request();
-		String passwordHash = md5Hash(password + email);
 		request.url = this.REQUEST_HANDLER_URL;
 		try {
 			request.params.put("request_type", "login");
-			request.params.put("email", email);
-			request.params.put("hash", passwordHash);
+			request.params.put("login", login);
+			request.params.put("pass", password);
 		} catch(JSONException e) {
 			e.printStackTrace();
 		}
@@ -151,6 +150,7 @@ public class CommunicationManager {
 	}
 	
 	public void downloadImage(String url, File imageFile) {
+		System.out.println(url);
 		new ExecuteImageDownload(this, imageFile).execute(url);
 	}
 }

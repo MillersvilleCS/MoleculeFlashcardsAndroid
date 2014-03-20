@@ -41,7 +41,7 @@ public class DescriptionActivity extends Activity {
 			TextView time = (TextView)findViewById(R.id.time_limit);
 			time.setText(time.getText() + " " + formatTime(game.getString("time_limit")));
 			TextView numberOfQuestions = (TextView)findViewById(R.id.number_of_questions);
-            numberOfQuestions.setText(numberOfQuestions.getText() + " " + game.getString("q_count"));
+            numberOfQuestions.setText(numberOfQuestions.getText() + " " + "?");//q_count removed?
 		} catch(JSONException e) {
 			e.printStackTrace();
 			finish();

@@ -11,7 +11,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -38,7 +37,8 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 	private ArrayList<String> ids;
 	private ArrayList<String> urls;
 	private boolean wantedDismiss = false;
-	private JSONArray fullGameJSON;
+	private JSONObject fullGameJSON;
+	private JSONArray gamesJSON, categoriesJSON;
 	
 	
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +65,16 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 			
 		} else {
 			try {
-				this.fullGameJSON = new JSONArray(savedInstanceState.getString("fullGameJSON"));
+				this.fullGameJSON = new JSONObject(savedInstanceState.getString("fullGameJSON"));
+				this.categoriesJSON = this.fullGameJSON.getJSONArray("categories");
+				this.gamesJSON = this.fullGameJSON.getJSONArray("available_games");
+				
 				this.urls = new ArrayList<String>();
 				this.ids = new ArrayList<String>();
-				for(int i = 0; i < this.fullGameJSON.length(); i++) {
-					this.urls.add("http://exscitech.gcl.cis.udel.edu" + 
-								   this.fullGameJSON.getJSONObject(i).getString("image").substring(1));
-					this.ids.add(this.fullGameJSON.getJSONObject(i).getString("id"));//.13
+				for(int i = 0; i < this.gamesJSON.length(); i++) {
+					this.urls.add("https://exscitech.org/" + 
+								   this.gamesJSON.getJSONObject(i).getString("image").substring(1));
+					this.ids.add(this.gamesJSON.getJSONObject(i).getString("id"));//.13
 				}
 				
 				createCategories();
@@ -105,7 +108,7 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 		Intent intent = new Intent(this, SelectionActivity.class);
 	    intent.putExtra(MainActivity.USERNAME, this.username);
 	    intent.putExtra(MainActivity.AUTH, this.auth);
-	    intent.putExtra(MainActivity.GAME_JSON, this.fullGameJSON.toString());
+	    intent.putExtra(MainActivity.GAME_JSON, this.gamesJSON.toString());
 	    startActivity(intent);
 	}
 
@@ -124,15 +127,16 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 		this.fileHandler = new FileHandler(this);
 		try{
 			if(response.getBoolean("success")) {
-				JSONArray avail = response.getJSONArray("available_games");
-				this.fullGameJSON = avail;
+				this.fullGameJSON = response;
+				this.categoriesJSON = response.getJSONArray("categories");
+				this.gamesJSON = response.getJSONArray("available_games");
 				//this.fileHandler.writeTemp("games", avail.toString().split("\n"));
 				this.urls = new ArrayList<String>();
 				this.ids = new ArrayList<String>();
-				for(int i = 0; i < avail.length(); i++) {
-					this.urls.add("http://exscitech.gcl.cis.udel.edu" + 
-								   avail.getJSONObject(i).getString("image").substring(1));
-					this.ids.add(avail.getJSONObject(i).getString("id"));//.13
+				for(int i = 0; i < gamesJSON.length(); i++) {
+					this.urls.add("https://exscitech.org/" + 
+								gamesJSON.getJSONObject(i).getString("image").substring(1));
+					this.ids.add(gamesJSON.getJSONObject(i).getString("id"));//.13
 				}
 				this.comm.downloadImage(this.urls.remove(0), 
 				                        this.fileHandler.createFileTemp(ids.get(0) + ".jpg"));
@@ -185,9 +189,20 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 	}
 	
 	private void createCategories() {
-    	//Until API has categories, we create a fake one
-        this.categories = new SelectionItem[1];
-        this.categories[0] = new SelectionItem(null, "No Categories");
+        this.categories = new SelectionItem[this.categoriesJSON.length()];
+        try{
+        	for(int i = 0; i < this.categoriesJSON.length(); i++) {
+            	JSONObject category = this.categoriesJSON.getJSONObject(i);
+            	this.categories[i] = new SelectionItem(null, category.getString("name"));
+            }
+        } catch(JSONException e) {
+        	new ErrorDialog(getFragmentManager(), "Invalid Categories").show();
+        	if(this.progress != null) {
+        		this.wantedDismiss = true;
+    	        this.progress.dismiss();
+        	}
+        }
+        
         
         ListView categoryListView = (ListView) findViewById(R.id.category_list);
         SelectionBaseAdapter listHandler = new SelectionBaseAdapter(this, categories);
