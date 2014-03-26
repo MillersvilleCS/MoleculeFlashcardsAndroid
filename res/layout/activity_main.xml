@@ -11,6 +11,8 @@
 		android:layout_marginBottom="30dp"
 		android:textSize="40sp"
 		android:text="@string/start_button"
+		android:textColor="#ffffffff"
+		android:background="@drawable/green_button"
 		android:onClick="onStartButton" />
 	 
 	<Button
@@ -19,6 +21,8 @@
 		android:layout_marginBottom="30dp"
 		android:textSize="40sp"
 		android:text="@string/tutorial_button"
+		android:textColor="#ffffffff"
+        android:background="@drawable/blue_button"
 		android:onClick="onTutorialButton" />
 	 
 	<Button
@@ -26,6 +30,8 @@
 		android:layout_width="200dp"
 		android:textSize="40sp"
 		android:text="@string/credits_button"
+		android:textColor="#ffffffff"
+        android:background="@drawable/blue_button"
 		android:onClick="onCreditsButton" />
 
 </LinearLayout>
