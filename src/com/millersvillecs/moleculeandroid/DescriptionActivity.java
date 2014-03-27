@@ -4,12 +4,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.millersvillecs.moleculeandroid.data.FileHandler;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DescriptionActivity extends Activity {
@@ -33,15 +37,22 @@ public class DescriptionActivity extends Activity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		try{
+			FileHandler fileHandler = new FileHandler(this);
 			this.fullGameJSON = new JSONArray(gamesJSONText);
 			JSONObject game = (JSONObject)this.fullGameJSON.get(this.position);
 			actionBar.setTitle(game.getString("name"));
+			
+			String image = game.getString("id") + ".jpg";
+			Bitmap bitmap = fileHandler.readTempImage(image);
+			ImageView imageView = (ImageView) findViewById(R.id.description_image);
+			imageView.setImageBitmap(bitmap);
+			
 			TextView description = (TextView)findViewById(R.id.game_description);
 			description.setText(game.getString("description"));
 			TextView time = (TextView)findViewById(R.id.time_limit);
 			time.setText(time.getText() + " " + formatTime(game.getString("time_limit")));
 			TextView numberOfQuestions = (TextView)findViewById(R.id.number_of_questions);
-            numberOfQuestions.setText(numberOfQuestions.getText() + " " + "?");//q_count removed?
+            numberOfQuestions.setText(numberOfQuestions.getText() + " " + game.getString("mol_count"));
 		} catch(JSONException e) {
 			e.printStackTrace();
 			finish();

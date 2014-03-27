@@ -15,21 +15,21 @@
 		android:textSize="20sp"
 		android:textStyle="bold"
 		android:paddingLeft="20dp"
-		android:layout_marginBottom="160dp" />
+		android:layout_marginBottom="175dp" />
 
 	<ScrollView
 		android:id="@+id/question_scrollbar"
 		android:layout_width="match_parent"
-		android:layout_height="150dp"
+		android:layout_height="165dp"
 		android:layout_gravity="bottom"
 		android:orientation="vertical" >
 		
 		<RelativeLayout
 			android:layout_width="match_parent"
-			android:layout_height="150dp"
+			android:layout_height="165dp"
 			android:gravity="top"
 			android:orientation="vertical"
-			android:background="#FFFFFF" >
+			android:background="#000000" >
 			
 			<View 
 				android:id="@+id/button_separator"
@@ -43,34 +43,42 @@
 				android:layout_alignRight="@id/button_separator"
 				android:layout_alignParentLeft="true"
 				android:orientation="vertical"
-				android:background="#FFFFFF">
+				android:background="#000000">
 				
 				<Button
 					android:id="@+id/game_button_0"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
+					android:layout_margin="3dp"
 					android:singleLine="true"
+					android:background="@drawable/button_gray"
 					android:onClick="onAnswerButton" />
 				
 				<Button
 					android:id="@+id/game_button_2"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
+					android:layout_margin="3dp"
 					android:singleLine="true"
+					android:background="@drawable/button_gray"
 					android:onClick="onAnswerButton" />
 				
 				<Button
 					android:id="@+id/game_button_4"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content" 
+					android:layout_margin="3dp"
 					android:singleLine="true"
+					android:background="@drawable/button_gray"
 					android:onClick="onAnswerButton" />
 				
 				<Button
 					android:id="@+id/game_button_6"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
+					android:layout_margin="3dp"
 					android:singleLine="true"
+					android:background="@drawable/button_gray"
 					android:onClick="onAnswerButton" />
 				
 			</LinearLayout>
@@ -81,35 +89,42 @@
 				android:layout_alignLeft="@id/button_separator"
 				android:layout_alignParentRight="true"
 				android:orientation="vertical"
-				android:background="#FFFFFF">
-			
-	
+				android:background="#000000">
+				
 				<Button
 					android:id="@+id/game_button_1"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
+					android:layout_margin="3dp"
 					android:singleLine="true"
+					android:background="@drawable/button_gray"
 					android:onClick="onAnswerButton" />
 				
 				<Button
 					android:id="@+id/game_button_3"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
+					android:layout_margin="3dp"
 					android:singleLine="true"
+					android:background="@drawable/button_gray"
 					android:onClick="onAnswerButton" />
 				
 				<Button
 					android:id="@+id/game_button_5"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
+					android:layout_margin="3dp"
 					android:singleLine="true"
+					android:background="@drawable/button_gray"
 					android:onClick="onAnswerButton" />
 				
 				<Button
 					android:id="@+id/game_button_7"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
+					android:layout_margin="3dp"
 					android:singleLine="true"
+					android:background="@drawable/button_gray"
 					android:onClick="onAnswerButton" />
 		   </LinearLayout>
 			

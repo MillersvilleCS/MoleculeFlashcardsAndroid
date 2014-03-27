@@ -70,7 +70,7 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 	    }
 	}
 	
-	public void onStartButton(View view) {
+	public void onPlayButton(View view) {
 		Intent intent = new Intent(this, CategoryActivity.class);
 	    intent.putExtra(MainActivity.USERNAME, this.username);
 	    intent.putExtra(MainActivity.AUTH, this.auth);
