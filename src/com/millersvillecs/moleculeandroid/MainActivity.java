@@ -46,8 +46,6 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 		}
 	}
 	
-
-	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    // Inflate the menu items for use in the action bar
@@ -87,7 +85,7 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 	}
 	
 	public void onTutorialButton(View view) {
-	    
+		
 	}
 
 	public void onCreditsButton(View view) {
