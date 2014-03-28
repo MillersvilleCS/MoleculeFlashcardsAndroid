@@ -149,7 +149,6 @@ public class CommunicationManager {
 	}
 	
 	public void downloadImage(String url, File imageFile) {
-		System.out.println(url);
 		new ExecuteImageDownload(this, imageFile).execute(url);
 	}
 }
