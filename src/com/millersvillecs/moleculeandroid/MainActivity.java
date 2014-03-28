@@ -26,8 +26,9 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 							   GAME_INDEX = "com.millersvillecs.moleculeandroid.GAME_INDEX",
 							   GAME_JSON = "com.millersvillecs.moleculeandroid.GAME_JSON";
 	
-	private String username, auth;
+	private String username = "", auth = "";
 	private ProgressDialog progress;
+	private MenuItem logout;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,6 +57,13 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 	}
 	
 	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+	    this.logout = menu.findItem(R.id.action_logout);
+	    this.logout.setVisible(!this.username.equals(""));
+	    return super.onPrepareOptionsMenu(menu);
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	        case R.id.action_logout:
@@ -63,6 +71,7 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 	        	fileHandler.delete("credentials");
 	        	this.username = "";
 	        	this.auth = "";
+	        	this.logout.setVisible(false);
 	        	setContentView(R.layout.activity_main_login);
 	            return true;
 	        default:
@@ -115,6 +124,7 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 				fileHandler.write("credentials", data);
 				this.username = username;
 				this.auth = auth;
+				this.logout.setVisible(true);
 				setContentView(R.layout.activity_main);
 			} else {
 				new ErrorDialog(getFragmentManager(), response.getString("error")).show();
