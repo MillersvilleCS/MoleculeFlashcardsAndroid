@@ -15,6 +15,7 @@ import android.content.pm.ConfigurationInfo;
 import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import com.millersvillecs.moleculeandroid.data.CommunicationManager;
@@ -155,8 +156,14 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
                 boolean correct = response.getBoolean("correct");
                 
                 if(correct) {
-                    this.lastAnswerIndex = -1;
-                    nextQuestion();
+                	this.gameUIPieces.markCorrect(this.lastAnswerIndex);
+                    Handler handler = new Handler(); 
+                    handler.postDelayed(new Runnable() { 
+                        public void run() {
+                        	lastAnswerIndex = -1;
+                            nextQuestion(); 
+                        } 
+                    }, 3000);
                 } else {
                     this.gameUIPieces.markWrong(this.lastAnswerIndex);
                     this.lastAnswerIndex = -1;
@@ -170,7 +177,6 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
             try{
                 this.score = response.getDouble("final_score");
                 int rank = response.getInt("rank");
-                System.out.println("#" + rank + " " + this.score);
                 this.gameUIPieces.displayFinishScreen(this.score, rank);
             } catch(JSONException e) {
                 e.printStackTrace();
@@ -243,6 +249,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
                     break;
             }
             this.lastAnswerIndex = index;
+            this.gameUIPieces.markWorking(index);
             Question question = this.questions[this.currentQuestion];
             String answerId = question.getAnswer(index).getId();
             

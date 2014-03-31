@@ -2,6 +2,8 @@ package com.millersvillecs.moleculeandroid;
 
 import android.graphics.Color;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -12,6 +14,7 @@ public class GameUIPieces {
     private Button[] buttons;
     private TextView questionText;
     private ScrollView scrollView;
+    private Animation animation;
     
     public GameUIPieces (GameActivity gameActivity) {
         this.gameActivity = gameActivity;
@@ -28,6 +31,7 @@ public class GameUIPieces {
         this.questionText = (TextView) gameActivity.findViewById(R.id.question_text);
         this.scrollView = (ScrollView) gameActivity.findViewById(R.id.question_scrollbar);
         //this.scrollView.setScrollBarStyle(ScrollView.SCROLLBARS_INSIDE_INSET);
+        this.animation = AnimationUtils.loadAnimation(gameActivity, R.anim.button_pulse);
         
         resetButtons();
         hideQuestionText();
@@ -40,6 +44,7 @@ public class GameUIPieces {
                 this.buttons[i].setTextColor(Color.BLACK);
                 this.buttons[i].setEnabled(true);
                 this.buttons[i].setAlpha(1.0f);
+                this.buttons[i].clearAnimation();
             }
         }
     }
@@ -54,7 +59,22 @@ public class GameUIPieces {
         }
     }
     
+    public void markWorking(int index) {
+    	this.buttons[index].startAnimation(this.animation);
+    }
+    
+    public void markCorrect(int index) {
+    	this.buttons[index].setTextColor(Color.rgb(0, 153, 0));
+    	for(int i = 0; i < this.buttons.length; i++) {
+    		if(i != index && this.buttons[i].isShown()) {
+    			this.buttons[i].setEnabled(false);
+    	        this.buttons[i].setAlpha(0.5f);
+    		}
+    	}
+    }
+    
     public void markWrong(int index) {
+    	this.buttons[index].clearAnimation();
         this.buttons[index].setTextColor(Color.RED);
         this.buttons[index].setEnabled(false);
         this.buttons[index].setAlpha(0.5f);
