@@ -21,6 +21,7 @@ import android.widget.ListView;
 
 import com.millersvillecs.moleculeandroid.data.CommunicationManager;
 import com.millersvillecs.moleculeandroid.data.FileHandler;
+import com.millersvillecs.moleculeandroid.data.Molecule;
 import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
 import com.millersvillecs.moleculeandroid.helper.CategoryBaseAdapter;
 import com.millersvillecs.moleculeandroid.helper.CategoryItem;
@@ -174,7 +175,7 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 	}
 
 	@Override
-	public void onMoleculeResponse(String[] data) {}
+	public void onMoleculeResponse(Molecule molecule) {}
 
 	@Override
 	public void onImageResponse(Bitmap bitmap, boolean error) {

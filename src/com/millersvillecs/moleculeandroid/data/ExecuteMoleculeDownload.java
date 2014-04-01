@@ -25,11 +25,11 @@ import org.json.JSONException;
 
 import android.os.AsyncTask;
 
-public class ExecuteGet extends AsyncTask<Request, Void, String[]>{
+public class ExecuteMoleculeDownload extends AsyncTask<Request, Void, Molecule>{
 	
 	private CommunicationManager commRef;
 	
-	public ExecuteGet(CommunicationManager cm) {
+	public ExecuteMoleculeDownload(CommunicationManager cm) {
 		this.commRef = cm;
 	}
 	
@@ -49,11 +49,12 @@ public class ExecuteGet extends AsyncTask<Request, Void, String[]>{
 	}
 	
 	@Override
-	protected String[] doInBackground(Request... requests) {
+	protected Molecule doInBackground(Request... requests) {
 		if(requests.length != 1) {
 			return null;
 		}
 		Request request = requests[0];
+		Molecule molecule = null;
 		String[] data = new String[0];
 		HttpClient client = createHttpClient();
 		try {
@@ -73,6 +74,7 @@ public class ExecuteGet extends AsyncTask<Request, Void, String[]>{
             }
             reader.close();
             data = content.substring(0, content.length()).split("\n");
+            molecule = SDFParser.parse(data);
 	    } catch (ClientProtocolException e) {
 	    	e.printStackTrace();
 	    } catch (IOException e) {
@@ -80,11 +82,11 @@ public class ExecuteGet extends AsyncTask<Request, Void, String[]>{
 	    } catch (JSONException e) {
 	    	e.printStackTrace();
 	    }
-		return data;
+		return molecule;
 	}
 	
 	@Override
-	protected void onPostExecute(String[] data) {
-		this.commRef.setMoleculeResponse(data);
+	protected void onPostExecute(Molecule molecule) {
+		this.commRef.setMoleculeResponse(molecule);
 	}
 }

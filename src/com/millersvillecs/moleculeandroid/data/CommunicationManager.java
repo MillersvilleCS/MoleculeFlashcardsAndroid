@@ -21,8 +21,8 @@ public class CommunicationManager {
 		this.callback.onRequestResponse(response);
 	}
 	
-	public void setMoleculeResponse(String[] data) {
-		this.callback.onMoleculeResponse(data);
+	public void setMoleculeResponse(Molecule molecule) {
+		this.callback.onMoleculeResponse(molecule);
 	}
 	
 	public void setImageResults(Bitmap bitmap, boolean error) {
@@ -135,6 +135,7 @@ public class CommunicationManager {
 	}
 	
 	public void getMedia(String gameSessionId, int mediaType, String questionId) {
+		//TODO - change media type to download image if question set uses image
 		Request request = new Request();
 		request.url = this.GET_MEDIA_URL;
 		try {
@@ -145,7 +146,7 @@ public class CommunicationManager {
 			e.printStackTrace();
 		}
 		
-		new ExecuteGet(this).execute(request);
+		new ExecuteMoleculeDownload(this).execute(request);
 	}
 	
 	public void downloadImage(String url, File imageFile) {

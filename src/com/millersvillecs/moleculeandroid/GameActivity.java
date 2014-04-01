@@ -188,8 +188,8 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
     }
 
     @Override
-    public void onMoleculeResponse(String[] data) {
-        this.molecules[this.currentQuestion] = SDFParser.parse(data);
+    public void onMoleculeResponse(Molecule molecule) {
+        this.molecules[this.currentQuestion] = molecule;
         this.currentQuestion++;
         if(this.currentQuestion < this.molecules.length) {
             this.comm.getMedia(this.gameSessionId, 0, this.questions[0].getId());

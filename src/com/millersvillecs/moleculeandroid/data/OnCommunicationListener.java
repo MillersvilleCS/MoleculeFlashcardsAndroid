@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 
 public interface OnCommunicationListener {
 	public void onRequestResponse(JSONObject response);
-	public void onMoleculeResponse(String[] data);
+	public void onMoleculeResponse(Molecule molecule);
 	public void onImageResponse(Bitmap bitmap, boolean error);
 }
 

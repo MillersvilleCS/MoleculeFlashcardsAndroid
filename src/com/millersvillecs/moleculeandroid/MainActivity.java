@@ -16,6 +16,7 @@ import android.widget.EditText;
 
 import com.millersvillecs.moleculeandroid.data.CommunicationManager;
 import com.millersvillecs.moleculeandroid.data.FileHandler;
+import com.millersvillecs.moleculeandroid.data.Molecule;
 import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
 import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
 
@@ -137,7 +138,7 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 	}
 
 	@Override
-	public void onMoleculeResponse(String[] data) {}
+	public void onMoleculeResponse(Molecule molecule) {}
 
 	@Override
 	public void onImageResponse(Bitmap bitmap, boolean error) {}
