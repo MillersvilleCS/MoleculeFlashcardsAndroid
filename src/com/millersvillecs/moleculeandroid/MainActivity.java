@@ -23,9 +23,10 @@ import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
 public class MainActivity extends Activity implements OnCommunicationListener {
 	
 	public static final String USERNAME = "com.millersvillecs.moleculeandroid.USERNAME",
-							   AUTH = "com.millersvillecs.moleculeandroid.USERNAME",
+							   AUTH = "com.millersvillecs.moleculeandroid.AUTH",
 							   GAME_INDEX = "com.millersvillecs.moleculeandroid.GAME_INDEX",
-							   GAME_JSON = "com.millersvillecs.moleculeandroid.GAME_JSON";
+							   GAME_JSON = "com.millersvillecs.moleculeandroid.GAME_JSON",
+							   NEW_GAME_JSON = "com.millersvillecs.moleculeandroid.NEW_GAME_JSON";
 	
 	private String username = "", auth = "";
 	private ProgressDialog progress;

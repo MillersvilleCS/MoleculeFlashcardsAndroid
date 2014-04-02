@@ -21,7 +21,6 @@ import android.view.View;
 import com.millersvillecs.moleculeandroid.data.CommunicationManager;
 import com.millersvillecs.moleculeandroid.data.Molecule;
 import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
-import com.millersvillecs.moleculeandroid.data.SDFParser;
 import com.millersvillecs.moleculeandroid.helper.Answer;
 import com.millersvillecs.moleculeandroid.helper.Question;
 
@@ -35,6 +34,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 	private AndroidRenderer renderer;
 
 	private String auth, gameId, gameSessionId;
+	private int rank = 0;
 	private CommunicationManager comm;
 	private ProgressDialog progress;
 	private boolean wantedDismiss = false;
@@ -176,7 +176,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
         } else {
             try{
                 this.score = response.getDouble("final_score");
-                int rank = response.getInt("rank");
+                this.rank = response.getInt("rank");
                 this.gameUIPieces.displayFinishScreen(this.score, rank);
             } catch(JSONException e) {
                 e.printStackTrace();

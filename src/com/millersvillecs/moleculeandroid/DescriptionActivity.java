@@ -4,8 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.millersvillecs.moleculeandroid.data.FileHandler;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -15,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.millersvillecs.moleculeandroid.data.FileHandler;
 
 public class DescriptionActivity extends Activity {
 	
@@ -83,7 +83,7 @@ public class DescriptionActivity extends Activity {
 	    startActivity(intent);
 	}
 	
-	public void onHighScoresButton(View view) {
+	public void onHighScoresButton(View view) {		
 		Intent intent = new Intent(this, HighScoreActivity.class);
 	    intent.putExtra(MainActivity.GAME_INDEX, this.position);
 	    intent.putExtra(MainActivity.GAME_JSON, this.fullGameJSON.toString());
