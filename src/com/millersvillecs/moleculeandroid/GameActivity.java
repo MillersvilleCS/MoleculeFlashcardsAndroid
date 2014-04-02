@@ -10,7 +10,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
@@ -20,6 +19,7 @@ import android.view.View;
 
 import com.millersvillecs.moleculeandroid.data.CommunicationManager;
 import com.millersvillecs.moleculeandroid.data.Molecule;
+import com.millersvillecs.moleculeandroid.data.MoleculeGamePreferences;
 import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
 import com.millersvillecs.moleculeandroid.helper.Answer;
 import com.millersvillecs.moleculeandroid.helper.Question;
@@ -28,13 +28,13 @@ import com.millersvillecs.moleculeandroid.helper.Question;
 public class GameActivity extends Activity implements OnDismissListener, OnCommunicationListener {
     private static int LOADING = 1, PLAYING = 2, FINISHING = 3;
     
+    private MoleculeGamePreferences preferences;
     private GameUIPieces gameUIPieces;
 	private GLSurfaceView gLSurfaceView;
 	
 	private AndroidRenderer renderer;
 
 	private String auth, gameId, gameSessionId;
-	private int rank = 0;
 	private CommunicationManager comm;
 	private ProgressDialog progress;
 	private boolean wantedDismiss = false;
@@ -47,11 +47,11 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Intent intent = getIntent();
-        //this.username = intent.getStringExtra(MainActivity.USERNAME);
-        this.auth = intent.getStringExtra(MainActivity.AUTH);
-        int position = intent.getIntExtra(MainActivity.GAME_INDEX, -1);
-        String gamesJSONText = intent.getStringExtra(MainActivity.GAME_JSON);
+		this.preferences = new MoleculeGamePreferences(this);
+        //this.username = this.preferences.getUsername();
+        this.auth = this.preferences.getAuth();
+        int position = this.preferences.getPosition();
+        String gamesJSONText = this.preferences.getAllGamesJSON();
 		
 		setContentView(R.layout.activity_game);
 		getActionBar().setDisplayHomeAsUpEnabled(false);//no need to check, 4.0+ req on app
@@ -176,7 +176,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
         } else {
             try{
                 this.score = response.getDouble("final_score");
-                this.rank = response.getInt("rank");
+                int rank = response.getInt("rank");
                 this.gameUIPieces.displayFinishScreen(this.score, rank);
             } catch(JSONException e) {
                 e.printStackTrace();

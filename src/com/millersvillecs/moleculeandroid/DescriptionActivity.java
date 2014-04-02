@@ -15,21 +15,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.millersvillecs.moleculeandroid.data.FileHandler;
+import com.millersvillecs.moleculeandroid.data.MoleculeGamePreferences;
 
 public class DescriptionActivity extends Activity {
 	
-	private String username, auth;
 	private int position;
 	private JSONArray fullGameJSON;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Intent intent = getIntent();
-		this.username = intent.getStringExtra(MainActivity.USERNAME);
-		this.auth = intent.getStringExtra(MainActivity.AUTH);
-		this.position = intent.getIntExtra(MainActivity.GAME_INDEX, -1);
-		String gamesJSONText = intent.getStringExtra(MainActivity.GAME_JSON);
+		MoleculeGamePreferences preferences = new MoleculeGamePreferences(this);
+		this.position = preferences.getPosition();
+		String gamesJSONText = preferences.getAllGamesJSON();
 		
 		setContentView(R.layout.activity_description);
 		
@@ -76,17 +74,11 @@ public class DescriptionActivity extends Activity {
 	
 	public void onStartButton(View view) {
 		Intent intent = new Intent(this, GameActivity.class);
-	    intent.putExtra(MainActivity.USERNAME, this.username);
-	    intent.putExtra(MainActivity.AUTH, this.auth);
-	    intent.putExtra(MainActivity.GAME_INDEX, this.position);
-	    intent.putExtra(MainActivity.GAME_JSON, this.fullGameJSON.toString());
 	    startActivity(intent);
 	}
 	
 	public void onHighScoresButton(View view) {		
 		Intent intent = new Intent(this, HighScoreActivity.class);
-	    intent.putExtra(MainActivity.GAME_INDEX, this.position);
-	    intent.putExtra(MainActivity.GAME_JSON, this.fullGameJSON.toString());
 	    startActivity(intent);
 	}
 	

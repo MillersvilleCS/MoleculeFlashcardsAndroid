@@ -17,16 +17,11 @@ import android.widget.EditText;
 import com.millersvillecs.moleculeandroid.data.CommunicationManager;
 import com.millersvillecs.moleculeandroid.data.FileHandler;
 import com.millersvillecs.moleculeandroid.data.Molecule;
+import com.millersvillecs.moleculeandroid.data.MoleculeGamePreferences;
 import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
 import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
 
 public class MainActivity extends Activity implements OnCommunicationListener {
-	
-	public static final String USERNAME = "com.millersvillecs.moleculeandroid.USERNAME",
-							   AUTH = "com.millersvillecs.moleculeandroid.AUTH",
-							   GAME_INDEX = "com.millersvillecs.moleculeandroid.GAME_INDEX",
-							   GAME_JSON = "com.millersvillecs.moleculeandroid.GAME_JSON",
-							   NEW_GAME_JSON = "com.millersvillecs.moleculeandroid.NEW_GAME_JSON";
 	
 	private String username = "", auth = "";
 	private ProgressDialog progress;
@@ -81,8 +76,9 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 	
 	public void onPlayButton(View view) {
 		Intent intent = new Intent(this, CategoryActivity.class);
-	    intent.putExtra(MainActivity.USERNAME, this.username);
-	    intent.putExtra(MainActivity.AUTH, this.auth);
+		MoleculeGamePreferences preferences = new MoleculeGamePreferences(this);
+		preferences.setUsername(this.username);
+		preferences.setAuth(this.auth);
 	    startActivity(intent);
 	}
 	

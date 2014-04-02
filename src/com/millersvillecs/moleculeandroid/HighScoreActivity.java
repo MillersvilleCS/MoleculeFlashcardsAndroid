@@ -5,22 +5,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.millersvillecs.moleculeandroid.data.MoleculeGamePreferences;
 import com.millersvillecs.moleculeandroid.helper.ScoreBaseAdapter;
 import com.millersvillecs.moleculeandroid.helper.ScoreItem;
 
 public class HighScoreActivity extends Activity {
-    
-    protected void onCreate(Bundle savedInstanceState) {
+
+	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        Intent intent = getIntent();
-        int position = intent.getIntExtra(MainActivity.GAME_INDEX, -1);
-        String gamesJSONText = intent.getStringExtra(MainActivity.GAME_JSON);
+        MoleculeGamePreferences preferences = new MoleculeGamePreferences(this);
+        int position = preferences.getPosition();
+        String gamesJSONText = preferences.getAllGamesJSON();
         
         setContentView(R.layout.activity_high_score);
         

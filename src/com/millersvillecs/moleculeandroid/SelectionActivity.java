@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.millersvillecs.moleculeandroid.data.FileHandler;
+import com.millersvillecs.moleculeandroid.data.MoleculeGamePreferences;
 import com.millersvillecs.moleculeandroid.helper.SelectionBaseAdapter;
 import com.millersvillecs.moleculeandroid.helper.SelectionItem;
 
@@ -20,17 +21,14 @@ import android.widget.ListView;
 
 public class SelectionActivity extends Activity implements OnItemClickListener {
 	
+	private MoleculeGamePreferences preferences;
 	private SelectionItem[] games;
-	private String username, auth;
-	private JSONArray fullGameJSON;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Intent intent = getIntent();
-		this.username = intent.getStringExtra(MainActivity.USERNAME);
-		this.auth = intent.getStringExtra(MainActivity.AUTH);
-		String gamesJSONText = intent.getStringExtra(MainActivity.GAME_JSON);
+		this.preferences = new MoleculeGamePreferences(this);
+		String gamesJSONText = this.preferences.getCategoricalGamesJSON();
 		
 		FileHandler fileHandler = new FileHandler(this);
 		
@@ -39,13 +37,14 @@ public class SelectionActivity extends Activity implements OnItemClickListener {
 		getActionBar().setDisplayHomeAsUpEnabled(true);//no need to check, 4.0+ req on app
 		 
 		try{
-		    this.fullGameJSON = new JSONArray(gamesJSONText);
+		    JSONArray partialJSON = new JSONArray(gamesJSONText);
 			
-			games = new SelectionItem[this.fullGameJSON.length()];
-			for(int i = 0; i < this.fullGameJSON.length(); i++) {
-				String image = ((JSONObject)this.fullGameJSON.get(i)).getString("id") + ".jpg";
+			games = new SelectionItem[partialJSON.length()];
+			for(int i = 0; i < partialJSON.length(); i++) {
+				JSONObject game = partialJSON.getJSONObject(i);
+				String image = game.getString("id") + ".jpg";
 				Bitmap bitmap = fileHandler.readTempImage(image);
-				games[i] = new SelectionItem(bitmap, ((JSONObject)this.fullGameJSON.get(i)).getString("name") );
+				games[i] = new SelectionItem(bitmap, game.getString("name"), game.getInt("id") );
 			}
 		} catch(JSONException e) {
 			e.printStackTrace();
@@ -75,11 +74,24 @@ public class SelectionActivity extends Activity implements OnItemClickListener {
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Intent intent = new Intent(this, DescriptionActivity.class);
-	    intent.putExtra(MainActivity.USERNAME, this.username);
-	    intent.putExtra(MainActivity.AUTH, this.auth);
-	    intent.putExtra(MainActivity.GAME_INDEX, position);
-	    intent.putExtra(MainActivity.GAME_JSON, this.fullGameJSON.toString());
+		try{
+			JSONArray fullGameJSON = new JSONArray(this.preferences.getAllGamesJSON());
+			int gameID = this.games[position].getGameID();
+			position = -1;
+			for(int i = 0; i < fullGameJSON.length(); i++) {
+				if(fullGameJSON.getJSONObject(i).getInt("id") == gameID) {
+					position = i;
+					break;
+				}
+			}
+		} catch(JSONException e) {
+			e.printStackTrace();
+			finish();
+			return;
+		}
+	    this.preferences.setPosition(position);
+	    
+	    Intent intent = new Intent(this, DescriptionActivity.class);
 	    startActivity(intent);
 	}
 }

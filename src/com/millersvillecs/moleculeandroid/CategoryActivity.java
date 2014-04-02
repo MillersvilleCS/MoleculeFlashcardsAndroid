@@ -22,6 +22,7 @@ import android.widget.ListView;
 import com.millersvillecs.moleculeandroid.data.CommunicationManager;
 import com.millersvillecs.moleculeandroid.data.FileHandler;
 import com.millersvillecs.moleculeandroid.data.Molecule;
+import com.millersvillecs.moleculeandroid.data.MoleculeGamePreferences;
 import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
 import com.millersvillecs.moleculeandroid.helper.CategoryBaseAdapter;
 import com.millersvillecs.moleculeandroid.helper.CategoryItem;
@@ -30,11 +31,12 @@ import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
 public class CategoryActivity extends Activity implements OnItemClickListener, 
 														  OnDismissListener, OnCommunicationListener {
 	
+	private MoleculeGamePreferences preferences;
 	private FileHandler fileHandler;
 	private CommunicationManager comm;
 	private CategoryItem[] categories;
 	private ProgressDialog progress;
-	private String username, auth;
+	private String auth;
 	private ArrayList<String> ids;
 	private ArrayList<String> urls;
 	private boolean wantedDismiss = false;
@@ -45,9 +47,8 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Intent intent = getIntent();
-		this.username = intent.getStringExtra(MainActivity.USERNAME);
-		this.auth = intent.getStringExtra(MainActivity.AUTH);
+		this.preferences = new MoleculeGamePreferences(this);
+		this.auth = this.preferences.getAuth();
 		
 		setContentView(R.layout.activity_category);
 		
@@ -74,8 +75,8 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 				this.ids = new ArrayList<String>();
 				for(int i = 0; i < this.gamesJSON.length(); i++) {
 					this.urls.add("https://exscitech.org/" + 
-								   this.gamesJSON.getJSONObject(i).getString("image").substring(1));
-					this.ids.add(this.gamesJSON.getJSONObject(i).getString("id"));//.13
+								   this.gamesJSON.getJSONObject(i).getString("hires_image").substring(1));
+					this.ids.add(this.gamesJSON.getJSONObject(i).getString("id"));
 				}
 				
 				createCategories();
@@ -120,9 +121,8 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 		
 		
 		Intent intent = new Intent(this, SelectionActivity.class);
-	    intent.putExtra(MainActivity.USERNAME, this.username);
-	    intent.putExtra(MainActivity.AUTH, this.auth);
-	    intent.putExtra(MainActivity.GAME_JSON, newGamesJSON.toString());
+		this.preferences.setAllGamesJSON(this.gamesJSON.toString());
+		this.preferences.setCategoricalGamesJSON(newGamesJSON.toString());
 	    startActivity(intent);
 	}
 
