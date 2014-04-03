@@ -177,6 +177,7 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
             try{
                 this.score = response.getDouble("final_score");
                 int rank = response.getInt("rank");
+                updateHighScores(rank);
                 this.gameUIPieces.displayFinishScreen(this.score, rank);
             } catch(JSONException e) {
                 e.printStackTrace();
@@ -185,6 +186,37 @@ public class GameActivity extends Activity implements OnDismissListener, OnCommu
             }
         }
         
+    }
+    
+    private void updateHighScores(int rank) {
+    	try{
+            JSONArray gamesJSON = new JSONArray(this.preferences.getAllGamesJSON());
+            JSONObject game = (JSONObject)gamesJSON.get(this.preferences.getPosition());
+            JSONArray highScoresJSON = game.getJSONArray("high_scores");
+            if(rank > highScoresJSON.length() + 1) {
+            	return;
+            }
+            for(int i = highScoresJSON.length() - 1; i >= rank - 1; i--) {
+            	JSONObject highScore = highScoresJSON.getJSONObject(i);
+            	highScore.put("rank", i + 2);
+            	highScoresJSON.put(i + 1, highScore);
+            }
+            
+            JSONObject newScore = new JSONObject(highScoresJSON.getJSONObject(0).toString());
+            newScore.put("rank", rank);
+            newScore.put("username", preferences.getUsername());
+            newScore.put("score", this.score);
+            
+            highScoresJSON.put(rank - 1, newScore);
+            
+            game.put("high_scores", highScoresJSON);
+            
+            this.preferences.setAllGamesJSON(gamesJSON.toString());
+            
+        } catch(JSONException e) {
+            e.printStackTrace();
+            finish();
+        }
     }
 
     @Override
