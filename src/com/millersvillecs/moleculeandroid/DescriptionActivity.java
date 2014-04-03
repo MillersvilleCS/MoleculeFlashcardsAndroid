@@ -40,7 +40,7 @@ public class DescriptionActivity extends Activity {
 			JSONObject game = (JSONObject)this.fullGameJSON.get(this.position);
 			actionBar.setTitle(game.getString("name"));
 			
-			String image = game.getString("id") + ".jpg";
+			String image = game.getString("id") + ".png";
 			Bitmap bitmap = fileHandler.readTempImage(image);
 			ImageView imageView = (ImageView) findViewById(R.id.description_image);
 			imageView.setImageBitmap(bitmap);

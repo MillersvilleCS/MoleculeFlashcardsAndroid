@@ -191,7 +191,7 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
                 return;
 		    }
 		} else {
-		    this.fileHandler.writeTempImage(bitmap, id + ".jpg");  
+		    this.fileHandler.writeTempImage(bitmap, id + ".png");  
 		}
 		
 		if(this.urls.size() == 0) {

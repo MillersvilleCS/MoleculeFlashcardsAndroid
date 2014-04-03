@@ -29,23 +29,6 @@ public class CommunicationManager {
 		this.callback.onImageResponse(bitmap, error);
 	}
 	
-	/* TODO - Remove?
-	//http://www.mail-archive.com/android-beginners@googlegroups.com/msg18680.html
-	private static String md5Hash(String s) {
-        MessageDigest m = null;
-
-        try {
-                m = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-        }
-
-        m.update(s.getBytes(), 0, s.length());
-        String hash = new BigInteger(1, m.digest()).toString(16);
-        return hash;
-	}
-	*/
-	
 	public void login(String login, String password) {
 		Request request = new Request();
 		request.url = this.REQUEST_HANDLER_URL;
