@@ -14,8 +14,9 @@ import com.millersvillecs.moleculeandroid.data.Molecule;
 public class GameActivity extends Activity {
     private GameLogic gameLogic;
 	private GLSurfaceView gLSurfaceView;
-	
 	private AndroidRenderer renderer;
+	
+	private int orientation;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class GameActivity extends Activity {
 		
 		setContentView(R.layout.activity_game);
 		getActionBar().setDisplayHomeAsUpEnabled(false);//no need to check, 4.0+ req on app
+		this.orientation = getResources().getConfiguration().orientation;
 
 		this.gLSurfaceView = (GLSurfaceView) findViewById(R.id.glsurfaceview);
 		
@@ -46,13 +48,18 @@ public class GameActivity extends Activity {
 	
 	@Override
 	public void onBackPressed() {
+		this.gameLogic.cancel();
 	    finish();
 	}
 	
 	@Override
 	public void onPause() {
 		super.onPause();
-	    finish();
+		if(this.orientation == getResources().getConfiguration().orientation) {
+			this.gameLogic.cancel();
+			finish();
+		}
+	    //finish(); - check to make sure is not just orient
 	}
     
     public void onFinishBack(View view) {

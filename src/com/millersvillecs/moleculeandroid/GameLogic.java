@@ -61,6 +61,11 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 		//TODO - rotation reload - will use init
 	}
 	
+	public void cancel() {
+		this.progress.dismiss();
+		this.comm.cancel();
+	}
+	
 	private void init() {
 		this.auth = this.preferences.getAuth();
         int position = this.preferences.getPosition();

@@ -12,21 +12,28 @@ public class CommunicationManager {
 	private final String REQUEST_HANDLER_URL = "https://exscitech.org/request_handler.php",
 						 GET_MEDIA_URL = "https://exscitech.org/get_media.php";
 	private OnCommunicationListener callback;
+	private boolean cancelled = false;
 	
 	public CommunicationManager(OnCommunicationListener callback) {
 		this.callback = callback;
 	}
 	
 	public void setJSONResults(JSONObject response) {
-		this.callback.onRequestResponse(response);
+		if(!this.cancelled) {
+			this.callback.onRequestResponse(response);
+		}
 	}
 	
 	public void setMoleculeResponse(Molecule molecule) {
-		this.callback.onMoleculeResponse(molecule);
+		if(!this.cancelled) {
+			this.callback.onMoleculeResponse(molecule);
+		}
 	}
 	
 	public void setImageResults(Bitmap bitmap, boolean error) {
-		this.callback.onImageResponse(bitmap, error);
+		if(!this.cancelled) {
+			this.callback.onImageResponse(bitmap, error);
+		}
 	}
 	
 	public void login(String login, String password) {
@@ -134,5 +141,9 @@ public class CommunicationManager {
 	
 	public void downloadImage(String url, File imageFile) {
 		new ExecuteImageDownload(this, imageFile).execute(url);
+	}
+	
+	public void cancel() {
+		this.cancelled = true;
 	}
 }
