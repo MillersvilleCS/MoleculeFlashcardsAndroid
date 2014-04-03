@@ -232,6 +232,15 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 	}
 	
 	@Override
+	public void onPause() {
+		super.onPause();
+		if(this.progress != null) {
+        	this.wantedDismiss = true;
+            this.progress.dismiss();
+        }
+	}
+	
+	@Override
 	protected void onSaveInstanceState (Bundle outState) {
 		outState.putString("fullGameJSON", this.fullGameJSON.toString());
 	}

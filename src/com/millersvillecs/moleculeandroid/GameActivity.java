@@ -25,7 +25,7 @@ public class GameActivity extends Activity {
 		setContentView(R.layout.activity_game);
 		getActionBar().setDisplayHomeAsUpEnabled(false);//no need to check, 4.0+ req on app
 		this.orientation = getResources().getConfiguration().orientation;
-
+		
 		this.gLSurfaceView = (GLSurfaceView) findViewById(R.id.glsurfaceview);
 		
 		final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -59,7 +59,6 @@ public class GameActivity extends Activity {
 			this.gameLogic.cancel();
 			finish();
 		}
-	    //finish(); - check to make sure is not just orient
 	}
     
     public void onFinishBack(View view) {

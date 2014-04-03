@@ -18,7 +18,7 @@ public class SelectionBaseAdapter extends BaseAdapter{
 	
 	private class SelectionHolder {
 		ImageView image;
-		TextView text;
+		TextView title, description;
 	}
 	
 	public SelectionBaseAdapter(Context context, SelectionItem[] data) {
@@ -50,7 +50,8 @@ public class SelectionBaseAdapter extends BaseAdapter{
         	holder = new SelectionHolder();
         	convertView = layoutInflater.inflate(R.layout.selection_item, null);
         	holder.image = (ImageView) convertView.findViewById(R.id.selection_item_image);
-        	holder.text = (TextView) convertView.findViewById(R.id.selection_item_title);
+        	holder.title = (TextView) convertView.findViewById(R.id.selection_item_title);
+        	holder.description = (TextView) convertView.findViewById(R.id.selection_item_description);
         	convertView.setTag(holder);
         } else {
         	holder = (SelectionHolder) convertView.getTag();
@@ -58,7 +59,8 @@ public class SelectionBaseAdapter extends BaseAdapter{
         
         SelectionItem item = (SelectionItem) getItem(position);
         holder.image.setImageBitmap(item.getImage());
-        holder.text.setText(item.getDescription());
+        holder.title.setText(item.getTitle());
+        holder.description.setText(item.getDescription());
         
         return convertView;
 	}

@@ -5,12 +5,13 @@ import android.graphics.Bitmap;
 public class SelectionItem {
 	
 	private Bitmap image;
-	private String title;
+	private String title, description;
 	private int gameID;
 	
-	public SelectionItem(Bitmap image, String title, int gameID) {
+	public SelectionItem(Bitmap image, String title, String description, int gameID) {
 		this.image = image;
 		this.title = title;
+		this.description = description;
 		this.gameID = gameID;
 	}
 	
@@ -18,8 +19,12 @@ public class SelectionItem {
 		return this.image;
 	}
 	
-	public String getDescription() {
+	public String getTitle() {
 		return this.title;
+	}
+	
+	public String getDescription() {
+		return this.description;
 	}
 	
 	public int getGameID() {

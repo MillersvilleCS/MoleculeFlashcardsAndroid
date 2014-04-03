@@ -44,7 +44,8 @@ public class SelectionActivity extends Activity implements OnItemClickListener {
 				JSONObject game = partialJSON.getJSONObject(i);
 				String image = game.getString("id") + ".png";
 				Bitmap bitmap = fileHandler.readTempImage(image);
-				games[i] = new SelectionItem(bitmap, game.getString("name"), game.getInt("id") );
+				games[i] = new SelectionItem(bitmap, game.getString("name"), 
+											 game.getString("description"), game.getInt("id") );
 			}
 		} catch(JSONException e) {
 			e.printStackTrace();
