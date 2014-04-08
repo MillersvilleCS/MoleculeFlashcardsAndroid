@@ -9,6 +9,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class GameUIPieces {
+	
+	public static final int STATE_INVISIBLE = 0, STATE_UNCHOSEN = 1, STATE_WRONG = 2;
     
     private GameActivity gameActivity;
     private Button[] buttons;
@@ -37,9 +39,9 @@ public class GameUIPieces {
         hideQuestionText();
     }
     
-    public void resetButtons() {
-        for(int i = 0; i < this.buttons.length; i++) {
-            if(this.buttons[i].isShown()) {
+    public void resetButtons(boolean force) {
+    	for(int i = 0; i < this.buttons.length; i++) {
+            if(this.buttons[i].isShown() || force) {
                 this.buttons[i].setVisibility(View.GONE);
                 this.buttons[i].setTextColor(Color.BLACK);
                 this.buttons[i].setEnabled(true);
@@ -47,6 +49,10 @@ public class GameUIPieces {
                 this.buttons[i].clearAnimation();
             }
         }
+    }
+    
+    public void resetButtons() {
+        resetButtons(false);
     }
     
     public void displayButton(int index, String message) {
@@ -103,6 +109,21 @@ public class GameUIPieces {
         
         scoreView.setText("Score: " + score);
         rankView.setText("Rank: #" + rank);
+    }
+    
+    public int[] getButtonStates() {
+    	int[] states = new int[this.buttons.length];
+    	for(int i = 0; i < states.length; i++) {
+    		if(this.buttons[i].isShown()) {
+    			if(this.buttons[i].isEnabled()) {
+    				states[i] = GameUIPieces.STATE_UNCHOSEN;
+    			} else {
+    				states[i] = GameUIPieces.STATE_WRONG;
+    			}
+    		}
+    	}
+    	
+    	return states;
     }
 }
 

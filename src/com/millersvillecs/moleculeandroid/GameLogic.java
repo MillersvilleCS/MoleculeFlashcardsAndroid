@@ -33,7 +33,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 	private Molecule[] molecules;
 	private String auth, gameId, gameSessionId;
 	private double score;
-	private int currentQuestion = 0, lastAnswerIndex = -1, gameState;
+	private int currentQuestion = 0, lastAnswerIndex = -1, gameState, rank;
 	private boolean wantedDismiss = false;
 	
 	public GameLogic(GameActivity gameActivity) {
@@ -42,6 +42,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 	}
 	
 	public void start() {
+		this.gameActivity.lockOrientation();
 		this.progress = new ProgressDialog(this.gameActivity);
         this.progress.setCanceledOnTouchOutside(false);
         this.progress.setMessage("Loading questions...");
@@ -57,8 +58,60 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         this.comm.loadFlashcardGame(this.auth, this.gameId);
 	}
 	
-	public void reload() {
-		//TODO - rotation reload - will use init
+	public void reload(GameFragment state) {
+		
+		this.questions = state.getQuestions();
+		this.currentQuestion = state.getCurrentIndex();
+		this.score = state.getScore();
+		this.rank = state.getRank();
+		this.gameUIPieces = new GameUIPieces(this.gameActivity);
+		this.gameUIPieces.resetButtons(true);
+		
+		this.progress = new ProgressDialog(this.gameActivity);
+        this.progress.setCanceledOnTouchOutside(false);
+        this.progress.setMessage("Loading questions...");
+        this.progress.setOnDismissListener(this);
+        this.comm = new CommunicationManager(this);
+        
+        if(this.currentQuestion < this.questions.length || this.rank == 0) {
+        	this.gameState = GameLogic.PLAYING;
+        	
+        	this.molecules = state.getMolecules();
+    		this.lastAnswerIndex = state.getLastIndex();
+    		this.gameSessionId = state.getGameSessionId();
+    		int[] buttonStates = state.getButtonStates();
+    		
+    		this.gameUIPieces = new GameUIPieces(this.gameActivity);
+    		this.gameUIPieces.resetButtons(true);
+    		init();
+        	
+        	this.currentQuestion -= 1;
+            this.nextQuestion();
+            
+            this.gameUIPieces.resetButtons();
+    		for(int i = 0; i < buttonStates.length; i++) {
+    			if(buttonStates[i] != GameUIPieces.STATE_INVISIBLE) {
+    				if(buttonStates[i] == GameUIPieces.STATE_WRONG) {
+    					this.gameUIPieces.markWrong(i);
+    				}
+    			} else {
+    				break;
+    			}
+    		}
+        } else {
+        	this.gameUIPieces.displayFinishScreen(this.score, this.rank);
+        }
+	}
+	
+	public void save(GameFragment state) {
+		state.setMolecules(this.molecules);
+		state.setQuestions(this.questions);
+		state.setCurrentIndex(this.currentQuestion);
+		state.setLastIndex(this.lastAnswerIndex);
+		state.setScore(this.score);
+		state.setSessionId(this.gameSessionId);
+		state.setRank(this.rank);
+		state.setButtonStates(this.gameUIPieces.getButtonStates());
 	}
 	
 	public void cancel() {
@@ -134,12 +187,13 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
                     handler.postDelayed(new Runnable() { 
                         public void run() {
                         	lastAnswerIndex = -1;
-                            nextQuestion(); 
+                            nextQuestion();  
                         } 
                     }, 3000);
                 } else {
                     this.gameUIPieces.markWrong(this.lastAnswerIndex);
                     this.lastAnswerIndex = -1;
+                    this.gameActivity.unlockOrientation();
                 }
             } catch(JSONException e) {
                 e.printStackTrace();
@@ -148,9 +202,10 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         } else {
             try{
                 this.score = response.getDouble("final_score");
-                int rank = response.getInt("rank");
-                updateHighScores(rank);
-                this.gameUIPieces.displayFinishScreen(this.score, rank);
+                this.rank = response.getInt("rank");
+                updateHighScores(this.rank);
+                this.gameUIPieces.displayFinishScreen(this.score, this.rank);
+                this.gameActivity.unlockOrientation();
             } catch(JSONException e) {
                 e.printStackTrace();
                 this.gameActivity.finish();
@@ -207,6 +262,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
             Question question = this.questions[this.currentQuestion];
             String answerId = question.getAnswer(index).getId();
             
+            this.gameActivity.lockOrientation();
             this.comm.submitFlashcardAnswer(this.auth, this.gameSessionId, question.getId(), answerId, 1000);//TODO, actual time
         }
 	}
@@ -257,6 +313,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         this.currentQuestion++;
         
         if(this.currentQuestion < this.questions.length) {
+        	this.gameActivity.unlockOrientation();
             Question question = this.questions[this.currentQuestion];
             this.gameUIPieces.displayQuestionText(question.getQuestionText());
             this.gameUIPieces.resetButtons();

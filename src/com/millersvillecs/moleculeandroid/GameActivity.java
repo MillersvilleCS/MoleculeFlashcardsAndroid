@@ -2,16 +2,26 @@ package com.millersvillecs.moleculeandroid;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ConfigurationInfo;
+import android.content.res.Configuration;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.millersvillecs.moleculeandroid.data.Molecule;
 
 
 public class GameActivity extends Activity {
+	
+	private static final String FRAGMENT_TAG = "data";
+	
+	private GameFragment gameState;
+	
     private GameLogic gameLogic;
 	private GLSurfaceView gLSurfaceView;
 	private AndroidRenderer renderer;
@@ -41,9 +51,19 @@ public class GameActivity extends Activity {
 			//error?
 			finish();
 		}
-		
-		this.gameLogic = new GameLogic(this);
-		this.gameLogic.start();
+		FragmentManager manager = getFragmentManager();
+        this.gameState = (GameFragment) manager.findFragmentByTag(GameActivity.FRAGMENT_TAG);
+
+        if (this.gameState == null) {
+            gameState = new GameFragment();
+            manager.beginTransaction().add(gameState, GameActivity.FRAGMENT_TAG).commit();
+            
+            this.gameLogic = new GameLogic(this);
+    		this.gameLogic.start();
+        } else {
+        	this.gameLogic = new GameLogic(this);
+    		this.gameLogic.reload(this.gameState);
+        }
     }
 	
 	@Override
@@ -60,6 +80,14 @@ public class GameActivity extends Activity {
 			finish();
 		}
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (!isFinishing()) {
+			this.gameLogic.save(this.gameState);
+		}
+	}
     
     public void onFinishBack(View view) {
         finish();
@@ -73,5 +101,27 @@ public class GameActivity extends Activity {
     public Molecule getCurrentMolecule() {
     	//TODO - Remove and call GameLogic directly - leaving this for Will when he merges.
     	return this.gameLogic.getCurrentMolecule();
+    }
+    
+    public void lockOrientation() {
+    	WindowManager w = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+    	switch (w.getDefaultDisplay().getRotation()) {
+    		case Surface.ROTATION_0:
+    			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    			break;
+    		case Surface.ROTATION_90:
+    			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    			break;
+    		case Surface.ROTATION_180:
+    			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+    			break;
+    		default:
+    			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+    			break;
+    	}    	
+    }
+    
+    public void unlockOrientation() {
+    	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
 }
