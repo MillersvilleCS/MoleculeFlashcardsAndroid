@@ -1,6 +1,6 @@
 package com.millersvillecs.moleculeandroid;
 
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,6 +17,7 @@ public class GameUIPieces {
     private TextView questionText;
     private ScrollView scrollView;
     private Animation animation;
+    private Drawable defaultBackground, correctBackground, wrongBackground;
     
     public GameUIPieces (GameActivity gameActivity) {
         this.gameActivity = gameActivity;
@@ -30,6 +31,10 @@ public class GameUIPieces {
         this.buttons[6] = (Button) gameActivity.findViewById(R.id.game_button_6);
         this.buttons[7] = (Button) gameActivity.findViewById(R.id.game_button_7);
         
+        this.defaultBackground = gameActivity.getResources().getDrawable(R.drawable.button_gray);
+        this.correctBackground = gameActivity.getResources().getDrawable(R.drawable.button_green);
+        this.wrongBackground = gameActivity.getResources().getDrawable(R.drawable.button_wrong);
+        
         this.questionText = (TextView) gameActivity.findViewById(R.id.question_text);
         this.scrollView = (ScrollView) gameActivity.findViewById(R.id.question_scrollbar);
         //this.scrollView.setScrollBarStyle(ScrollView.SCROLLBARS_INSIDE_INSET);
@@ -39,12 +44,13 @@ public class GameUIPieces {
         hideQuestionText();
     }
     
+    @SuppressWarnings("deprecation")
     public void resetButtons(boolean force) {
     	for(int i = 0; i < this.buttons.length; i++) {
             if(this.buttons[i].isShown() || force) {
                 this.buttons[i].setVisibility(View.GONE);
-                this.buttons[i].setTextColor(Color.BLACK);
                 this.buttons[i].setEnabled(true);
+                this.buttons[i].setBackgroundDrawable(this.defaultBackground);
                 this.buttons[i].setAlpha(1.0f);
                 this.buttons[i].clearAnimation();
             }
@@ -69,8 +75,9 @@ public class GameUIPieces {
     	this.buttons[index].startAnimation(this.animation);
     }
     
-    public void markCorrect(int index) {
-    	this.buttons[index].setTextColor(Color.rgb(0, 153, 0));
+    @SuppressWarnings("deprecation")
+	public void markCorrect(int index) {
+    	this.buttons[index].setBackgroundDrawable(this.correctBackground);//new version is above our min-level
     	for(int i = 0; i < this.buttons.length; i++) {
     		if(i != index && this.buttons[i].isShown()) {
     			this.buttons[i].setEnabled(false);
@@ -79,9 +86,10 @@ public class GameUIPieces {
     	}
     }
     
+    @SuppressWarnings("deprecation")
     public void markWrong(int index) {
     	this.buttons[index].clearAnimation();
-        this.buttons[index].setTextColor(Color.RED);
+    	this.buttons[index].setBackgroundDrawable(this.wrongBackground);
         this.buttons[index].setEnabled(false);
         this.buttons[index].setAlpha(0.5f);
     }
