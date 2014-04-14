@@ -1,5 +1,6 @@
 package com.millersvillecs.moleculeandroid;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.animation.Animation;
@@ -51,6 +52,7 @@ public class GameUIPieces {
                 this.buttons[i].setVisibility(View.GONE);
                 this.buttons[i].setEnabled(true);
                 this.buttons[i].setBackgroundDrawable(this.defaultBackground);
+                this.buttons[i].setTextColor(Color.BLACK);
                 this.buttons[i].setAlpha(1.0f);
                 this.buttons[i].clearAnimation();
             }
@@ -78,6 +80,7 @@ public class GameUIPieces {
     @SuppressWarnings("deprecation")
 	public void markCorrect(int index) {
     	this.buttons[index].setBackgroundDrawable(this.correctBackground);//new version is above our min-level
+    	this.buttons[index].setTextColor(Color.WHITE);
     	for(int i = 0; i < this.buttons.length; i++) {
     		if(i != index && this.buttons[i].isShown()) {
     			this.buttons[i].setEnabled(false);
@@ -90,8 +93,8 @@ public class GameUIPieces {
     public void markWrong(int index) {
     	this.buttons[index].clearAnimation();
     	this.buttons[index].setBackgroundDrawable(this.wrongBackground);
+    	this.buttons[index].setTextColor(Color.WHITE);
         this.buttons[index].setEnabled(false);
-        this.buttons[index].setAlpha(0.5f);
     }
     
     public void hideQuestionText() {
