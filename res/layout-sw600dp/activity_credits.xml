@@ -23,6 +23,7 @@
             android:layout_marginBottom="-60dp"
             android:contentDescription="@string/empty"
             android:scaleType="centerInside"
+            android:onClick="onExscitech"
             android:src="@drawable/exscitech_logo" />
     
     <TextView android:id="@+id/credits_body_view"

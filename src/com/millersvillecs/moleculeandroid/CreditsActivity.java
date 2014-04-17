@@ -28,4 +28,12 @@ public class CreditsActivity extends Activity{
 		i.setData(Uri.parse(url));
 		startActivity(i);
 	}
+	
+	public void onExscitech(View view)
+	{
+		String url = "https://exscitech.org/";
+		Intent i = new Intent(Intent.ACTION_VIEW);
+		i.setData(Uri.parse(url));
+		startActivity(i);
+	}
 }
