@@ -87,7 +87,8 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 	}
 
 	public void onCreditsButton(View view) {
-		
+		Intent intent = new Intent(this, CreditsActivity.class);
+		startActivity(intent);
 	}
 	
 	public void onLoginButton(View view) {

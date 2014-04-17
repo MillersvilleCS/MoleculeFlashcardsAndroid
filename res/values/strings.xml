@@ -32,5 +32,23 @@
     <!-- Game Screen -->
     <string name="error_gl">Error: Could not create openGL 2.0 context!</string>
     <string name="back">Back</string>
+    
+    <!-- Credits Screen -->
+    <string name="credits_header">This app was developed as part of</string>
+    <string name="credits_nsf">NSF IIS #0968350</string>
+    <string name="credits_body">
+        <![CDATA[
+            <b>Primary Developers:</b><br/>
+                - Connor Mahaffey<br/>
+                - William Gervasio<br/>
+            <b>Primary Contributors:</b><br/>
+                - Sam Schlachter<br/>
+            <b>Project Leads:</b><br/>
+                - Gary Zoppetti<br/>
+                - Michela Taufer<br/><br/>
+            <i>This project was made possible through the support of the
+               National Science Foundation.</i>
+        ]]>
+    </string>
 
 </resources>
