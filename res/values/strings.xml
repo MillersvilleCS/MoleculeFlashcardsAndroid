@@ -39,13 +39,13 @@
     <string name="credits_body">
         <![CDATA[
             <b>Primary Developers:</b><br/>
-                - Connor Mahaffey<br/>
+                - <a href="http://connormahaffey.com/">Connor Mahaffey</a><br/>
                 - William Gervasio<br/>
             <b>Primary Contributors:</b><br/>
-                - Sam Schlachter<br/>
+                - <a href="http://samschlachter.com">Sam Schlachter</a><br/>
             <b>Project Leads:</b><br/>
                 - Gary Zoppetti<br/>
-                - Michela Taufer<br/><br/>
+                - <a href="http://gcl.cis.udel.edu/personal/taufer/index.php">Michela Taufer</a><br/><br/>
             <i>This project was made possible through the support of the
                National Science Foundation.</i>
         ]]>

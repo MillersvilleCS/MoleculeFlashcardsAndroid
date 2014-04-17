@@ -52,6 +52,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/empty"
             android:scaleType="centerInside"
+            android:onClick="onNSF"
             android:src="@drawable/nsf_logo" />
         
         <TextView 
