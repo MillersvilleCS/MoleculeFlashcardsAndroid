@@ -101,7 +101,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         		Color workingColor = new Color(1.0f, 0.05f, 0.05f, 1.0f);
         		Color tempColor = new Color(atom.color.getRed(), atom.color.getGreen(), atom.color.getBlue(), atom.color.getAlpha());
         		//Cube cube = new Cube(workingColor);
-        		Mesh sphere = GeometryUtils.createSphereGeometry(0.5f,12, 12, workingColor);
+        		Mesh sphere = GeometryUtils.createSphereGeometry(((float)atom.radius / 4),12, 12, tempColor);
         		SceneObject atomObject = new SceneObject(sphere, shader);
         		atomObject.translate((float) atom.x, (float) atom.y, (float) atom.z);
         		//scene.attach(atomObject);

@@ -16,6 +16,7 @@ public class VAO {
    private final VBO vbo;
    private final IBO ibo;
    private final int size;
+   private int handle = -1;
 
    public VAO(VBO vbo, IBO ibo, int size) {
        this.vbo = vbo;
@@ -24,7 +25,16 @@ public class VAO {
    }
 
    public void init() {
+	   
 
+
+   }
+
+   public final void addVertexAttribute(final int index, final Descriptor descriptor) {
+       descriptors.put(index, descriptor);
+   }
+
+   public void draw() {
        vbo.bind();
        
        for (int i : descriptors.keySet()) {
@@ -38,17 +48,11 @@ public class VAO {
 
        }
        
-       vbo.unbind();
-   }
-
-   public final void addVertexAttribute(final int index, final Descriptor descriptor) {
-       descriptors.put(index, descriptor);
-   }
-
-   public void draw() {
+       
 	   ibo.bind();
       // GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, size);
        GLES20.glDrawElements(GLES20.GL_TRIANGLES, size, GLES20.GL_UNSIGNED_INT, 0);
+       vbo.unbind();
        ibo.unbind();
    }
 }
