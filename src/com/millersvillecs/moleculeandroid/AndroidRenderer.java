@@ -13,6 +13,8 @@ import javax.microedition.khronos.opengles.GL10;
 import com.millersvillecs.moleculeandroid.data.Atom;
 import com.millersvillecs.moleculeandroid.data.Molecule;
 import com.millersvillecs.moleculeandroid.graphics.Camera;
+import com.millersvillecs.moleculeandroid.graphics.Color;
+import com.millersvillecs.moleculeandroid.graphics.GeometryUtils;
 import com.millersvillecs.moleculeandroid.graphics.Mesh;
 import com.millersvillecs.moleculeandroid.graphics.VertexAttribute;
 import com.millersvillecs.moleculeandroid.graphics.opengles.ShaderProgram;
@@ -25,7 +27,6 @@ import com.millersvillecs.moleculeandroid.util.math.Vector3;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
@@ -79,7 +80,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         SceneNode moleculeNode;
 	public AndroidRenderer(Context context, GameActivity activity) {
 		camera = new Camera(5, 5, 1, 100);
-		camera.setTranslation(0, 0, -3);
+		camera.setTranslation(0, 0, -10);
 		camera.lookAt(0, 0, 1);
 		scene = new Scene();
 		this.context = context;
@@ -96,9 +97,12 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
             }
         	moleculeNode = new SceneNode();
         	
-        	for(Atom atom : mol.getAtoms()) {
-        		Cube cube = new Cube(atom.color);
-        		SceneObject atomObject = new SceneObject(cube, shader);
+        	for(Atom atom: mol.getAtoms()) {
+        		Color workingColor = new Color(1.0f, 0.05f, 0.05f, 1.0f);
+        		Color tempColor = new Color(atom.color.getRed(), atom.color.getGreen(), atom.color.getBlue(), atom.color.getAlpha());
+        		//Cube cube = new Cube(workingColor);
+        		Mesh sphere = GeometryUtils.createSphereGeometry(0.5f,12, 12, workingColor);
+        		SceneObject atomObject = new SceneObject(sphere, shader);
         		atomObject.translate((float) atom.x, (float) atom.y, (float) atom.z);
         		//scene.attach(atomObject);
         		moleculeNode.attach(atomObject);
@@ -139,30 +143,24 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
           } catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}     
         
         List<VertexAttribute> meshDescriptor = new ArrayList<VertexAttribute>();
         meshDescriptor.add(new VertexAttribute(triangle1PositionData, 3));
         meshDescriptor.add(new VertexAttribute(triangle1ColorData, 4));
+        Color c1 = new Color(0.0f, 0.5f, 15f, 1.0f);
+        Color c2 = new Color(1.0f, 1f, 1f, 1.0f);
+        Mesh cube2 = GeometryUtils.createSphereGeometry(1, 12, 12, c2);
+        Mesh cube1 = GeometryUtils.createSphereGeometry(1, 12, 12, c1);
         
-        Mesh mesh  =new Mesh(triangle1IndicesData, meshDescriptor);
+        SceneObject c1Object = new SceneObject(cube1, shader);
+        c1Object.translate(-1, 0, 0);
         
-        SceneObject so = new SceneObject(mesh, shader);
-        so.translate(0f, 0, 0);
-        //scene.attach(so);
-        Quad quad = new Quad(5, 5, shader);
-        Quad quad2 = new Quad(2, 2, shader);
-        Cube cube = new Cube(Color.GREEN);
-        SceneObject cubeSO = new SceneObject(cube, shader);
-        SceneObject cubeSO2 = new SceneObject(cube, shader);
-        cubeSO.translate(1.28f, -0.2f, 0);
-        //scene.attach(cubeSO);
-        //scene.attach(cubeSO2);
-        quad.translate(1f, 0.2f, 0);
-        //scene.attach(quad);
-        //scene.attach(quad2);
-        //scene.attach(new SceneObject(mesh, shader));
-        
+        SceneObject c2Object = new SceneObject(cube2, shader);
+        c2Object.translate(1, 0, 0);
+        //scene.attach(c2Object);
+        //scene.attach(c1Object);
+       
         
     }
     

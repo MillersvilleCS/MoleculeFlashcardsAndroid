@@ -3,8 +3,7 @@ package com.millersvillecs.moleculeandroid;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.graphics.Color;
-
+import com.millersvillecs.moleculeandroid.graphics.Color;
 import com.millersvillecs.moleculeandroid.graphics.Mesh;
 import com.millersvillecs.moleculeandroid.graphics.VertexAttribute;
 
@@ -43,24 +42,24 @@ public class Cube extends Mesh{
             28, 29, 30, 31, 32, 33, 34, 35 };
     
 
-    public Cube(int color) {
+    public Cube(Color color) {
     	super(INDICES, create(color));
     }
     
-    private static List<VertexAttribute> create(int color) {
+    private static List<VertexAttribute> create(Color color) {
     	List<VertexAttribute> meshDescriptor = new ArrayList<VertexAttribute>();
     	meshDescriptor.add(new VertexAttribute(VERTICES, 3));
     	meshDescriptor.add(new VertexAttribute(createColorArray(color), 4));
     	return meshDescriptor;
     }
     
-    private static float[] createColorArray(int color) {
+    private static float[] createColorArray(Color color) {
     	float[] colors = new float[36 * 4];
     	for(int i =0; i < 36; ++i) {
-    		colors[i * 4] = Color.red(color) / 255;
-    		colors[i * 4 + 1] = Color.green(color) / 255;
-    		colors[i * 4 + 2] = Color.blue(color) / 255;
-    		colors[i * 4 + 3] = Color.alpha(color) / 255;
+    		colors[i * 4] = color.getRed();
+    		colors[i * 4 + 1] = color.getGreen();
+    		colors[i * 4 + 2] = color.getBlue();
+    		colors[i * 4 + 3] = color.getAlpha();
     	}
     	
     	return colors;

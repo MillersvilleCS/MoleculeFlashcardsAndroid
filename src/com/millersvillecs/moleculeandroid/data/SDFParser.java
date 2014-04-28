@@ -44,7 +44,7 @@ public class SDFParser {
 
         return atom;
     }
-
+    
     private static Bond parseBondLine(String line) {
         Bond bond = new Bond();
         Scanner scanner = new Scanner(line);
