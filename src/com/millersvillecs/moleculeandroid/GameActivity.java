@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ConfigurationInfo;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Surface;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.millersvillecs.moleculeandroid.data.Molecule;
+import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
 
 
 public class GameActivity extends Activity {
@@ -46,23 +48,28 @@ public class GameActivity extends Activity {
 			this.gLSurfaceView.setEGLContextClientVersion(2);
 			renderer = new AndroidRenderer(this.getApplicationContext(), this);
 			this.gLSurfaceView.setRenderer(renderer);
+			
+			FragmentManager manager = getFragmentManager();
+	        this.gameState = (GameFragment) manager.findFragmentByTag(GameActivity.FRAGMENT_TAG);
+
+	        if (this.gameState == null) {
+	            gameState = new GameFragment();
+	            manager.beginTransaction().add(gameState, GameActivity.FRAGMENT_TAG).commit();
+	            
+	            this.gameLogic = new GameLogic(this);
+	    		this.gameLogic.start();
+	        } else {
+	        	this.gameLogic = new GameLogic(this);
+	    		this.gameLogic.reload(this.gameState);
+	        }
 		} else {
-			//error?
+			System.err.println("This device does not support Android OpenGL ES 2.0");
+			System.err.println("Your OpenGL Version is: " + GLES20.glGetString(GLES20.GL_VERSION));
+			System.err.println("Your Shader Language version is: " + 
+								GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
 			finish();
 		}
-		FragmentManager manager = getFragmentManager();
-        this.gameState = (GameFragment) manager.findFragmentByTag(GameActivity.FRAGMENT_TAG);
-
-        if (this.gameState == null) {
-            gameState = new GameFragment();
-            manager.beginTransaction().add(gameState, GameActivity.FRAGMENT_TAG).commit();
-            
-            this.gameLogic = new GameLogic(this);
-    		this.gameLogic.start();
-        } else {
-        	this.gameLogic = new GameLogic(this);
-    		this.gameLogic.reload(this.gameState);
-        }
+		
     }
 	
 	@Override
