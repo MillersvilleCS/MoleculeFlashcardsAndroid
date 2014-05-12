@@ -44,6 +44,10 @@ public class GameActivity extends Activity {
 				.getDeviceConfigurationInfo();
 		final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
 		
+		System.out.println("Your OpenGL Version is: " + GLES20.glGetString(GLES20.GL_VERSION));
+		System.out.println("Your Shader Language version is: " + 
+							GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
+		
 		if (supportsEs2) {
 			this.gLSurfaceView.setEGLContextClientVersion(2);
 			renderer = new AndroidRenderer(this.getApplicationContext(), this);
@@ -64,9 +68,6 @@ public class GameActivity extends Activity {
 	        }
 		} else {
 			System.err.println("This device does not support Android OpenGL ES 2.0");
-			System.err.println("Your OpenGL Version is: " + GLES20.glGetString(GLES20.GL_VERSION));
-			System.err.println("Your Shader Language version is: " + 
-								GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
 			finish();
 		}
 		
