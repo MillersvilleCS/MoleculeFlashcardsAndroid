@@ -114,15 +114,18 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         	for(Bond bond : mol.getBonds()) {
         		Atom from = mol.getAtoms().get(bond.from);
         		Atom to = mol.getAtoms().get(bond.to);
-        		Mesh cylinder = GeometryUtils.createCylinderGeometry(0.1f, 1, 40, from.color,to.color);
-        		bondObject = new SceneObject(cylinder, shader);
-        		final Vector3 direction = new Vector3((float)from.x,(float) from.y,(float) from.z).sub((float)to.x,(float) to.y,(float) to.z).normalize();
-        		final Vector3 crossProd = direction.cross(new Vector3(0,1,0));
+        		Vector3 distance = new Vector3((float)from.x,(float) from.y,(float) from.z).sub((float)to.x,(float) to.y,(float) to.z);
+        		final Vector3 direction = distance.clone().normalize();
+        		final Vector3 crossProd = (new Vector3(0,1,0)).cross(direction);
         		float angle = (float) Math.acos(crossProd.dot(direction));
+        		Mesh cylinder = GeometryUtils.createCylinderGeometry(0.1f, 1.25f, 40, from.color,to.color);
+        		SceneObject bondObject = new SceneObject(cylinder, shader);
+        		//bondObject.translate(0,0.5f,0);
         		angle = (float) Math.toDegrees(angle);
-        		bondObject.translate(new Vector3((float)from.x, (float)from.y, (float)from.z));
         		Vector3 rotation = crossProd.scale(angle);
-        		bondObject.rotate(rotation.x,rotation.y, rotation.z);
+        		bondObject.rotateLocal(rotation.x,rotation.y, rotation.z);
+        		bondObject.translate(new Vector3((float)from.x, (float)from.y, (float)from.z));
+        		
         		/*
         		Vector3 direction = new Vector3((float)from.x,(float) from.y,(float) from.z).sub((float)to.x,(float) to.y,(float) to.z);
         		Vector3 nDirection = (new Vector3((float)from.x,(float) from.y,(float) from.z).sub((float)to.x,(float) to.y,(float) to.z)).normalize();
@@ -163,7 +166,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         }
         if(moleculeNode != null) {
         	moleculeNode.rotate(1f, 1, 0);
-        	bondObject.rotate(1, 1, 0);
+        	
         }
         scene.render(0, camera);
     }
@@ -174,7 +177,6 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         
         
     }
-    SceneObject bondObject;
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

@@ -17,7 +17,7 @@ public class SceneNode extends Node<SceneNode> {
 
 	private List<IBehavior> behaviors = new ArrayList<IBehavior>();
 
-	protected Vector3 translation, scale, rotation;
+	protected Vector3 translation, scale, rotation, localRotation;
 	protected float sceneTime;
 
 	public SceneNode() {
@@ -32,6 +32,7 @@ public class SceneNode extends Node<SceneNode> {
 		this.translation = translation;
 		this.scale = scale;
 		this.rotation = new Vector3();
+		this.localRotation = new Vector3();
 	}
 
 	public void render(int delta, Camera camera) {
@@ -99,6 +100,15 @@ public class SceneNode extends Node<SceneNode> {
 			((SceneNode) node).rotate(rx, ry, rz);
 		}
 		this.rotation.add(rx, ry, rz);
+		return this;
+	}
+	
+	public SceneNode rotateLocal(float rx, float ry, float rz) {
+		
+		for (Node<SceneNode> node : this.getSubnodes()) {
+			((SceneNode) node).rotateLocal(rx, ry, rz);
+		}
+		this.localRotation.add(rx, ry, rz);
 		return this;
 	}
 
