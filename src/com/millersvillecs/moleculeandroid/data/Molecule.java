@@ -2,8 +2,6 @@ package com.millersvillecs.moleculeandroid.data;
 
 import java.util.ArrayList;
 
-import android.graphics.Color;
-
 public class Molecule {
 
     private ArrayList<Atom> atoms;

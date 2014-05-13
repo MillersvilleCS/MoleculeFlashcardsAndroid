@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.millersvillecs.moleculeandroid.data.Molecule;
-import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
 
 
 public class GameActivity extends Activity {

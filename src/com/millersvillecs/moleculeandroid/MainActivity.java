@@ -83,7 +83,8 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 	}
 	
 	public void onTutorialButton(View view) {
-		
+		Intent intent = new Intent(this, TutorialActivity.class);
+		startActivity(intent);
 	}
 
 	public void onCreditsButton(View view) {
@@ -140,21 +141,4 @@ public class MainActivity extends Activity implements OnCommunicationListener {
 
 	@Override
 	public void onImageResponse(Bitmap bitmap, boolean error) {}
-	
-	/* 
-	 * see: http://developer.android.com/reference/android/app/Activity.html#ActivityLifecycle
-	 * 
-	
-	protected void onStart() {};
-    
-    protected void onRestart() {};
-
-    protected void onResume() {};
-
-    protected void onPause() {};
-
-    protected void onStop() {};
-
-    protected void onDestroy() {};
-    */
 }

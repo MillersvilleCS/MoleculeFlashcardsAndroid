@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 public class CreditsActivity extends Activity{
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_credits);
@@ -36,4 +38,18 @@ public class CreditsActivity extends Activity{
 		i.setData(Uri.parse(url));
 		startActivity(i);
 	}
+	
+	/*
+	 * Handles 'Up' Menu press (does the same thing as the back button)
+	 */
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+        	//NavUtils.navigateUpFromSameTask(this);
+        	finish();//so "up" looks like "back"
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

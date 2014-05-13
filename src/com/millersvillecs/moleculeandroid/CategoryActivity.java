@@ -128,7 +128,6 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 
 	@Override
 	public void onDismiss(DialogInterface dialog) {
-		//should make a way to cancel loading
 		if(this.wantedDismiss) {
 			this.wantedDismiss = false;
 		} else {
@@ -144,7 +143,7 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 				this.fullGameJSON = response;
 				this.categoriesJSON = response.getJSONArray("categories");
 				this.gamesJSON = response.getJSONArray("available_games");
-				//this.fileHandler.writeTemp("games", avail.toString().split("\n"));
+				
 				this.urls = new ArrayList<String>();
 				this.ids = new ArrayList<String>();
 				for(int i = 0; i < gamesJSON.length(); i++) {
@@ -155,14 +154,12 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 				this.comm.downloadImage(this.urls.remove(0), 
 				                        this.fileHandler.createFileTemp(ids.get(0) + ".png"));
 			} else {
-				//this.fileHandler.deleteTemp("games");
 				new ErrorDialog(getFragmentManager(), response.getString("error")).show();
 				this.wantedDismiss = true;
 		        this.progress.dismiss();
 			}
 		} catch(JSONException e) {
 			e.printStackTrace();
-			//this.fileHandler.deleteTemp("games");
 			new ErrorDialog(getFragmentManager(), "Invalid Server Response").show();
 			this.wantedDismiss = true;
 	        this.progress.dismiss();
@@ -244,21 +241,4 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 	protected void onSaveInstanceState (Bundle outState) {
 		outState.putString("fullGameJSON", this.fullGameJSON.toString());
 	}
-	
-	/* 
-	 * see: http://developer.android.com/reference/android/app/Activity.html#ActivityLifecycle
-	 * 
-	
-	protected void onStart() {};
-    
-    protected void onRestart() {};
-
-    protected void onResume() {};
-
-    protected void onPause() {};
-
-    protected void onStop() {};
-
-    protected void onDestroy() {};
-    */
 }

@@ -50,5 +50,22 @@
                National Science Foundation.</i>
         ]]>
     </string>
-
+    
+    <!-- Tutorial Screen -->
+    <string name="tutorial_step_1">1. Click Play then select a Category and finally a Game to play.</string>
+    <string name="tutorial_step_2">2. Once you are sure of your decision, hit Play.</string>
+    <string name="tutorial_step_3">
+        Important: Once you\'ve started a game, exiting an app will restart your game and cause you to
+        lose progress.
+    </string>
+    <string name="tutorial_step_4">
+        3. Read and answer the question or identify the molecule shown.
+           You can rotate the molecule with your finger, as well as use pinch-to-zoom.
+    </string>
+    <string name="tutorial_step_5">Correct answers gain you points, incorrect answers cost you points.</string>
+    <string name="tutorial_step_6">
+        Finish before the timer runs out. Finishing faster will gain you extra points and
+        an opportunity to get within the top 10!
+    </string>
+    <string name="tutorial_step_7">Have fun!</string>
 </resources>
