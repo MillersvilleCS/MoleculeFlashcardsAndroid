@@ -84,6 +84,13 @@ public class Vector3 implements Cloneable {
 	public float dot(Vector3 other) {
 		return (x * other.x) + (y * other.y + (z * other.z));
 	}
+	
+	public Vector3 cross(Vector3 other) {
+		float nx = this.y * other.z - this.z * other.y;
+		float ny = this.z * other.x - this.x * other.z;
+		float nz = this.x * other.y - this.y  * other.x;
+		return set(nx, ny, nz);
+	}
 
 	public float length() {
 		return (float) Math.sqrt(length2());

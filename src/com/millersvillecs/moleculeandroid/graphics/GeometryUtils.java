@@ -129,8 +129,42 @@ public class GeometryUtils {
 				meshDescriptor);
 	}
 	
-	public static Mesh createCylinderGeometry(final float radius,  final Color color) {
-				return null;
+	public static Mesh createCylinderGeometry(final float radius, float height, int resolution,  final Color color1, Color color2) {
+		
+		float perR = (float) (2 * Math.PI / (resolution / 2 - 1));
+		List<Vector3> positions = new ArrayList<Vector3>();
+		List<Color> colors = new ArrayList<Color>();
+		List<Integer> indices = new ArrayList<Integer>();
+		
+	    for (int i = 0; i < resolution; i += 2) {
+	    	float vert1 = (float) (radius * Math.cos(i / 2 * perR));
+	    	float vert2 = (float) (radius * Math.sin(i / 2 * perR));
+	    	positions.add(new Vector3(vert1, height, vert2));
+	    	positions.add(new Vector3(vert1, 0, vert2));
+	    	colors.add(color2);
+	    	colors.add(color1);
+	    	
+	    	
+	    	if(i+2 < resolution) {
+	    		indices.add(i);
+	    		indices.add(i + 1);
+	    		indices.add(i + 2);
+	    		
+	    		indices.add(i + 1);
+	    		indices.add(i + 2);
+	    		indices.add(i + 3);
+	    	}
+	    }
+	    //indices.add(0);
+    	//indices.add(1);
+    	
+    	List<VertexAttribute> meshDescriptor = new ArrayList<VertexAttribute>();
+		meshDescriptor.add(new VertexAttribute(VertexUtils
+				.vector3ListToFloatArray(positions), 3));
+		meshDescriptor.add(new VertexAttribute(VertexUtils
+				.ColorListToFloatArray(colors), 4));
+		return new Mesh(VertexUtils.IntegerListToIntArray(indices),
+				meshDescriptor);
 		
 	}
 }

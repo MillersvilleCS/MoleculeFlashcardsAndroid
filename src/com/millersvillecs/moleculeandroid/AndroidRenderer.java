@@ -11,6 +11,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.millersvillecs.moleculeandroid.data.Atom;
+import com.millersvillecs.moleculeandroid.data.Bond;
 import com.millersvillecs.moleculeandroid.data.Molecule;
 import com.millersvillecs.moleculeandroid.graphics.Camera;
 import com.millersvillecs.moleculeandroid.graphics.Color;
@@ -23,6 +24,8 @@ import com.millersvillecs.moleculeandroid.scene.SceneNode;
 import com.millersvillecs.moleculeandroid.scene.SceneObject;
 import com.millersvillecs.moleculeandroid.util.BufferUtils;
 import com.millersvillecs.moleculeandroid.util.FileUtil;
+import com.millersvillecs.moleculeandroid.util.RangeUtils;
+import com.millersvillecs.moleculeandroid.util.math.Quaternion;
 import com.millersvillecs.moleculeandroid.util.math.Vector3;
 
 import android.content.Context;
@@ -107,11 +110,60 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         		//scene.attach(atomObject);
         		moleculeNode.attach(atomObject);
         	}
+        	
+        	for(Bond bond : mol.getBonds()) {
+        		Atom from = mol.getAtoms().get(bond.from);
+        		Atom to = mol.getAtoms().get(bond.to);
+        		Mesh cylinder = GeometryUtils.createCylinderGeometry(0.1f, 1, 40, from.color,to.color);
+        		bondObject = new SceneObject(cylinder, shader);
+        		final Vector3 direction = new Vector3((float)from.x,(float) from.y,(float) from.z).sub((float)to.x,(float) to.y,(float) to.z).normalize();
+        		final Vector3 crossProd = direction.cross(new Vector3(0,1,0));
+        		float angle = (float) Math.acos(crossProd.dot(direction));
+        		angle = (float) Math.toDegrees(angle);
+        		bondObject.translate(new Vector3((float)from.x, (float)from.y, (float)from.z));
+        		Vector3 rotation = crossProd.scale(angle);
+        		bondObject.rotate(rotation.x,rotation.y, rotation.z);
+        		/*
+        		Vector3 direction = new Vector3((float)from.x,(float) from.y,(float) from.z).sub((float)to.x,(float) to.y,(float) to.z);
+        		Vector3 nDirection = (new Vector3((float)from.x,(float) from.y,(float) from.z).sub((float)to.x,(float) to.y,(float) to.z)).normalize();
+        		
+        		//rotate
+        		//create quaternion
+        		float radians = 0 ;
+        		Vector3 axis = new Vector3();
+        		Quaternion q = new Quaternion();
+        		if ( nDirection.y > 0.99999 ) {
+
+        			q.set( 0, 0, 0, 1 );
+        		} else if ( nDirection.y < - 0.99999 ) {
+        			q.set( 1, 0, 0, 0 );
+        		} else {
+        			axis.set( nDirection.z, 0, - nDirection.x ).normalize();
+        			radians = (float) Math.acos( nDirection.y );
+        			q.setFromAxisAngle( axis, radians );
+        		}
+        		
+        		//turn quaternion into Euler
+        		float sqx = q.getX() * q.getX();
+        		float sqy = q.getY() * q.getY();
+        		float sqz = q.getZ() * q.getZ();
+        		float sqw = q.getW() * q.getW();
+
+        		float ex = (float) Math.atan2( 2 * ( q.getX() * q.getW() - q.getY() * q.getZ() ), ( sqw - sqx - sqy + sqz ) );
+        		float ey = (float) Math.asin(  RangeUtils.forceIntoRange( 2 * ( q.getX() * q.getZ() + q.getY() * q.getW() ), -1, 1 ) );
+        		float ez = (float) Math.atan2( 2 * ( q.getZ() * q.getW() - q.getX() * q.getY() ), ( sqw + sqx - sqy - sqz ) );
+
+        		bondObject.translate(new Vector3((float)from.x, (float)from.y, (float)from.z).add(direction.scale(0.5f)));
+        		bondObject.rotate((float)Math.toDegrees(ex),(float) Math.toDegrees(ey), (float)Math.toDegrees(ez));*/
+        		moleculeNode.attach(bondObject);
+        	}
+        	
         	currentMolecule = mol;
         	scene.attach(moleculeNode);
         }
         if(moleculeNode != null) {
         	moleculeNode.rotate(1f, 1, 0);
+        	bondObject.rotate(1, 1, 0);
         }
         scene.render(0, camera);
     }
@@ -122,7 +174,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         
         
     }
-
+    SceneObject bondObject;
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -161,7 +213,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         //scene.attach(c2Object);
         //scene.attach(c1Object);
        
-        
+       
     }
     
     public void setMolecule(Molecule molecule) {

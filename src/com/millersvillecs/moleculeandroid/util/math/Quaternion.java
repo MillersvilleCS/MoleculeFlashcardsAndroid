@@ -33,6 +33,19 @@ public class Quaternion {
 
 		return this;
 	}
+	
+	public Quaternion setFromAxisAngle( Vector3 axis, float angle ) {
+
+		float halfAngle = angle / 2, s = (float) Math.sin( halfAngle );
+
+		this.x = axis.x * s;
+		this.y = axis.y * s;
+		this.z = axis.z * s;
+		this.w = (float) Math.cos( halfAngle );
+
+		return this;
+
+	}
 
 	public Quaternion normalize() {
 		float m = (float) Math.sqrt(x * x + y * y + z * z + w * w);
