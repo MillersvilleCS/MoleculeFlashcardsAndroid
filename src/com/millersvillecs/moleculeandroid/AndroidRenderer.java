@@ -110,15 +110,19 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         		//scene.attach(atomObject);
         		moleculeNode.attach(atomObject);
         	}
-        	
+        	final Vector3 up = new Vector3(0, 0, -1);
+        	//final Vector3 right = new Vector3(-1, 0, 0);
+
         	for(Bond bond : mol.getBonds()) {
         		Atom from = mol.getAtoms().get(bond.from);
         		Atom to = mol.getAtoms().get(bond.to);
         		Vector3 distance = new Vector3((float)from.x,(float) from.y,(float) from.z).sub((float)to.x,(float) to.y,(float) to.z);
         		final Vector3 direction = distance.clone().normalize();
-        		final Vector3 crossProd = (new Vector3(0,1,0)).cross(direction);
+        		
+        		
+        		final Vector3 crossProd = (up.clone().cross(direction));
         		float angle = (float) Math.acos(crossProd.dot(direction));
-        		Mesh cylinder = GeometryUtils.createCylinderGeometry(0.1f, 1.25f, 40, from.color,to.color);
+        		Mesh cylinder = GeometryUtils.createCylinderGeometry(0.1f, distance.length(), 20, from.color,to.color);
         		SceneObject bondObject = new SceneObject(cylinder, shader);
         		//bondObject.translate(0,0.5f,0);
         		angle = (float) Math.toDegrees(angle);
