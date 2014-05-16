@@ -55,35 +55,12 @@ public class SceneObject extends SceneNode {
 				0, 0, 1, 0,
 				0, 0, 0, 1
 		};
-		//Matrix.setIdentityM(resultMatrix, 0);
-		
-		Matrix.translateM(resultMatrix, 0, translation.x, translation.y, translation.z);
-		
-		float[] rotateXMatrix = {
-				1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				0, 0, 0, 1
-		};
-		Matrix.rotateM(rotateXMatrix, 0, rotation.x, 1, 0, 0);
-		float[] rotateYMatrix = {
-				1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				0, 0, 0, 1
-		};
-		Matrix.rotateM(rotateYMatrix, 0, rotation.y, 0, 1, 0);
-		float[] rotateZMatrix = {
-				1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				0, 0, 0, 1
-		};
-		Matrix.rotateM(rotateZMatrix, 0, rotation.z, 0, 0, 1);
-		
-		Matrix.multiplyMM(resultMatrix, 0, rotateXMatrix, 0, resultMatrix, 0);
-		Matrix.multiplyMM(resultMatrix, 0, rotateYMatrix, 0, resultMatrix, 0);
-		Matrix.multiplyMM(resultMatrix, 0, rotateZMatrix, 0, resultMatrix, 0);
+		//local rotation
+		Matrix.setIdentityM(resultMatrix, 0);
+	
+		Matrix.multiplyMM(resultMatrix, 0, localRotation.getArray(), 0, resultMatrix, 0);
+		Matrix.multiplyMM(resultMatrix, 0, translation.getArray(), 0, resultMatrix, 0);
+		Matrix.multiplyMM(resultMatrix, 0, rotation.getArray(), 0, resultMatrix, 0);
 		return resultMatrix;
 	}
 }
