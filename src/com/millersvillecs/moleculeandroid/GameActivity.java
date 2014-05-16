@@ -13,8 +13,6 @@ import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.millersvillecs.moleculeandroid.data.Molecule;
-
 
 public class GameActivity extends Activity {
 	
@@ -49,7 +47,7 @@ public class GameActivity extends Activity {
 		
 		if (supportsEs2) {
 			this.gLSurfaceView.setEGLContextClientVersion(2);
-			renderer = new AndroidRenderer(this.getApplicationContext(), this);
+			renderer = new AndroidRenderer(this.getApplicationContext());
 			this.gLSurfaceView.setRenderer(renderer);
 			
 			FragmentManager manager = getFragmentManager();
@@ -65,6 +63,7 @@ public class GameActivity extends Activity {
 	        	this.gameLogic = new GameLogic(this);
 	    		this.gameLogic.reload(this.gameState);
 	        }
+	        this.renderer.setGameLogic(this.gameLogic);
 		} else {
 			System.err.println("This device does not support Android OpenGL ES 2.0");
 			finish();
@@ -101,12 +100,6 @@ public class GameActivity extends Activity {
     
     public void onAnswerButton(View view) {
     	this.gameLogic.onAnswerButton(view);
-    }
-    
-    @Deprecated
-    public Molecule getCurrentMolecule() {
-    	//TODO - Remove and call GameLogic directly - leaving this for Will when he merges.
-    	return this.gameLogic.getCurrentMolecule();
     }
     
     public void lockOrientation() {

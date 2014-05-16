@@ -8,7 +8,6 @@ import com.millersvillecs.moleculeandroid.graphics.Mesh;
 import com.millersvillecs.moleculeandroid.graphics.VertexAttribute;
 import com.millersvillecs.moleculeandroid.graphics.opengles.ShaderProgram;
 import com.millersvillecs.moleculeandroid.scene.SceneObject;
-import com.millersvillecs.moleculeandroid.util.math.Vector2;
 import com.millersvillecs.moleculeandroid.util.math.Vector3;
 
 /**

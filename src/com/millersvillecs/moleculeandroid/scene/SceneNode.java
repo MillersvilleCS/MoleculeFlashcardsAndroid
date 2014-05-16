@@ -3,13 +3,11 @@ package com.millersvillecs.moleculeandroid.scene;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import android.opengl.Matrix;
 import android.renderscript.Matrix4f;
 
 import com.millersvillecs.moleculeandroid.graphics.Camera;
 import com.millersvillecs.moleculeandroid.util.Node;
-import com.millersvillecs.moleculeandroid.util.math.Vector2;
 import com.millersvillecs.moleculeandroid.util.math.Vector3;
 
 /**
@@ -109,9 +107,9 @@ public class SceneNode extends Node<SceneNode> {
 		for (Node<SceneNode> node : this.getSubnodes()) {
 			((SceneNode) node).rotateLocal(rot, rx, ry, rz);
 		}
-		float x = getX();
-		float y = getY();
-		float z = getZ();
+		//float x = getX();
+		//float y = getY();
+		//float z = getZ();
 		
 		//model.translate(-x, -y, -z);
 		localRotation.rotate(rot, rx, ry, rz);

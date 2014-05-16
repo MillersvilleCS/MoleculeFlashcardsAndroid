@@ -24,10 +24,8 @@ public class Mesh {
     protected VAO vao;
 
     private List<VertexAttribute> vertexElements;
-    private int[] indices;
 
     public Mesh(int[] indices, List<VertexAttribute> vertexElements) {
-        this.indices = indices;
         this.vertexElements = vertexElements;
 
         //create Vertex Buffer

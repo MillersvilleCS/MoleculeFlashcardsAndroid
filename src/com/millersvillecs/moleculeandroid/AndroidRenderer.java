@@ -1,14 +1,17 @@
 package com.millersvillecs.moleculeandroid;
 
 import java.io.IOException;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.opengl.GLES20;
+import android.opengl.GLSurfaceView;
+import android.util.SparseArray;
 
 import com.millersvillecs.moleculeandroid.data.Atom;
 import com.millersvillecs.moleculeandroid.data.Bond;
@@ -22,23 +25,15 @@ import com.millersvillecs.moleculeandroid.graphics.opengles.ShaderProgram;
 import com.millersvillecs.moleculeandroid.scene.Scene;
 import com.millersvillecs.moleculeandroid.scene.SceneNode;
 import com.millersvillecs.moleculeandroid.scene.SceneObject;
-import com.millersvillecs.moleculeandroid.util.BufferUtils;
 import com.millersvillecs.moleculeandroid.util.FileUtil;
-import com.millersvillecs.moleculeandroid.util.RangeUtils;
-import com.millersvillecs.moleculeandroid.util.math.Quaternion;
 import com.millersvillecs.moleculeandroid.util.math.Vector3;
-
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
 
 public class AndroidRenderer implements GLSurfaceView.Renderer {
 	
 	private Scene scene;
 	private Camera camera;
 	private Context context;
+	private long lastTime, currTime;
 	
 	final String vertexShader =
             "uniform mat4 u_view;      \n"     // A constant representing the combined model/view/projection matrix.
@@ -78,22 +73,32 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         final int[] triangle1IndicesData = {
                 0,1,2};
         ShaderProgram shader = null;
-        private GameActivity activity;
+        private GameLogic gameLogic;
         private Molecule currentMolecule;
         SceneNode moleculeNode;
-	public AndroidRenderer(Context context, GameActivity activity) {
+        
+	public AndroidRenderer(Context context) {
 		camera = new Camera(5, 5, 1, 100);
 		camera.setTranslation(0, 0, -10);
 		camera.lookAt(0, 0, 1);
 		scene = new Scene();
 		this.context = context;
-		this.activity = activity;
 	}
 	
     @Override
     public void onDrawFrame(GL10 gl) {
+    	this.currTime = System.currentTimeMillis();
+    	float deltaTime = (float)(this.currTime - this.lastTime);
+    	if(deltaTime > 30f) {
+    		deltaTime = 30f;
+    	}
+    	
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        Molecule mol = activity.getCurrentMolecule();
+        Molecule mol = null;
+        if(this.gameLogic != null) {
+        	mol = this.gameLogic.getCurrentMolecule();
+        }
+        
         if(mol != null && !mol.equals(currentMolecule)) {
         	if(moleculeNode != null) {
             	scene.detach(moleculeNode);
@@ -101,10 +106,10 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         	moleculeNode = new SceneNode();
         	
         	for(Atom atom: mol.getAtoms()) {
-        		Color workingColor = new Color(1.0f, 0.05f, 0.05f, 1.0f);
-        		Color tempColor = new Color(atom.color.getRed(), atom.color.getGreen(), atom.color.getBlue(), atom.color.getAlpha());
+        		//Color workingColor = new Color(1.0f, 0.05f, 0.05f, 1.0f);
+        		Color color = new Color(atom.color.getRed(), atom.color.getGreen(), atom.color.getBlue(), atom.color.getAlpha());
         		//Cube cube = new Cube(workingColor);
-        		Mesh sphere = GeometryUtils.createSphereGeometry(((float)atom.radius / 4),16, 16, tempColor);
+        		Mesh sphere = GeometryUtils.createSphereGeometry(((float)atom.radius / 4),16, 16, color);
         		SceneObject atomObject = new SceneObject(sphere, shader);
         		atomObject.translate((float) atom.x, (float) atom.y, (float) atom.z);
         		//scene.attach(atomObject);
@@ -138,10 +143,12 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         	scene.attach(moleculeNode);
         }
         if(moleculeNode != null) {
-        	moleculeNode.rotate(1, 1f, 1, 0);
-        	
+        	float rotChange = deltaTime / 20f;
+        	moleculeNode.rotate(rotChange, rotChange, rotChange, 0);
         }
-        scene.render(0, camera);
+        scene.render(0, camera); // Delta Time Always 0 ???
+        
+        this.lastTime = this.currTime;
     }
 
     @Override
@@ -152,12 +159,12 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     }
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        GLES20.glClearColor(0.82f, 0.82f, 0.82f, 1.0f);
         AssetManager assetManager = context.getAssets();
         
         
         try {
-            Map<Integer, String> attributes = new HashMap<Integer, String>();
+            SparseArray<String> attributes = new SparseArray<String>();
             attributes.put(0, "in_position");
             attributes.put(1, "in_color");
             
@@ -187,11 +194,13 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         c2Object.translate(1, 0, 0);
         //scene.attach(c2Object);
         //scene.attach(c1Object);
-       
+        
+        this.lastTime = System.currentTimeMillis();
+        this.currTime = System.currentTimeMillis();
        
     }
     
-    public void setMolecule(Molecule molecule) {
-    	
+    public void setGameLogic(GameLogic g) {
+    	this.gameLogic = g;
     }
 }

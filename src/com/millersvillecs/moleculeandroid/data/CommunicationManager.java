@@ -125,7 +125,6 @@ public class CommunicationManager {
 	}
 	
 	public void getMedia(String gameSessionId, int mediaType, String questionId) {
-		//TODO - change media type to download image if question set uses image
 		Request request = new Request();
 		request.url = this.GET_MEDIA_URL;
 		try {

@@ -3,7 +3,6 @@ package com.millersvillecs.moleculeandroid.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.millersvillecs.moleculeandroid.util.math.Vector2;
 import com.millersvillecs.moleculeandroid.util.math.Vector3;
 
 public class GeometryUtils {
@@ -23,19 +22,21 @@ public class GeometryUtils {
 				-0.5f, -0.5f, -0.5f, 0.5f, -0.5f, -0.5f };
 
 		// Vertex normals
+		/*
 		final float normals[] = { 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
 				0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
 				0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, -1,
 				0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, 1,
 				0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0,
 				-1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0 };
-
+		*/
 		// Vertex texture coordinates
+		/*
 		final float texCoords[] = { 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0,
 				0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1,
 				1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0,
 				0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1 };
-
+		*/
 		// Primitive indices
 		final int indices[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
 				14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
@@ -66,7 +67,7 @@ public class GeometryUtils {
 		int numVerticesPerRow = hSegments + 1;
 		int numVerticesPerColumn = vSegments + 1;
 
-		int numVertices = numVerticesPerRow * numVerticesPerColumn;
+		//int numVertices = numVerticesPerRow * numVerticesPerColumn;
 
 		float theta = 0.0f;
 		float phi = 0.0f;
@@ -97,7 +98,7 @@ public class GeometryUtils {
 		}
 		
 		//create indices
-		int numIndices = hSegments * vSegments * 6;
+		//int numIndices = hSegments * vSegments * 6;
 		List<Integer> indices = new ArrayList<Integer>();
 
 		for (int verticalIt = 0; verticalIt < vSegments; verticalIt++)

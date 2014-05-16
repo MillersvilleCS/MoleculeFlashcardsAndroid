@@ -5,7 +5,38 @@
 	
 	<android.opengl.GLSurfaceView android:id="@+id/glsurfaceview"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent" />
+		android:layout_height="match_parent"
+		android:layout_marginRight="200dp" />
+	
+	<TextView
+        android:id="@+id/game_score"
+        android:layout_gravity="top|left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#ff00B400"
+        android:padding="10dp" />
+    
+    <TextView
+        android:id="@+id/game_score_change"
+        android:layout_gravity="top|left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingLeft="10dp"
+        android:paddingTop="40dp" />
+    
+    <TextView
+        android:id="@+id/game_time"
+        android:layout_gravity="top|right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingTop="10dp"
+        android:layout_marginRight="210dp" />
 	
 	<TextView 
 		android:id="@+id/question_text"
@@ -15,6 +46,7 @@
 		android:textSize="20sp"
 		android:textStyle="bold"
 		android:layout_marginLeft="10dp"
+		android:layout_marginRight="10dp"
 		android:layout_marginBottom="10dp" />
 
 	<ScrollView

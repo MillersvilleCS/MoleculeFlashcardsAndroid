@@ -6,7 +6,6 @@ import android.opengl.Matrix;
 import com.millersvillecs.moleculeandroid.graphics.Camera;
 import com.millersvillecs.moleculeandroid.graphics.Mesh;
 import com.millersvillecs.moleculeandroid.graphics.opengles.ShaderProgram;
-import com.millersvillecs.moleculeandroid.util.math.Vector2;
 import com.millersvillecs.moleculeandroid.util.math.Vector3;
 
 /**

@@ -1,8 +1,7 @@
 package com.millersvillecs.moleculeandroid.graphics.opengles;
 
 import android.opengl.GLES20;
-
-import java.util.Map;
+import android.util.SparseArray;
 
 import com.millersvillecs.moleculeandroid.util.GraphicsException;
 
@@ -11,7 +10,7 @@ public class ShaderProgram {
 	private int handle;
 
 	public ShaderProgram(String vertexShader, String fragmentShader,
-			Map<Integer, String> attributes) throws GraphicsException {
+			SparseArray<String> attributes) throws GraphicsException {
 
 		int vertexHandle = compileShader(vertexShader, GLES20.GL_VERTEX_SHADER);
 		int fragmentHandle = compileShader(fragmentShader, GLES20.GL_FRAGMENT_SHADER);
@@ -22,8 +21,8 @@ public class ShaderProgram {
 		GLES20.glAttachShader(handle, fragmentHandle);
 
 		if (attributes != null) {
-			for (Map.Entry<Integer, String> e : attributes.entrySet()) {
-				GLES20.glBindAttribLocation(handle, e.getKey(), e.getValue());
+			for (int i = 0; i < attributes.size(); i++) {
+				GLES20.glBindAttribLocation(handle, i, attributes.get(i));
 			}
 		}
 

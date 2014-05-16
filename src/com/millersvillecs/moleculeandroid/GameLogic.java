@@ -66,6 +66,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 		this.rank = state.getRank();
 		this.gameUIPieces = new GameUIPieces(this.gameActivity);
 		this.gameUIPieces.resetButtons(true);
+		this.gameUIPieces.updateScore(this.score);
 		
 		this.progress = new ProgressDialog(this.gameActivity);
         this.progress.setCanceledOnTouchOutside(false);
@@ -81,8 +82,6 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
     		this.gameSessionId = state.getGameSessionId();
     		int[] buttonStates = state.getButtonStates();
     		
-    		this.gameUIPieces = new GameUIPieces(this.gameActivity);
-    		this.gameUIPieces.resetButtons(true);
     		init();
         	
         	this.currentQuestion -= 1;
@@ -179,6 +178,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         } else if(this.gameState == GameLogic.PLAYING) {
             try{
                 this.score = response.getDouble("score");
+                this.gameUIPieces.updateScore(this.score);
                 boolean correct = response.getBoolean("correct");
                 
                 if(correct) {
@@ -218,7 +218,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 		this.molecules[this.currentQuestion] = molecule;
         this.currentQuestion++;
         if(this.currentQuestion < this.molecules.length) {
-            this.comm.getMedia(this.gameSessionId, 0, this.questions[0].getId());
+            this.comm.getMedia(this.gameSessionId, 0, this.questions[this.currentQuestion].getId());
         } else {
             this.wantedDismiss = true;
             this.progress.dismiss();

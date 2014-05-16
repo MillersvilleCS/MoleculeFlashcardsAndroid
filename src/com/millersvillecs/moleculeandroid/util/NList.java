@@ -2,7 +2,9 @@ package com.millersvillecs.moleculeandroid.util;
 
 import java.util.LinkedList;
 
+@SuppressWarnings("serial")
 public class NList<E> extends LinkedList<E> {
+	
 	public NList() {
 
 	}

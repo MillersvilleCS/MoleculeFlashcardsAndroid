@@ -1,9 +1,7 @@
 package com.millersvillecs.moleculeandroid.graphics;
 
 import android.opengl.Matrix;
-import android.renderscript.Matrix4f;
 
-import com.millersvillecs.moleculeandroid.util.math.Vector2;
 import com.millersvillecs.moleculeandroid.util.math.Vector3;
 
 public class Camera {
@@ -11,14 +9,9 @@ public class Camera {
     private float[] view = new float[16];
     private float[] projection = new float[16];
     private Vector3 translation;
-    private float width, height, near, far;
 
     public Camera(float width, float height, float near, float far) {
         translation = new Vector3();
-        this.width = width;
-        this.height = height;
-        this.near = near;
-        this.far = far;
         
         float ratio = (float) width / height;
         

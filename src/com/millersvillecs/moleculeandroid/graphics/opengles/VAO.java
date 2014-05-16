@@ -1,9 +1,7 @@
 package com.millersvillecs.moleculeandroid.graphics.opengles;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.opengl.GLES20;
+import android.util.SparseArray;
 
 
 /**
@@ -11,12 +9,12 @@ import android.opengl.GLES20;
 */
 
 public class VAO {
-   private final Map<Integer, Descriptor> descriptors = new HashMap<Integer, Descriptor>();
+   private final SparseArray<Descriptor> descriptors = new SparseArray< Descriptor>();
 
    private final VBO vbo;
    private final IBO ibo;
    private final int size;
-   private int handle = -1;
+   //private int handle = -1;
 
    public VAO(VBO vbo, IBO ibo, int size) {
        this.vbo = vbo;
@@ -37,7 +35,7 @@ public class VAO {
    public void draw() {
        vbo.bind();
        
-       for (int i : descriptors.keySet()) {
+       for (int i = 0; i < descriptors.size(); i++) {
 
            final Descriptor descriptor = descriptors.get(i);
 

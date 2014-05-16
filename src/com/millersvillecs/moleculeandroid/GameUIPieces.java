@@ -15,7 +15,7 @@ public class GameUIPieces {
     
     private GameActivity gameActivity;
     private Button[] buttons;
-    private TextView questionText;
+    private TextView questionText, scoreText;
     private ScrollView scrollView;
     private Animation animation;
     private Drawable defaultBackground, correctBackground, wrongBackground;
@@ -37,6 +37,9 @@ public class GameUIPieces {
         this.wrongBackground = gameActivity.getResources().getDrawable(R.drawable.button_wrong);
         
         this.questionText = (TextView) gameActivity.findViewById(R.id.question_text);
+        this.scoreText = (TextView) gameActivity.findViewById(R.id.game_score);
+        this.scoreText.setText("0");
+        
         this.scrollView = (ScrollView) gameActivity.findViewById(R.id.question_scrollbar);
         //this.scrollView.setScrollBarStyle(ScrollView.SCROLLBARS_INSIDE_INSET);
         this.animation = AnimationUtils.loadAnimation(gameActivity, R.anim.button_pulse);
@@ -135,6 +138,15 @@ public class GameUIPieces {
     	}
     	
     	return states;
+    }
+    
+    public void updateScore(double score) {
+    	if(score >= 0) {
+    		this.scoreText.setTextColor(Color.rgb(0, 180, 0));
+    	} else {
+    		this.scoreText.setTextColor(Color.RED);
+    	}
+    	this.scoreText.setText(Double.toString(score));
     }
 }
 
