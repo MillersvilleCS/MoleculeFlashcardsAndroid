@@ -110,58 +110,27 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         		//scene.attach(atomObject);
         		moleculeNode.attach(atomObject);
         	}
-        	final Vector3 up = new Vector3(0, 0, -1);
+        	
         	//final Vector3 right = new Vector3(-1, 0, 0);
 
         	for(Bond bond : mol.getBonds()) {
         		Atom from = mol.getAtoms().get(bond.from);
         		Atom to = mol.getAtoms().get(bond.to);
         		Vector3 distance = new Vector3((float)from.x,(float) from.y,(float) from.z).sub((float)to.x,(float) to.y,(float) to.z);
-        		final Vector3 direction = distance.clone().normalize();
+        		final Vector3 directionA = new Vector3(0, -1, 0).normalize();
+        		final Vector3 directionB = distance.clone().normalize();
         		
-        		
-        		final Vector3 crossProd = (up.clone().cross(direction));
-        		float angle = (float) Math.acos(crossProd.dot(direction));
+        		float angle = (float) Math.acos(directionA.dot(directionB));
+        		final Vector3 rotationAxis = directionA.clone().cross(directionB).normalize();
         		Mesh cylinder = GeometryUtils.createCylinderGeometry(0.1f, distance.length(), 20, from.color,to.color);
         		SceneObject bondObject = new SceneObject(cylinder, shader);
         		//bondObject.translate(0,0.5f,0);
         		angle = (float) Math.toDegrees(angle);
-        		Vector3 rotation = crossProd.scale(angle);
-        		bondObject.rotateLocal(rotation.x,rotation.y, rotation.z);
-        		bondObject.translate(new Vector3((float)from.x, (float)from.y, (float)from.z));
+        		//Vector3 rotation = crossProd.scale(angle);
+        		bondObject.rotateLocal(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
+        		bondObject.setTranslation(new Vector3((float)from.x, (float)from.y, (float)from.z));
+        		//bondObject.lookAt((float)to.x, (float)to.y, (float)to.z, 0, 0, -1);
         		
-        		/*
-        		Vector3 direction = new Vector3((float)from.x,(float) from.y,(float) from.z).sub((float)to.x,(float) to.y,(float) to.z);
-        		Vector3 nDirection = (new Vector3((float)from.x,(float) from.y,(float) from.z).sub((float)to.x,(float) to.y,(float) to.z)).normalize();
-        		
-        		//rotate
-        		//create quaternion
-        		float radians = 0 ;
-        		Vector3 axis = new Vector3();
-        		Quaternion q = new Quaternion();
-        		if ( nDirection.y > 0.99999 ) {
-
-        			q.set( 0, 0, 0, 1 );
-        		} else if ( nDirection.y < - 0.99999 ) {
-        			q.set( 1, 0, 0, 0 );
-        		} else {
-        			axis.set( nDirection.z, 0, - nDirection.x ).normalize();
-        			radians = (float) Math.acos( nDirection.y );
-        			q.setFromAxisAngle( axis, radians );
-        		}
-        		
-        		//turn quaternion into Euler
-        		float sqx = q.getX() * q.getX();
-        		float sqy = q.getY() * q.getY();
-        		float sqz = q.getZ() * q.getZ();
-        		float sqw = q.getW() * q.getW();
-
-        		float ex = (float) Math.atan2( 2 * ( q.getX() * q.getW() - q.getY() * q.getZ() ), ( sqw - sqx - sqy + sqz ) );
-        		float ey = (float) Math.asin(  RangeUtils.forceIntoRange( 2 * ( q.getX() * q.getZ() + q.getY() * q.getW() ), -1, 1 ) );
-        		float ez = (float) Math.atan2( 2 * ( q.getZ() * q.getW() - q.getX() * q.getY() ), ( sqw + sqx - sqy - sqz ) );
-
-        		bondObject.translate(new Vector3((float)from.x, (float)from.y, (float)from.z).add(direction.scale(0.5f)));
-        		bondObject.rotate((float)Math.toDegrees(ex),(float) Math.toDegrees(ey), (float)Math.toDegrees(ez));*/
         		moleculeNode.attach(bondObject);
         	}
         	
@@ -169,7 +138,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         	scene.attach(moleculeNode);
         }
         if(moleculeNode != null) {
-        	moleculeNode.rotate(1f, 1, 0);
+        	moleculeNode.rotate(1, 1f, 1, 0);
         	
         }
         scene.render(0, camera);

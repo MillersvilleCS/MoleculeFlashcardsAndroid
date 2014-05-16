@@ -3,7 +3,9 @@ package com.millersvillecs.moleculeandroid.scene;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.graphics.Matrix;
+
+import android.opengl.Matrix;
+import android.renderscript.Matrix4f;
 
 import com.millersvillecs.moleculeandroid.graphics.Camera;
 import com.millersvillecs.moleculeandroid.util.Node;
@@ -19,7 +21,11 @@ public class SceneNode extends Node<SceneNode> {
 
 	private List<IBehavior> behaviors = new ArrayList<IBehavior>();
 
-	protected Vector3 translation, scale, rotation, localRotation;
+	protected Matrix4f translation = new Matrix4f();
+	protected Matrix4f rotation = new Matrix4f();
+	protected Matrix4f localRotation = new Matrix4f();
+	//protected Vector3 translation = new Vector3();
+	
 	protected float sceneTime;
 
 	public SceneNode() {
@@ -31,14 +37,16 @@ public class SceneNode extends Node<SceneNode> {
 	}
 
 	public SceneNode(Vector3 translation, Vector3 scale) {
-		this.translation = translation;
-		this.scale = scale;
-		this.rotation = new Vector3();
-		this.localRotation = new Vector3();
+		localRotation.loadIdentity();
+		rotation.loadIdentity();
+		this.translation.loadIdentity();
+		this.translation.translate(translation.x, translation.y, translation.z);
+		//this.translation = translation;
 	}
 
 	public void render(int delta, Camera camera) {
 		for (Node<SceneNode> node : this.getSubnodes()) {
+			
 			((SceneNode) node).render(delta, camera);
 		}
 	}
@@ -61,11 +69,24 @@ public class SceneNode extends Node<SceneNode> {
 
 	public SceneNode setTranslation(float x, float y, float z) {
 		for (Node<SceneNode> node : this.getSubnodes()) {
-			Vector3 offset = ((SceneNode) node).getTranslation().sub(x, y, z);
-			((SceneNode) node).setTranslation(offset.add(x, y, z));
+			SceneNode nodeCast = ((SceneNode) node);
+			float xo = getX() - nodeCast.getX();
+			float yo = getY() - nodeCast.getY();
+			float zo = getZ() - nodeCast.getZ();
+			((SceneNode) node).setTranslation(xo + x, yo + y, zo + z);
 		}
-		translation.set(x, y, z);
-
+		translation.translate(-getX(), -getY(), -getZ());
+		translation.translate(x, y, z);
+		//translation.set(x, y, z);
+		return this;
+	}
+	
+	public SceneNode translate(float x, float y, float z) {
+		for (Node<SceneNode> node : this.getSubnodes()) {
+			((SceneNode) node).translate(x, y, z);
+		}
+		translation.translate(x, y, z);
+		//translation.set(x, y, z);
 		return this;
 	}
 
@@ -73,71 +94,58 @@ public class SceneNode extends Node<SceneNode> {
 		return translate(translation.x, translation.y, translation.z);
 	}
 
-	public SceneNode translate(float x, float y, float z) {
+
+	
+	public SceneNode rotate(float rot, float rx, float ry, float rz) {
 		for (Node<SceneNode> node : this.getSubnodes()) {
-			((SceneNode) node).getTranslation().add(x, y, z);
+			((SceneNode) node).rotate(rot, rx, ry, rz);
 		}
-		translation.add(x, y, z);
-
-		return this;
-	}
-
-	public SceneNode scale(float scalarX, float scalarY, float scalarZ) {
-		for (Node<SceneNode> node : this.getSubnodes()) {
-			((SceneNode) node).scale(scalarX, scalarY, scalarZ);
-		}
-		scale.mul(scalarX, scalarY, scalarZ);
-
-		return this;
-	}
-
-	public SceneNode scale(float scalar) {
-		scale.mul(scalar, scalar, scalar);
-
+		rotation.rotate(rot, rx, ry, rz);
 		return this;
 	}
 	
-	public SceneNode rotate(float rx, float ry, float rz) {
-		for (Node<SceneNode> node : this.getSubnodes()) {
-			((SceneNode) node).rotate(rx, ry, rz);
-		}
-		this.rotation.add(rx, ry, rz);
-		return this;
-	}
-	
-	public SceneNode rotateLocal(float rx, float ry, float rz) {
+	public SceneNode rotateLocal(float rot, float rx, float ry, float rz) {
 		
 		for (Node<SceneNode> node : this.getSubnodes()) {
-			((SceneNode) node).rotateLocal(rx, ry, rz);
+			((SceneNode) node).rotateLocal(rot, rx, ry, rz);
 		}
-		this.localRotation.add(rx, ry, rz);
+		float x = getX();
+		float y = getY();
+		float z = getZ();
+		
+		//model.translate(-x, -y, -z);
+		localRotation.rotate(rot, rx, ry, rz);
+		//model.translate(x, y, z);
 		return this;
 	}
-
-	public Vector3 getTranslation() {
-		return translation;
+	
+	public SceneNode lookAt(float x, float y , float z, float ax, float ay, float az) {
+		float[] resultMatrix = {
+				1, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1
+		};
+		Matrix.setLookAtM(resultMatrix, 0, getX(), getY(), getZ(), x, y,  z, ax, ay,  az );
+		localRotation = new Matrix4f(resultMatrix);
+	
+		return this;
 	}
 
 	public float getX() {
-		return translation.x;
+		return translation.get(3, 0);
 	}
 
 	public float getY() {
-		return translation.y;
+		return translation.get(3, 1);
 	}
 
 	public float getZ() {
-		return translation.z;
+		return translation.get(3, 2);
 	}
 	
-	public Vector3 getScale() {
-		return scale;
-	}
-	
-	public Vector3 getRotation() {
-		return rotation;
-	}
 	public float getSceneTime() {
 		return sceneTime;
 	}
+	
 }
