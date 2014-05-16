@@ -104,7 +104,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         		Color workingColor = new Color(1.0f, 0.05f, 0.05f, 1.0f);
         		Color tempColor = new Color(atom.color.getRed(), atom.color.getGreen(), atom.color.getBlue(), atom.color.getAlpha());
         		//Cube cube = new Cube(workingColor);
-        		Mesh sphere = GeometryUtils.createSphereGeometry(((float)atom.radius / 4),12, 12, tempColor);
+        		Mesh sphere = GeometryUtils.createSphereGeometry(((float)atom.radius / 4),16, 16, tempColor);
         		SceneObject atomObject = new SceneObject(sphere, shader);
         		atomObject.translate((float) atom.x, (float) atom.y, (float) atom.z);
         		//scene.attach(atomObject);
@@ -122,7 +122,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         		
         		float angle = (float) Math.acos(directionA.dot(directionB));
         		final Vector3 rotationAxis = directionA.clone().cross(directionB).normalize();
-        		Mesh cylinder = GeometryUtils.createCylinderGeometry(0.1f, distance.length(), 20, from.color,to.color);
+        		Mesh cylinder = GeometryUtils.createCylinderGeometry(0.1f, distance.length(), 10, from.color,to.color);
         		SceneObject bondObject = new SceneObject(cylinder, shader);
         		//bondObject.translate(0,0.5f,0);
         		angle = (float) Math.toDegrees(angle);
