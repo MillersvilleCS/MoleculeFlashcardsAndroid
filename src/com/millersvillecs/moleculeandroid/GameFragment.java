@@ -12,8 +12,9 @@ public class GameFragment extends Fragment {
 	private Question[] questions;
 	private int[] buttonStates;
 	private String gameSessionId;
-	private double score;
+	private double score, scoreChange;
 	private int currentIndex, lastIndex, rank;
+	private long timeLimit, timeStart;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,18 @@ public class GameFragment extends Fragment {
 	
 	public void setScore(double score) {
 		this.score = score;
+	}
+	
+	public void setScoreChange(double scoreChange) {
+		this.scoreChange = scoreChange;
+	}
+	
+	public void setTimeLimit(long timeLimit) {
+		this.timeLimit = timeLimit;
+	}
+	
+	public void setTimeStart(long timeStart) {
+		this.timeStart = timeStart;
 	}
 	
 	public void setCurrentIndex(int currentIndex) {
@@ -69,6 +82,18 @@ public class GameFragment extends Fragment {
 	
 	public double getScore() {
 		return this.score;
+	}
+	
+	public double getScoreChange() {
+		return this.scoreChange;
+	}
+	
+	public long getTimeLimit() {
+		return this.timeLimit;
+	}
+	
+	public long getTimeStart() {
+		return this.timeStart;
 	}
 	
 	public int getCurrentIndex() {

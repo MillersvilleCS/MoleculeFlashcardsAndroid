@@ -15,9 +15,9 @@ public class GameUIPieces {
     
     private GameActivity gameActivity;
     private Button[] buttons;
-    private TextView questionText, scoreText;
+    private TextView questionText, scoreText, scoreChangeText, timeLimit;
     private ScrollView scrollView;
-    private Animation animation;
+    private Animation animation, scoreChangeAnimation, scoreChangeInstant;
     private Drawable defaultBackground, correctBackground, wrongBackground;
     
     public GameUIPieces (GameActivity gameActivity) {
@@ -39,10 +39,17 @@ public class GameUIPieces {
         this.questionText = (TextView) gameActivity.findViewById(R.id.question_text);
         this.scoreText = (TextView) gameActivity.findViewById(R.id.game_score);
         this.scoreText.setText("0");
+        this.scoreChangeText = (TextView) gameActivity.findViewById(R.id.game_score_change);
+        this.scoreChangeText.setText("0");
+        this.timeLimit = (TextView) gameActivity.findViewById(R.id.game_time);
         
         this.scrollView = (ScrollView) gameActivity.findViewById(R.id.question_scrollbar);
         //this.scrollView.setScrollBarStyle(ScrollView.SCROLLBARS_INSIDE_INSET);
         this.animation = AnimationUtils.loadAnimation(gameActivity, R.anim.button_pulse);
+        this.scoreChangeAnimation = AnimationUtils.loadAnimation(gameActivity, R.anim.score_change_fade);
+        this.scoreChangeInstant = AnimationUtils.loadAnimation(gameActivity, R.anim.score_change_fade);
+        this.scoreChangeInstant.setDuration(0);
+        this.scoreChangeText.startAnimation(this.scoreChangeInstant);
         
         resetButtons();
         hideQuestionText();
@@ -121,7 +128,7 @@ public class GameUIPieces {
         TextView scoreView = (TextView) this.gameActivity.findViewById(R.id.game_finish_score);
         TextView rankView = (TextView) this.gameActivity.findViewById(R.id.game_finish_rank);
         
-        scoreView.setText("Score: " + score);
+        scoreView.setText("Score: " + (int)score);
         rankView.setText("Rank: #" + rank);
     }
     
@@ -146,7 +153,42 @@ public class GameUIPieces {
     	} else {
     		this.scoreText.setTextColor(Color.RED);
     	}
-    	this.scoreText.setText(Double.toString(score));
+    	this.scoreText.setText((int)score + "");
+    }
+    
+    public void updateScoreChange(double scoreChange, boolean doAnimation) {
+    	this.scoreChangeText.clearAnimation();
+    	if(doAnimation) {
+    		this.scoreChangeText.startAnimation(this.scoreChangeAnimation);
+    	} else {
+    		this.scoreChangeText.startAnimation(this.scoreChangeInstant);
+    	}
+    	
+    	if(scoreChange >= 0) {
+    		this.scoreChangeText.setTextColor(Color.rgb(0, 180, 0));
+    		this.scoreChangeText.setText("+" + (int)scoreChange);
+    	} else {
+    		this.scoreChangeText.setTextColor(Color.RED);
+    		this.scoreChangeText.setText((int)scoreChange + "");
+    	}
+    }
+    
+    public void updateTime(long timeLong) {
+    	if(timeLong < 0) {
+    		timeLong = 0;
+    	}
+    	int time = (int)timeLong;
+    	time /= 1000;
+	    int seconds = time % 60;
+	    time /= 60;
+	    String secondsString;
+	    if(seconds < 10) {
+	        secondsString = "0" + seconds;
+	    } else {
+	        secondsString = String.valueOf(seconds);
+	    }
+	    
+	    this.timeLimit.setText(time + ":" + secondsString);
     }
 }
 

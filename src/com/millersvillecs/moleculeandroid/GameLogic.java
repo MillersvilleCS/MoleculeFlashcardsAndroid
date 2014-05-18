@@ -31,9 +31,12 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 	
 	private Question[] questions;
 	private Molecule[] molecules;
+	private Handler timerHandler;
+	private Runnable timerRunnable;
 	private String auth, gameId, gameSessionId;
-	private double score;
+	private double score, scoreChange;
 	private int currentQuestion = 0, lastAnswerIndex = -1, gameState, rank;
+	private long timeLimit, timeStart;
 	private boolean wantedDismiss = false;
 	
 	public GameLogic(GameActivity gameActivity) {
@@ -53,7 +56,13 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         
         init();
         
+        this.scoreChange = 0;
         this.gameState = GameLogic.LOADING;
+        //has to be here
+        this.timeStart = System.currentTimeMillis();
+    	this.timeLimit = timeStart + this.timeLimit;
+    	startUpdatingTime();
+    	//
         this.comm = new CommunicationManager(this);
         this.comm.loadFlashcardGame(this.auth, this.gameId);
 	}
@@ -63,10 +72,12 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 		this.questions = state.getQuestions();
 		this.currentQuestion = state.getCurrentIndex();
 		this.score = state.getScore();
+		this.scoreChange = state.getScoreChange();
 		this.rank = state.getRank();
 		this.gameUIPieces = new GameUIPieces(this.gameActivity);
 		this.gameUIPieces.resetButtons(true);
 		this.gameUIPieces.updateScore(this.score);
+		this.gameUIPieces.updateScoreChange(this.scoreChange, false);
 		
 		this.progress = new ProgressDialog(this.gameActivity);
         this.progress.setCanceledOnTouchOutside(false);
@@ -84,6 +95,8 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
     		
     		init();
         	
+    		this.timeLimit = state.getTimeLimit();
+    		this.timeStart = state.getTimeStart();
         	this.currentQuestion -= 1;
             this.nextQuestion();
             
@@ -97,17 +110,23 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
     				break;
     			}
     		}
+    		
+    		startUpdatingTime();
         } else {
         	this.gameUIPieces.displayFinishScreen(this.score, this.rank);
         }
 	}
 	
 	public void save(GameFragment state) {
+		this.timerHandler.removeCallbacks(this.timerRunnable);
 		state.setMolecules(this.molecules);
 		state.setQuestions(this.questions);
 		state.setCurrentIndex(this.currentQuestion);
 		state.setLastIndex(this.lastAnswerIndex);
 		state.setScore(this.score);
+		state.setScoreChange(this.scoreChange);
+		state.setTimeLimit(this.timeLimit);
+		state.setTimeStart(this.timeStart);
 		state.setSessionId(this.gameSessionId);
 		state.setRank(this.rank);
 		state.setButtonStates(this.gameUIPieces.getButtonStates());
@@ -128,6 +147,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
             JSONObject game = (JSONObject)gamesJSON.get(position);
             this.gameActivity.getActionBar().setTitle(game.getString("name"));
             this.gameId = game.getString("id");
+            this.timeLimit = Long.parseLong(game.getString("time_limit"));
         } catch(JSONException e) {
             e.printStackTrace();
             this.gameActivity.finish();
@@ -137,7 +157,6 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 	
 	@Override
 	public void onDismiss(DialogInterface dialog) {
-		//should make a way to cancel loading
         if(this.wantedDismiss) {
             this.wantedDismiss = false;
         } else {
@@ -177,8 +196,10 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
             
         } else if(this.gameState == GameLogic.PLAYING) {
             try{
+            	this.scoreChange = response.getDouble("score") - this.score;
                 this.score = response.getDouble("score");
                 this.gameUIPieces.updateScore(this.score);
+                this.gameUIPieces.updateScoreChange(this.scoreChange, true);
                 boolean correct = response.getBoolean("correct");
                 
                 if(correct) {
@@ -220,6 +241,11 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         if(this.currentQuestion < this.molecules.length) {
             this.comm.getMedia(this.gameSessionId, 0, this.questions[this.currentQuestion].getId());
         } else {
+        	/* - should be here
+        	this.timeStart = System.currentTimeMillis();
+        	this.timeLimit = timeStart + this.timeLimit;
+        	startUpdatingTime();
+        	*/
             this.wantedDismiss = true;
             this.progress.dismiss();
             this.currentQuestion = -1;
@@ -229,7 +255,10 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 	}
 	
 	public void onAnswerButton(View view) {
-		if(this.lastAnswerIndex == -1 && this.currentQuestion < this.questions.length) {
+		if(this.lastAnswerIndex == -1 &&
+		   this.currentQuestion < this.questions.length &&
+		   this.gameState == GameLogic.PLAYING) {
+			
             int index = 0;
             switch(view.getId()) {
                 case R.id.game_button_0:
@@ -263,10 +292,10 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
             String answerId = question.getAnswer(index).getId();
             
             this.gameActivity.lockOrientation();
-            this.comm.submitFlashcardAnswer(this.auth, this.gameSessionId, question.getId(), answerId, 1000);//TODO, actual time
+            this.comm.submitFlashcardAnswer(this.auth, this.gameSessionId, question.getId(), answerId, 1000);
         }
 	}
-
+	
 	@Override
 	public void onImageResponse(Bitmap bitmap, boolean error) {}
 	
@@ -323,7 +352,44 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
             }
         } else {
             this.gameState = GameLogic.FINISHING;
-            this.comm.endFlashcardGame(this.auth, this.gameSessionId, 120000);//TODO, actual time
+            this.comm.endFlashcardGame(this.auth, this.gameSessionId, getTimeElapsed());
         }
     }
+	
+	private void timeRanOut() {
+		this.progress.setMessage("Time ran out...");
+		this.progress.show();
+		this.gameState = GameLogic.FINISHING;
+        this.comm.endFlashcardGame(this.auth, this.gameSessionId, getTimeElapsed());
+        this.wantedDismiss = true;
+        this.progress.dismiss();
+	}
+	
+	private void startUpdatingTime() {
+		this.timerHandler = new Handler();
+		
+		this.timerRunnable = new Runnable() {
+			@Override
+			public void run() {
+				long time = timeLimit - System.currentTimeMillis();
+				gameUIPieces.updateTime(time);
+				if(time <= 0) {
+					timeRanOut();
+				} else {
+					timerHandler.postDelayed(this, 1000);
+				}
+			}
+		};
+		
+		this.timerHandler.postDelayed(timerRunnable, 0);
+	}
+	
+	private long getTimeElapsed() {
+		long currTime = System.currentTimeMillis();
+		long time = currTime - this.timeStart;
+		if(currTime > this.timeLimit) {
+			time = this.timeLimit - this.timeStart;
+		}
+		return time;
+	}
 }

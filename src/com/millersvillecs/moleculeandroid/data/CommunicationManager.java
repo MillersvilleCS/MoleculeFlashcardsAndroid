@@ -77,7 +77,7 @@ public class CommunicationManager {
 		new ExecutePost(this).execute(request);
 	}
 	
-	public void endFlashcardGame(String auth, String gameSessionId, int gameTime) {
+	public void endFlashcardGame(String auth, String gameSessionId, long gameTime) {
 		Request request = new Request();
 		request.url = this.REQUEST_HANDLER_URL;
 		try {
