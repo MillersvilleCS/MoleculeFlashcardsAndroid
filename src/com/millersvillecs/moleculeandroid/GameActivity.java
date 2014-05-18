@@ -8,12 +8,18 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.ScaleGestureDetector.OnScaleGestureListener;
 import android.view.Surface;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 
 
-public class GameActivity extends Activity {
+public class GameActivity extends Activity implements OnTouchListener {
 	
 	private static final String FRAGMENT_TAG = "data";
 	
@@ -22,6 +28,8 @@ public class GameActivity extends Activity {
     private GameLogic gameLogic;
 	private GLSurfaceView gLSurfaceView;
 	private AndroidRenderer renderer;
+	private ScaleGestureDetector scaleGestureDetector;
+	private GestureDetector gestureDetector;
 	
 	private int orientation;
 
@@ -31,9 +39,13 @@ public class GameActivity extends Activity {
 		
 		setContentView(R.layout.activity_game);
 		getActionBar().setDisplayHomeAsUpEnabled(false);//no need to check, 4.0+ req on app
+		
+		initGestureDetectors();
+		
 		this.orientation = getResources().getConfiguration().orientation;
 		
 		this.gLSurfaceView = (GLSurfaceView) findViewById(R.id.glsurfaceview);
+		this.gLSurfaceView.setOnTouchListener(this);
 		
 		final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		final ConfigurationInfo configurationInfo = activityManager
@@ -68,6 +80,79 @@ public class GameActivity extends Activity {
 		}
 		
     }
+	
+	private void initGestureDetectors() {
+		this.scaleGestureDetector = new ScaleGestureDetector(this, new OnScaleGestureListener() {
+
+			@Override
+			public boolean onScale(ScaleGestureDetector detector) {
+				float amount = detector.getScaleFactor() - 1f;
+				System.out.println("Zoom Amount Raw: " + detector.getScaleFactor() + " Actual: " + amount);
+				renderer.zoomMolecule(amount);
+				return false;
+			}
+
+			@Override
+			public boolean onScaleBegin(ScaleGestureDetector detector) {
+				return true;
+			}
+
+			@Override
+			public void onScaleEnd(ScaleGestureDetector detector) {}
+			
+		});
+		
+		this.gestureDetector = new GestureDetector(this, new OnGestureListener() {
+
+			@Override
+			public boolean onDown(MotionEvent e) {
+				return false;
+			}
+
+			@Override
+			public boolean onFling(MotionEvent e1, MotionEvent e2,
+					float velocityX, float velocityY) {
+				return false;
+			}
+
+			@Override
+			public void onLongPress(MotionEvent e) {}
+
+			@Override
+			public boolean onScroll(MotionEvent e1, MotionEvent e2,
+					float distanceX, float distanceY) {
+				distanceX /= -20f;
+				if(distanceX > 5) {
+					distanceX = 5;
+				} else if(distanceX < -5) {
+					distanceX = -5;
+				}
+				System.out.println("Rotate amount: " + distanceX);
+				renderer.manuallyRotateMolecule(distanceX);
+				return true;
+			}
+
+			@Override
+			public void onShowPress(MotionEvent e) {}
+
+			@Override
+			public boolean onSingleTapUp(MotionEvent e) {
+				return false;
+			}
+			
+		});
+	}
+	
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		if(event.getPointerCount() >= 2) {
+			this.scaleGestureDetector.onTouchEvent(event);
+		} else {
+			this.gestureDetector.onTouchEvent(event);
+		}
+		
+		return true;
+	}
 	
 	@Override
 	public void onBackPressed() {

@@ -34,6 +34,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
 	private Camera camera;
 	private Context context;
 	private long lastTime, currTime;
+	private boolean manuallyRotating, changingMolecule;
 	
 	final String vertexShader =
             "uniform mat4 u_view;      \n"     // A constant representing the combined model/view/projection matrix.
@@ -100,6 +101,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         }
         
         if(mol != null && !mol.equals(currentMolecule)) {
+        	this.changingMolecule = true;
         	if(moleculeNode != null) {
             	scene.detach(moleculeNode);
             }
@@ -139,10 +141,12 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         		moleculeNode.attach(bondObject);
         	}
         	
+        	this.manuallyRotating = false;
         	currentMolecule = mol;
         	scene.attach(moleculeNode);
+        	this.changingMolecule = false;
         }
-        if(moleculeNode != null) {
+        if(moleculeNode != null && !this.manuallyRotating) {
         	float rotChange = deltaTime / 20f;
         	moleculeNode.rotate(rotChange, rotChange, rotChange, 0);
         }
@@ -154,9 +158,8 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
-        
-        
     }
+    
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.82f, 0.82f, 0.82f, 1.0f);
@@ -202,5 +205,18 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     
     public void setGameLogic(GameLogic g) {
     	this.gameLogic = g;
+    }
+    
+    public void zoomMolecule(float amount) {
+    	if(this.moleculeNode != null && !this.changingMolecule) {
+    		this.moleculeNode.translate(0, 0, amount);
+    	}
+    }
+    
+    public void manuallyRotateMolecule(float amount) {
+    	if(this.moleculeNode != null && !this.changingMolecule) {
+    		this.manuallyRotating = true;
+    		this.moleculeNode.rotate(amount, amount, 0, 0);
+    	}
     }
 }
