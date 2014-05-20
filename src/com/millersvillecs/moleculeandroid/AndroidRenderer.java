@@ -134,7 +134,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         		//bondObject.translate(0,0.5f,0);
         		angle = (float) Math.toDegrees(angle);
         		//Vector3 rotation = crossProd.scale(angle);
-        		bondObject.rotateLocal(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
+        		bondObject.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
         		bondObject.setTranslation(new Vector3((float)from.x, (float)from.y, (float)from.z));
         		//bondObject.lookAt((float)to.x, (float)to.y, (float)to.z, 0, 0, -1);
         		
@@ -158,6 +158,9 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
+        camera = new Camera(width, height, 1, 100);
+        camera.setTranslation(0, 0, -10);
+		camera.lookAt(0, 0, 1);
     }
     
     @Override

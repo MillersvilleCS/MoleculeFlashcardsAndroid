@@ -13,8 +13,8 @@ import com.millersvillecs.moleculeandroid.util.math.Vector3;
  */
 public class SceneObject extends SceneNode {
 
-    protected Mesh mesh;
-    protected ShaderProgram shader;
+    private Mesh mesh;
+    private ShaderProgram shader;
 
     public SceneObject(Mesh mesh, ShaderProgram shader) {
         this.mesh = mesh;
@@ -23,12 +23,6 @@ public class SceneObject extends SceneNode {
 
     public SceneObject(Vector3 translation, Mesh mesh, ShaderProgram shader) {
         super(translation);
-        this.mesh = mesh;
-        this.shader = shader;
-    }
-
-    public SceneObject(Vector3 translation,Vector3 scale, Mesh mesh, ShaderProgram shader) {
-        super(translation, scale);
         this.mesh = mesh;
         this.shader = shader;
     }
@@ -46,21 +40,4 @@ public class SceneObject extends SceneNode {
 		mesh.draw();
         shader.unbind();
 	}
-	/*
-	private float[] createModelMatrix() {
-		float[] resultMatrix = {
-				1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				0, 0, 0, 1
-		};
-		//local rotation
-		Matrix.setIdentityM(resultMatrix, 0);
-	
-		Matrix.multiplyMM(resultMatrix, 0, localRotation.getArray(), 0, resultMatrix, 0);
-		Matrix.multiplyMM(resultMatrix, 0, translation.getArray(), 0, resultMatrix, 0);
-		Matrix.multiplyMM(resultMatrix, 0, rotation.getArray(), 0, resultMatrix, 0);
-		return resultMatrix;
-	}
-	*/
 }
