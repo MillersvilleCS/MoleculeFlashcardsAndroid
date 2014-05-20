@@ -121,14 +121,11 @@ public class GameActivity extends Activity implements OnTouchListener {
 			@Override
 			public boolean onScroll(MotionEvent e1, MotionEvent e2,
 					float distanceX, float distanceY) {
-				distanceX /= -20f;
-				if(distanceX > 5) {
-					distanceX = 5;
-				} else if(distanceX < -5) {
-					distanceX = -5;
-				}
+				distanceX /= -4f;
+				distanceY /= -4f;
+			
 				System.out.println("Rotate amount: " + distanceX);
-				renderer.manuallyRotateMolecule(distanceX);
+				renderer.manuallyRotateMolecule(distanceX,distanceY);
 				return true;
 			}
 

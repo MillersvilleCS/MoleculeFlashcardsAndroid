@@ -26,6 +26,7 @@ import com.millersvillecs.moleculeandroid.scene.Scene;
 import com.millersvillecs.moleculeandroid.scene.SceneNode;
 import com.millersvillecs.moleculeandroid.scene.SceneObject;
 import com.millersvillecs.moleculeandroid.util.FileUtil;
+import com.millersvillecs.moleculeandroid.util.math.Vector2;
 import com.millersvillecs.moleculeandroid.util.math.Vector3;
 
 public class AndroidRenderer implements GLSurfaceView.Renderer {
@@ -146,7 +147,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         	scene.attach(moleculeNode);
         	this.changingMolecule = false;
         }
-        if(moleculeNode != null) {
+        if(moleculeNode != null && !manuallyRotating) {
         	float rotChange = deltaTime / 20f;
         	moleculeNode.rotate(rotChange, 0, 1, 0);
         }
@@ -216,10 +217,13 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     	}
     }
     
-    public void manuallyRotateMolecule(float amount) {
+    public void manuallyRotateMolecule(float amountX, float amountY) {
     	if(this.moleculeNode != null && !this.changingMolecule) {
     		this.manuallyRotating = true;
-    		this.moleculeNode.rotate(amount, 0, 1, 0);
+    		Vector2 rotation = new Vector2(amountX,amountY);
+    		float scale = rotation.length();
+    		rotation.normalize();
+    		this.moleculeNode.rotate(amountX, 0, 1, 0);
     	}
     }
 }
