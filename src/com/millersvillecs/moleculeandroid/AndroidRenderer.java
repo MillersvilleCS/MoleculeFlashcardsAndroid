@@ -79,7 +79,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         SceneNode moleculeNode;
         
 	public AndroidRenderer(Context context) {
-		camera = new Camera(5, 5, 1, 100);
+		camera = new Camera(50, 50, 1, 100);
 		camera.setTranslation(0, 0, -10);
 		camera.lookAt(0, 0, 1);
 		scene = new Scene();
@@ -146,9 +146,9 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         	scene.attach(moleculeNode);
         	this.changingMolecule = false;
         }
-        if(moleculeNode != null && !this.manuallyRotating) {
+        if(moleculeNode != null) {
         	float rotChange = deltaTime / 20f;
-        	moleculeNode.rotate(rotChange, rotChange, rotChange, 0);
+        	moleculeNode.rotate(rotChange, 0, 1, 0);
         }
         scene.render(0, camera); // Delta Time Always 0 ???
         
@@ -216,7 +216,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     public void manuallyRotateMolecule(float amount) {
     	if(this.moleculeNode != null && !this.changingMolecule) {
     		this.manuallyRotating = true;
-    		this.moleculeNode.rotate(amount, amount, 0, 0);
+    		this.moleculeNode.rotate(amount, 0, 1, 0);
     	}
     }
 }

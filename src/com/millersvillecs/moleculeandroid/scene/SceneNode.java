@@ -18,11 +18,11 @@ import com.millersvillecs.moleculeandroid.util.math.Vector3;
 public class SceneNode extends Node<SceneNode> {
 
 	private List<IBehavior> behaviors = new ArrayList<IBehavior>();
-
-	protected Matrix4f translation = new Matrix4f();
-	protected Matrix4f rotation = new Matrix4f();
-	protected Matrix4f localRotation = new Matrix4f();
-	//protected Vector3 translation = new Vector3();
+	private SceneNode parent = null;
+	private Matrix4f model = new Matrix4f();
+	protected Matrix4f translationMatrix = new Matrix4f();
+	protected Matrix4f rotationMatrix = new Matrix4f();
+	protected Vector3 translation = new Vector3();
 	
 	protected float sceneTime;
 
@@ -35,17 +35,14 @@ public class SceneNode extends Node<SceneNode> {
 	}
 
 	public SceneNode(Vector3 translation, Vector3 scale) {
-		localRotation.loadIdentity();
-		rotation.loadIdentity();
-		this.translation.loadIdentity();
-		this.translation.translate(translation.x, translation.y, translation.z);
-		//this.translation = translation;
+		translationMatrix.loadIdentity();
+		rotationMatrix.loadIdentity();
+		setTranslation(translation);
 	}
 
 	public void render(int delta, Camera camera) {
-		for (Node<SceneNode> node : this.getSubnodes()) {
-			
-			((SceneNode) node).render(delta, camera);
+		for (int i = 0; i < getSubnodes().size(); ++i) {
+			((SceneNode)getSubnodes().get(i)).render(delta, camera);
 		}
 	}
 
@@ -66,25 +63,15 @@ public class SceneNode extends Node<SceneNode> {
 	}
 
 	public SceneNode setTranslation(float x, float y, float z) {
-		for (Node<SceneNode> node : this.getSubnodes()) {
-			SceneNode nodeCast = ((SceneNode) node);
-			float xo = getX() - nodeCast.getX();
-			float yo = getY() - nodeCast.getY();
-			float zo = getZ() - nodeCast.getZ();
-			((SceneNode) node).setTranslation(xo + x, yo + y, zo + z);
-		}
-		translation.translate(-getX(), -getY(), -getZ());
-		translation.translate(x, y, z);
-		//translation.set(x, y, z);
+		translationMatrix.translate(-getX(), -getY(), -getZ());
+		translationMatrix.translate(x, y, z);
+		translation.set(x, y, z);
 		return this;
 	}
 	
 	public SceneNode translate(float x, float y, float z) {
-		for (Node<SceneNode> node : this.getSubnodes()) {
-			((SceneNode) node).translate(x, y, z);
-		}
-		translation.translate(x, y, z);
-		//translation.set(x, y, z);
+		translationMatrix.translate(x, y, z);
+		translation.add(x, y, z);
 		return this;
 	}
 
@@ -95,55 +82,54 @@ public class SceneNode extends Node<SceneNode> {
 
 	
 	public SceneNode rotate(float rot, float rx, float ry, float rz) {
-		for (Node<SceneNode> node : this.getSubnodes()) {
-			((SceneNode) node).rotate(rot, rx, ry, rz);
-		}
-		rotation.rotate(rot, rx, ry, rz);
+		rotationMatrix.rotate(rot, rx, ry, rz);
 		return this;
 	}
 	
 	public SceneNode rotateLocal(float rot, float rx, float ry, float rz) {
 		
-		for (Node<SceneNode> node : this.getSubnodes()) {
-			((SceneNode) node).rotateLocal(rot, rx, ry, rz);
-		}
-		//float x = getX();
-		//float y = getY();
-		//float z = getZ();
+		float x = getX();
+		float y = getY();
+		float z = getZ();
 		
-		//model.translate(-x, -y, -z);
-		localRotation.rotate(rot, rx, ry, rz);
-		//model.translate(x, y, z);
+		translationMatrix.translate(-x, -y, -z);
+		rotationMatrix.rotate(rot, rx, ry, rz);
+		translationMatrix.translate(x, y, z);
 		return this;
-	}
+	} 
 	
-	public SceneNode lookAt(float x, float y , float z, float ax, float ay, float az) {
-		float[] resultMatrix = {
-				1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				0, 0, 0, 1
-		};
-		Matrix.setLookAtM(resultMatrix, 0, getX(), getY(), getZ(), x, y,  z, ax, ay,  az );
-		localRotation = new Matrix4f(resultMatrix);
-	
-		return this;
+	@Override
+	public void attach(Node<SceneNode> node) {
+		super.attach(node);
+		((SceneNode)node).parent = this;
 	}
 
 	public float getX() {
-		return translation.get(3, 0);
+		return translation.x;
 	}
 
 	public float getY() {
-		return translation.get(3, 1);
+		return translation.y;
 	}
 
 	public float getZ() {
-		return translation.get(3, 2);
+		return translation.z;
 	}
 	
 	public float getSceneTime() {
 		return sceneTime;
 	}
 	
+	public Matrix4f getModel() {
+		model.load(translationMatrix);
+		model.multiply(rotationMatrix);
+		if(parent == null) {
+			return model;
+		} else {
+			
+			Matrix4f parentMatrix = parent.getModel();
+			parentMatrix.multiply(model);
+			return parentMatrix;
+		}
+	}
 }

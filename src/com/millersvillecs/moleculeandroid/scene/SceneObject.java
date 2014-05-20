@@ -41,12 +41,12 @@ public class SceneObject extends SceneNode {
 		int viewHandle = shader.getUniformLocation("u_view");
 		GLES20.glUniformMatrix4fv(viewHandle, 1, false, camera.getView(), 0);
 		int modelHandle = shader.getUniformLocation("u_model");
-		GLES20.glUniformMatrix4fv(modelHandle, 1, false, createModelMatrix(), 0);
+		GLES20.glUniformMatrix4fv(modelHandle, 1, false, getModel().getArray(), 0);
 		
 		mesh.draw();
         shader.unbind();
 	}
-	
+	/*
 	private float[] createModelMatrix() {
 		float[] resultMatrix = {
 				1, 0, 0, 0,
@@ -62,4 +62,5 @@ public class SceneObject extends SceneNode {
 		Matrix.multiplyMM(resultMatrix, 0, rotation.getArray(), 0, resultMatrix, 0);
 		return resultMatrix;
 	}
+	*/
 }
