@@ -1,8 +1,10 @@
 package com.millersvillecs.moleculeandroid.graphics;
 
-import android.opengl.GLES20;
-
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.List;
+
+import android.opengl.GLES20;
 
 import com.millersvillecs.moleculeandroid.graphics.opengles.BufferedObjectUsage;
 import com.millersvillecs.moleculeandroid.graphics.opengles.Descriptor;
@@ -11,9 +13,6 @@ import com.millersvillecs.moleculeandroid.graphics.opengles.VAO;
 import com.millersvillecs.moleculeandroid.graphics.opengles.VBO;
 import com.millersvillecs.moleculeandroid.util.BufferUtils;
 import com.millersvillecs.moleculeandroid.util.DatatypeUtils;
-
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
 /**
  * @author william gervasio

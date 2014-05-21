@@ -37,7 +37,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
 	private long lastTime, currTime;
 	private boolean changingMolecule;
 	private int autoRotateDirection = 1;
-	
+
     ShaderProgram shader = null;
     private GameLogic gameLogic;
     private Molecule currentMolecule;
@@ -135,7 +135,6 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         //GLES20.glEnable(GLES20.GL_CULL_FACE);
         AssetManager assetManager = context.getAssets();
         
-        
         try {
             SparseArray<String> attributes = new SparseArray<String>();
             attributes.put(0, "in_position");
@@ -146,10 +145,9 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
             String sphereFragShader = FileUtil.convertStreamToString(assetManager.open("shaders/BasicShader.frag"));
             shader = new ShaderProgram(sphereVertShader, sphereFragShader, attributes);
               
-          } catch (IOException e) {
-              System.out.println("Could not create the shader");
-          } catch (Exception e) {
-			// TODO Auto-generated catch block
+        } catch (IOException e) {
+            System.out.println("Could not create the shader");
+        } catch (Exception e) {
 			e.printStackTrace();
 		}     
       
@@ -165,7 +163,11 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     
     public void zoomMolecule(float amount) {
     	if(this.moleculeNode != null && !this.changingMolecule) {
-    		this.moleculeNode.translate(0, 0, amount);
+    		if(amount < 0 && this.moleculeNode.getZ() < -5f) {
+    			//do nothing
+    		} else {
+    			this.moleculeNode.translate(0, 0, amount);
+    		}
     	}
     }
     
@@ -179,6 +181,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     		Vector2 rotation = new Vector2(amountX,amountY);
     		rotation.normalize();
     		this.moleculeNode.rotate(amountX, 0, 1, 0);
+    		//this.moleculeNode.rotate(amountY, 1, 0, 0);
     	}
     }
 }
