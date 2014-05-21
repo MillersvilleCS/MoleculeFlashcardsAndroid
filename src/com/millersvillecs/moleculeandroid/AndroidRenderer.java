@@ -183,7 +183,8 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     		}
     		Vector2 rotation = new Vector2(amountX,amountY);
     		rotation.normalize();
-    		this.moleculeNode.rotate(amountX, 0, 1, 0);
+    		if( Math.abs(amountX) < 40)
+    			this.moleculeNode.rotate(amountX, 0, 1, 0);
     		//this.moleculeNode.rotate(amountY, 1, 0, 0);
     	}
     }
