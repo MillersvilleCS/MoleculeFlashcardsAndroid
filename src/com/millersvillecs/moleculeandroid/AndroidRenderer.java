@@ -96,16 +96,47 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         		
         		float angle = (float) Math.acos(directionA.dot(directionB));
         		final Vector3 rotationAxis = directionA.clone().cross(directionB).normalize();
-        		Mesh cylinder = GeometryUtils.createCylinderGeometry(0.1f, distance.length(), 20, from.color,to.color);
-        		SceneObject bondObject = new SceneObject(cylinder, shader);
-        		//bondObject.translate(0,0.5f,0);
-        		angle = (float) Math.toDegrees(angle);
-        		//Vector3 rotation = crossProd.scale(angle);
-        		bondObject.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
-        		bondObject.setTranslation(new Vector3((float)from.x, (float)from.y, (float)from.z));
-        		//bondObject.lookAt((float)to.x, (float)to.y, (float)to.z, 0, 0, -1);
-        		
-        		moleculeNode.attach(bondObject);
+        		if(bond.type == Bond.SINGLE) {
+        			Mesh cylinder = GeometryUtils.createCylinderGeometry(0.08f, distance.length(), 20, from.color,to.color);
+            		SceneObject bondObject = new SceneObject(cylinder, shader);
+            		angle = (float) Math.toDegrees(angle);
+            		bondObject.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
+            		bondObject.setTranslation(new Vector3((float)from.x, (float)from.y, (float)from.z));
+            		moleculeNode.attach(bondObject);
+        		} else if(bond.type == Bond.DOUBLE) {
+        			Mesh cylinder = GeometryUtils.createCylinderGeometry(0.08f, distance.length(), 20, from.color,to.color);
+        			angle = (float) Math.toDegrees(angle);
+        			
+            		SceneObject bondObject1 = new SceneObject(cylinder, shader);
+            		bondObject1.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
+            		bondObject1.setTranslation(new Vector3((float)from.x+ 0.15f, (float)from.y + 0.15f, (float)from.z));
+            		
+            		SceneObject bondObject2 = new SceneObject(cylinder, shader);
+            		bondObject2.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
+            		bondObject2.setTranslation(new Vector3((float)from.x - 0.15f, (float)from.y - 0.15f, (float)from.z));
+            		
+            		moleculeNode.attach(bondObject1);
+            		moleculeNode.attach(bondObject2);
+        		} else if(bond.type == Bond.TRIPLE) {
+        			Mesh cylinder = GeometryUtils.createCylinderGeometry(0.08f, distance.length(), 20, from.color,to.color);
+        			angle = (float) Math.toDegrees(angle);
+        			
+            		SceneObject bondObject1 = new SceneObject(cylinder, shader);
+            		bondObject1.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
+            		bondObject1.setTranslation(new Vector3((float)from.x+ 0.25f, (float)from.y + 0.25f, (float)from.z));
+            		
+            		SceneObject bondObject2 = new SceneObject(cylinder, shader);
+            		bondObject2.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
+            		bondObject2.setTranslation(new Vector3((float)from.x - 0.25f, (float)from.y - 0.25f, (float)from.z));
+            		
+            		SceneObject bondObject3 = new SceneObject(cylinder, shader);
+            		bondObject3.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
+            		bondObject3.setTranslation(new Vector3((float)from.x, (float)from.y, (float)from.z));
+            		
+            		moleculeNode.attach(bondObject1);
+            		moleculeNode.attach(bondObject2);
+            		moleculeNode.attach(bondObject3);
+        		}
         	}
         	
         	currentMolecule = mol;
