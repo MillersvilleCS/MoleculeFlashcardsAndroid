@@ -61,6 +61,7 @@ public class GeometryUtils {
 			final int hSegments, final int vSegments, final Color color) {
 
 		List<Vector3> positions = new ArrayList<Vector3>();
+		List<Vector3> normals = new ArrayList<Vector3>();
 		List<Color> colors = new ArrayList<Color>();
 
 		//create vertices
@@ -90,9 +91,13 @@ public class GeometryUtils {
 				float y = radius * (float) Math.cos(theta)
 						* (float) Math.sin(phi);
 				float z = radius * (float) Math.sin(theta);
+				
 
 				Vector3 position = new Vector3(x, z, y);
 				positions.add(position);
+				
+				normals.add(new Vector3(x, y, z).normalize());
+				
 				colors.add(color.clone());
 			}
 		}
@@ -122,18 +127,18 @@ public class GeometryUtils {
 		}
 		
 		List<VertexAttribute> meshDescriptor = new ArrayList<VertexAttribute>();
-		meshDescriptor.add(new VertexAttribute(VertexUtils
-				.vector3ListToFloatArray(positions), 3));
-		meshDescriptor.add(new VertexAttribute(VertexUtils
-				.ColorListToFloatArray(colors), 4));
-		return new Mesh(VertexUtils.IntegerListToIntArray(indices),
-				meshDescriptor);
+		meshDescriptor.add(new VertexAttribute(VertexUtils.vector3ListToFloatArray(positions), 3));
+		meshDescriptor.add(new VertexAttribute(VertexUtils.vector3ListToFloatArray(normals), 3));
+		meshDescriptor.add(new VertexAttribute(VertexUtils.ColorListToFloatArray(colors), 4));
+		
+		return new Mesh(VertexUtils.IntegerListToIntArray(indices), meshDescriptor);
 	}
 	
 	public static Mesh createCylinderGeometry(final float radius, float height, int resolution,  final Color color1, Color color2) {
 		
 		float perR = (float) (2 * Math.PI / (resolution / 2 - 1));
 		List<Vector3> positions = new ArrayList<Vector3>();
+		List<Vector3> normals = new ArrayList<Vector3>();
 		List<Color> colors = new ArrayList<Color>();
 		List<Integer> indices = new ArrayList<Integer>();
 		
@@ -142,6 +147,8 @@ public class GeometryUtils {
 	    	float vert2 = (float) (radius * Math.sin(i / 2 * perR));
 	    	positions.add(new Vector3(vert1, height, vert2));
 	    	positions.add(new Vector3(vert1, 0, vert2));
+	    	normals.add(new Vector3(vert1, 0, vert2).normalize());
+	    	normals.add(new Vector3(vert1, 0, vert2).normalize());
 	    	colors.add(color2);
 	    	colors.add(color1);
 	    	
@@ -160,12 +167,11 @@ public class GeometryUtils {
     	//indices.add(1);
     	
     	List<VertexAttribute> meshDescriptor = new ArrayList<VertexAttribute>();
-		meshDescriptor.add(new VertexAttribute(VertexUtils
-				.vector3ListToFloatArray(positions), 3));
-		meshDescriptor.add(new VertexAttribute(VertexUtils
-				.ColorListToFloatArray(colors), 4));
-		return new Mesh(VertexUtils.IntegerListToIntArray(indices),
-				meshDescriptor);
+		meshDescriptor.add(new VertexAttribute(VertexUtils.vector3ListToFloatArray(positions), 3));
+		meshDescriptor.add(new VertexAttribute(VertexUtils.vector3ListToFloatArray(normals), 3));
+		meshDescriptor.add(new VertexAttribute(VertexUtils.ColorListToFloatArray(colors), 4));
+		
+		return new Mesh(VertexUtils.IntegerListToIntArray(indices),meshDescriptor);
 		
 	}
 }
