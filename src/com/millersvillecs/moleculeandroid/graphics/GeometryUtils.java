@@ -61,6 +61,7 @@ public class GeometryUtils {
 			final int hSegments, final int vSegments, final Color color) {
 
 		List<Vector3> positions = new ArrayList<Vector3>();
+		List<Vector3> normals = new ArrayList<Vector3>();
 		List<Color> colors = new ArrayList<Color>();
 
 		//create vertices
@@ -93,6 +94,9 @@ public class GeometryUtils {
 
 				Vector3 position = new Vector3(x, z, y);
 				positions.add(position);
+				
+				normals.add(new Vector3(x, y, z).normalize());
+				
 				colors.add(color.clone());
 			}
 		}
@@ -125,6 +129,8 @@ public class GeometryUtils {
 		meshDescriptor.add(new VertexAttribute(VertexUtils
 				.vector3ListToFloatArray(positions), 3));
 		meshDescriptor.add(new VertexAttribute(VertexUtils
+				.vector3ListToFloatArray(normals), 3));
+		meshDescriptor.add(new VertexAttribute(VertexUtils
 				.ColorListToFloatArray(colors), 4));
 		return new Mesh(VertexUtils.IntegerListToIntArray(indices),
 				meshDescriptor);
@@ -134,6 +140,7 @@ public class GeometryUtils {
 		
 		float perR = (float) (2 * Math.PI / (resolution / 2 - 1));
 		List<Vector3> positions = new ArrayList<Vector3>();
+		List<Vector3> normals = new ArrayList<Vector3>();
 		List<Color> colors = new ArrayList<Color>();
 		List<Integer> indices = new ArrayList<Integer>();
 		
@@ -142,6 +149,8 @@ public class GeometryUtils {
 	    	float vert2 = (float) (radius * Math.sin(i / 2 * perR));
 	    	positions.add(new Vector3(vert1, height, vert2));
 	    	positions.add(new Vector3(vert1, 0, vert2));
+	    	normals.add(new Vector3(vert1, 0, vert2).normalize());
+	    	normals.add(new Vector3(vert1, 0, vert2).normalize());
 	    	colors.add(color2);
 	    	colors.add(color1);
 	    	
@@ -162,6 +171,8 @@ public class GeometryUtils {
     	List<VertexAttribute> meshDescriptor = new ArrayList<VertexAttribute>();
 		meshDescriptor.add(new VertexAttribute(VertexUtils
 				.vector3ListToFloatArray(positions), 3));
+		meshDescriptor.add(new VertexAttribute(VertexUtils
+				.vector3ListToFloatArray(normals), 3));
 		meshDescriptor.add(new VertexAttribute(VertexUtils
 				.ColorListToFloatArray(colors), 4));
 		return new Mesh(VertexUtils.IntegerListToIntArray(indices),

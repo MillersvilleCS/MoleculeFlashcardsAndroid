@@ -13,7 +13,6 @@ public class SceneNode extends Node<SceneNode> {
 
 	protected float sceneTime;
 	protected Matrix4f modelMatrix, translationMatrix, rotationMatrix;
-	protected Vector3 translation;
 	
 	private List<IBehavior> behaviors = new ArrayList<IBehavior>();
 	private SceneNode parent = null;
@@ -26,7 +25,6 @@ public class SceneNode extends Node<SceneNode> {
 		modelMatrix = new Matrix4f();
 		translationMatrix = new Matrix4f();
 		rotationMatrix = new Matrix4f();
-		this.translation = translation;
 		setTranslation(translation);
 	}
 	
@@ -61,7 +59,6 @@ public class SceneNode extends Node<SceneNode> {
 	public SceneNode setTranslation(float x, float y, float z) {
 		translationMatrix.translate(-getX(), -getY(), -getZ());
 		translationMatrix.translate(x, y, z);
-		translation.set(x, y, z);
 		return this;
 	}
 	
@@ -71,7 +68,6 @@ public class SceneNode extends Node<SceneNode> {
 	
 	public SceneNode translate(float x, float y, float z) {
 		translationMatrix.translate(x, y, z);
-		translation.add(x, y, z);
 		return this;
 	}
 
@@ -93,15 +89,15 @@ public class SceneNode extends Node<SceneNode> {
 	}
 
 	public float getX() {
-		return translation.x;
+		return translationMatrix.get(3, 0);
 	}
 
 	public float getY() {
-		return translation.y;
+		return translationMatrix.get(3, 1);
 	}
 
 	public float getZ() {
-		return translation.z;
+		return translationMatrix.get(3, 2);
 	}
 	
 	public float getSceneTime() {
