@@ -1,8 +1,6 @@
 package com.millersvillecs.moleculeandroid;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -21,7 +19,6 @@ import com.millersvillecs.moleculeandroid.graphics.Camera;
 import com.millersvillecs.moleculeandroid.graphics.Color;
 import com.millersvillecs.moleculeandroid.graphics.GeometryUtils;
 import com.millersvillecs.moleculeandroid.graphics.Mesh;
-import com.millersvillecs.moleculeandroid.graphics.VertexAttribute;
 import com.millersvillecs.moleculeandroid.graphics.opengles.ShaderProgram;
 import com.millersvillecs.moleculeandroid.scene.Scene;
 import com.millersvillecs.moleculeandroid.scene.SceneNode;
