@@ -133,6 +133,9 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.82f, 0.82f, 0.82f, 1.0f);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ZERO);
+       
         //GLES20.glEnable(GLES20.GL_CULL_FACE);
         AssetManager assetManager = context.getAssets();
         
