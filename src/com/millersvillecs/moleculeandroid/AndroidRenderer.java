@@ -42,6 +42,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     private GameLogic gameLogic;
     private Molecule currentMolecule;
     SceneNode moleculeNode;
+    boolean manuallyEditing = false;
         
 	public AndroidRenderer(Context context) {
 		camera = new Camera(50, 50, 1, 100);
@@ -111,7 +112,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         	scene.attach(moleculeNode);
         	this.changingMolecule = false;
         }
-        if(moleculeNode != null) {
+        if(moleculeNode != null && !manuallyEditing) {
         	float rotChange = deltaTime / 20f;
         	moleculeNode.rotate(rotChange * autoRotateDirection, 0, 1, 0);
         }

@@ -107,9 +107,10 @@ public class GameActivity extends Activity implements OnTouchListener {
 
 			@Override
 			public boolean onDown(MotionEvent e) {
+				renderer.manuallyEditing = true;
 				return false;
 			}
-
+			
 			@Override
 			public boolean onFling(MotionEvent e1, MotionEvent e2,
 					float velocityX, float velocityY) {
@@ -146,8 +147,10 @@ public class GameActivity extends Activity implements OnTouchListener {
 			this.scaleGestureDetector.onTouchEvent(event);
 		} else {
 			this.gestureDetector.onTouchEvent(event);
+		} 
+		if(event.getAction() == MotionEvent.ACTION_UP) {
+			renderer.manuallyEditing = false;
 		}
-		
 		return true;
 	}
 	
