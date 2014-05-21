@@ -164,7 +164,9 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     
     public void zoomMolecule(float amount) {
     	if(this.moleculeNode != null && !this.changingMolecule) {
-    		if(amount < 0 && this.moleculeNode.getZ() < -5f) {
+    		if(amount < 0 && this.moleculeNode.getZ() < -3f) {
+    			//do nothing
+    		} else if(amount > 0 && this.moleculeNode.getZ() > 10f) {
     			//do nothing
     		} else {
     			this.moleculeNode.translate(0, 0, amount);
