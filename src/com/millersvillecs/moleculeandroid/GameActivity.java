@@ -39,6 +39,7 @@ public class GameActivity extends Activity implements OnTouchListener {
 		
 		setContentView(R.layout.activity_game);
 		getActionBar().setDisplayHomeAsUpEnabled(false);//no need to check, 4.0+ req on app
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
 		initGestureDetectors();
 		
@@ -87,8 +88,8 @@ public class GameActivity extends Activity implements OnTouchListener {
 			@Override
 			public boolean onScale(ScaleGestureDetector detector) {
 				float amount = detector.getScaleFactor() - 1f;
-				System.out.println("Zoom Amount Raw: " + detector.getScaleFactor() + " Actual: " + amount);
-				renderer.zoomMolecule(amount);
+				renderer.zoomMolecule(-amount);
+				
 				return false;
 			}
 
@@ -123,9 +124,8 @@ public class GameActivity extends Activity implements OnTouchListener {
 					float distanceX, float distanceY) {
 				distanceX /= -4f;
 				distanceY /= -4f;
-			
-				System.out.println("Rotate amount: " + distanceX);
-				renderer.manuallyRotateMolecule(distanceX,distanceY);
+				
+				renderer.manuallyRotateMolecule(distanceX, distanceY);
 				return true;
 			}
 

@@ -25,7 +25,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import android.os.AsyncTask;
 
 //http://www.androidsnippets.com/executing-a-http-post-request-with-httpclient

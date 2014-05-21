@@ -26,7 +26,6 @@ import com.millersvillecs.moleculeandroid.scene.Scene;
 import com.millersvillecs.moleculeandroid.scene.SceneNode;
 import com.millersvillecs.moleculeandroid.scene.SceneObject;
 import com.millersvillecs.moleculeandroid.util.FileUtil;
-import com.millersvillecs.moleculeandroid.util.math.Vector2;
 import com.millersvillecs.moleculeandroid.util.math.Vector3;
 
 public class AndroidRenderer implements GLSurfaceView.Renderer {
@@ -37,47 +36,20 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
 	private long lastTime, currTime;
 	private boolean manuallyRotating, changingMolecule;
 	
-	final String vertexShader =
-            "uniform mat4 u_view;      \n"     // A constant representing the combined model/view/projection matrix.
-		  + "uniform mat4 u_projection; 	\n"
-		
-          + "attribute vec4 in_Position;     \n"     // Per-vertex position information we will pass in.
-          + "attribute vec4 in_Color;        \n"     // Per-vertex color information we will pass in.              
-          
-          + "varying vec4 pass_Color;          \n"     // This will be passed into the fragment shader.
-          
-          + "void main()                    \n"     // The entry point for our vertex shader.
-          + "{                              \n"
-          + "   pass_Color = in_Color;          \n"     // Pass the color through to the fragment shader. 
-                                                    // It will be interpolated across the triangle.
-          + "   gl_Position = u_projection * u_view  \n"     // gl_Position is a special variable used to store the final position.
-          + "               * in_Position;   \n"     // Multiply the vertex by the matrix to get the final point in                                                                   
-          + "}                              \n";    // normalized screen coordinates.
-        
-        final String fragmentShader =
-            "precision mediump float;       \n"     // Set the default precision to medium. We don't need as high of a 
-                                                    // precision in the fragment shader.                
-          + "varying vec4 pass_Color;          \n"     // This is the color from the vertex shader interpolated across the 
-                                                    // triangle per fragment.             
-          + "void main()                    \n"     // The entry point for our fragment shader.
-          + "{                              \n"
-          + "   gl_FragColor = pass_Color;     \n"     // Pass the color directly through the pipeline.          
-          + "}                              \n";
-        
-        final float[] triangle1PositionData = {
-                -0.5f, -0.25f, 0.0f, 
-                0.5f, -0.25f, 0.0f,
-                0.0f, 0.559016994f, 0.0f, };
-        final float[] triangle1ColorData = {
-                1.0f, 0.0f, 0.0f, 1.0f,
-                0.0f, 0.0f, 1.0f, 1.0f,
-                0.0f, 1.0f, 0.0f, 1.0f};
-        final int[] triangle1IndicesData = {
-                0,1,2};
-        ShaderProgram shader = null;
-        private GameLogic gameLogic;
-        private Molecule currentMolecule;
-        SceneNode moleculeNode;
+    final float[] triangle1PositionData = {
+            -0.5f, -0.25f, 0.0f, 
+            0.5f, -0.25f, 0.0f,
+            0.0f, 0.559016994f, 0.0f, };
+    final float[] triangle1ColorData = {
+            1.0f, 0.0f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
+            0.0f, 1.0f, 0.0f, 1.0f};
+    final int[] triangle1IndicesData = {
+            0,1,2};
+    ShaderProgram shader = null;
+    private GameLogic gameLogic;
+    private Molecule currentMolecule;
+    SceneNode moleculeNode;
         
 	public AndroidRenderer(Context context) {
 		camera = new Camera(50, 50, 1, 100);
@@ -169,7 +141,6 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         GLES20.glClearColor(0.82f, 0.82f, 0.82f, 1.0f);
         AssetManager assetManager = context.getAssets();
         
-        
         try {
             SparseArray<String> attributes = new SparseArray<String>();
             attributes.put(0, "in_position");
@@ -179,10 +150,9 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
             String sphereFragShader = FileUtil.convertStreamToString(assetManager.open("shaders/BasicShader.frag"));
             shader = new ShaderProgram(sphereVertShader, sphereFragShader, attributes);
               
-          } catch (IOException e) {
-              System.out.println("Could not create the shader");
-          } catch (Exception e) {
-			// TODO Auto-generated catch block
+        } catch (IOException e) {
+            System.out.println("Could not create the shader");
+        } catch (Exception e) {
 			e.printStackTrace();
 		}     
         
@@ -213,17 +183,19 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     
     public void zoomMolecule(float amount) {
     	if(this.moleculeNode != null && !this.changingMolecule) {
-    		this.moleculeNode.translate(0, 0, amount);
+    		if(amount < 0 && this.moleculeNode.getZ() < -5f) {
+    			//do nothing
+    		} else {
+    			this.moleculeNode.translate(0, 0, amount);
+    		}
     	}
     }
     
     public void manuallyRotateMolecule(float amountX, float amountY) {
     	if(this.moleculeNode != null && !this.changingMolecule) {
     		this.manuallyRotating = true;
-    		Vector2 rotation = new Vector2(amountX,amountY);
-    		float scale = rotation.length();
-    		rotation.normalize();
     		this.moleculeNode.rotate(amountX, 0, 1, 0);
+    		//this.moleculeNode.rotate(amountY, 1, 0, 0);
     	}
     }
 }

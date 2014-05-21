@@ -4,11 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.millersvillecs.moleculeandroid.data.FileHandler;
-import com.millersvillecs.moleculeandroid.data.MoleculeGamePreferences;
-import com.millersvillecs.moleculeandroid.helper.SelectionBaseAdapter;
-import com.millersvillecs.moleculeandroid.helper.SelectionItem;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,6 +13,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+
+import com.millersvillecs.moleculeandroid.data.FileHandler;
+import com.millersvillecs.moleculeandroid.data.MoleculeGamePreferences;
+import com.millersvillecs.moleculeandroid.helper.SelectionBaseAdapter;
+import com.millersvillecs.moleculeandroid.helper.SelectionItem;
 
 public class SelectionActivity extends Activity implements OnItemClickListener {
 	

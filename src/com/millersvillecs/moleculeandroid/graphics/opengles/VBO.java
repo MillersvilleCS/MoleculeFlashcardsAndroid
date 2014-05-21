@@ -2,9 +2,9 @@ package com.millersvillecs.moleculeandroid.graphics.opengles;
 
 import java.nio.FloatBuffer;
 
-import com.millersvillecs.moleculeandroid.util.DatatypeUtils;
-
 import android.opengl.GLES20;
+
+import com.millersvillecs.moleculeandroid.util.DatatypeUtils;
 
 public class VBO {
 

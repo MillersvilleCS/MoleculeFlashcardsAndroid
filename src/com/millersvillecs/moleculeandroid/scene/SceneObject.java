@@ -1,7 +1,6 @@
 package com.millersvillecs.moleculeandroid.scene;
 
 import android.opengl.GLES20;
-import android.opengl.Matrix;
 
 import com.millersvillecs.moleculeandroid.graphics.Camera;
 import com.millersvillecs.moleculeandroid.graphics.Mesh;
