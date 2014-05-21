@@ -12,8 +12,8 @@ import com.millersvillecs.moleculeandroid.util.math.Vector3;
  */
 public class SceneObject extends SceneNode {
 
-    private Mesh mesh;
-    private ShaderProgram shader;
+    protected Mesh mesh;
+    protected ShaderProgram shader;
 
     public SceneObject(Mesh mesh, ShaderProgram shader) {
         this.mesh = mesh;

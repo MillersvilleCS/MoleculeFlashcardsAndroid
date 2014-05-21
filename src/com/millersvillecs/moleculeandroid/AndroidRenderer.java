@@ -16,6 +16,7 @@ import android.util.SparseArray;
 import com.millersvillecs.moleculeandroid.data.Atom;
 import com.millersvillecs.moleculeandroid.data.Bond;
 import com.millersvillecs.moleculeandroid.data.Molecule;
+import com.millersvillecs.moleculeandroid.graphics.BondObject;
 import com.millersvillecs.moleculeandroid.graphics.Camera;
 import com.millersvillecs.moleculeandroid.graphics.Color;
 import com.millersvillecs.moleculeandroid.graphics.GeometryUtils;
@@ -39,6 +40,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
 	private int autoRotateDirection = 1;
 
     ShaderProgram shader = null;
+    ShaderProgram bondShader = null;
     private GameLogic gameLogic;
     private Molecule currentMolecule;
     SceneNode moleculeNode;
@@ -96,9 +98,12 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         		
         		float angle = (float) Math.acos(directionA.dot(directionB));
         		final Vector3 rotationAxis = directionA.clone().cross(directionB).normalize();
+        		Color fromColor = new Color(from.color.getRed(), from.color.getGreen(), from.color.getBlue(), from.color.getAlpha());
+        		Color toColor = new Color(to.color.getRed(), to.color.getGreen(), to.color.getBlue(), to.color.getAlpha());
+        		
         		if(bond.type == Bond.SINGLE) {
-        			Mesh cylinder = GeometryUtils.createCylinderGeometry(0.08f, distance.length(), 20, from.color,to.color);
-            		SceneObject bondObject = new SceneObject(cylinder, shader);
+        			Mesh cylinder = GeometryUtils.createCylinderGeometry(0.08f, distance.length(), 20, fromColor,toColor);
+            		SceneObject bondObject = new BondObject(cylinder, bondShader, fromColor, toColor );
             		angle = (float) Math.toDegrees(angle);
             		bondObject.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
             		bondObject.setTranslation(new Vector3((float)from.x, (float)from.y, (float)from.z));
@@ -107,11 +112,11 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         			Mesh cylinder = GeometryUtils.createCylinderGeometry(0.08f, distance.length(), 20, from.color,to.color);
         			angle = (float) Math.toDegrees(angle);
         			
-            		SceneObject bondObject1 = new SceneObject(cylinder, shader);
+            		SceneObject bondObject1 = new BondObject(cylinder, bondShader, fromColor, toColor );
             		bondObject1.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
             		bondObject1.setTranslation(new Vector3((float)from.x+ 0.15f, (float)from.y + 0.15f, (float)from.z));
             		
-            		SceneObject bondObject2 = new SceneObject(cylinder, shader);
+            		SceneObject bondObject2 = new BondObject(cylinder, bondShader, fromColor, toColor );
             		bondObject2.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
             		bondObject2.setTranslation(new Vector3((float)from.x - 0.15f, (float)from.y - 0.15f, (float)from.z));
             		
@@ -121,15 +126,15 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         			Mesh cylinder = GeometryUtils.createCylinderGeometry(0.08f, distance.length(), 20, from.color,to.color);
         			angle = (float) Math.toDegrees(angle);
         			
-            		SceneObject bondObject1 = new SceneObject(cylinder, shader);
+            		SceneObject bondObject1 = new BondObject(cylinder, bondShader, fromColor, toColor );
             		bondObject1.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
             		bondObject1.setTranslation(new Vector3((float)from.x+ 0.25f, (float)from.y + 0.25f, (float)from.z));
             		
-            		SceneObject bondObject2 = new SceneObject(cylinder, shader);
+            		SceneObject bondObject2 = new BondObject(cylinder, bondShader, fromColor, toColor );
             		bondObject2.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
             		bondObject2.setTranslation(new Vector3((float)from.x - 0.25f, (float)from.y - 0.25f, (float)from.z));
             		
-            		SceneObject bondObject3 = new SceneObject(cylinder, shader);
+            		SceneObject bondObject3 = new BondObject(cylinder, bondShader, fromColor, toColor );
             		bondObject3.rotate(angle, rotationAxis.x ,rotationAxis.y, rotationAxis.z);
             		bondObject3.setTranslation(new Vector3((float)from.x, (float)from.y, (float)from.z));
             		
@@ -171,6 +176,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         AssetManager assetManager = context.getAssets();
         
         try {
+        	//create atom shader
             SparseArray<String> attributes = new SparseArray<String>();
             attributes.put(0, "in_position");
             attributes.put(1, "in_normal");
@@ -179,7 +185,16 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
             String sphereVertShader = FileUtil.convertStreamToString(assetManager.open("shaders/BasicShader.vert"));
             String sphereFragShader = FileUtil.convertStreamToString(assetManager.open("shaders/BasicShader.frag"));
             shader = new ShaderProgram(sphereVertShader, sphereFragShader, attributes);
-              
+            
+            //create bond shader
+            SparseArray<String> bondAttributes = new SparseArray<String>();
+            bondAttributes.put(0, "in_position");
+            bondAttributes.put(1, "in_normal");
+            bondAttributes.put(2, "in_color");
+            
+            String bondVertShader = FileUtil.convertStreamToString(assetManager.open("shaders/BondShader.vert"));
+            String bondFragShader = FileUtil.convertStreamToString(assetManager.open("shaders/BondShader.frag"));
+            bondShader = new ShaderProgram(bondVertShader, bondFragShader, bondAttributes);
         } catch (IOException e) {
             System.out.println("Could not create the shader");
         } catch (Exception e) {
