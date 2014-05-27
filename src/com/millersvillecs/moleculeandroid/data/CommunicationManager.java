@@ -50,6 +50,21 @@ public class CommunicationManager {
 		new ExecutePost(this).execute(request);
 	}
 	
+	public void register(String email, String password, String username) {
+		Request request = new Request();
+		request.url = this.REQUEST_HANDLER_URL;
+		try {
+			request.params.put("request_type", "register");
+			request.params.put("email", email);
+			request.params.put("password", password);
+			request.params.put("username", username);
+		} catch(JSONException e) {
+			e.printStackTrace();
+		}
+		
+		new ExecutePost(this).execute(request);
+	}
+	
 	public void availableGames(String auth) {
 		Request request = new Request();
 		request.url = this.REQUEST_HANDLER_URL;

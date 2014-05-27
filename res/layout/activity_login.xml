@@ -23,7 +23,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginBottom="30dp"
             android:layout_alignBottom="@id/header_image"
-            android:text="@string/header_text"
+            android:text="@string/register_header_text"
             android:textSize="32sp"
             android:textColor="#ffffff" />
     
@@ -48,14 +48,26 @@
 	
 	 <Button
 		 android:layout_width="fill_parent"
-		 android:layout_height="80dp"
-		 android:layout_marginLeft="100dp"
-		 android:layout_marginRight="100dp"
-		 android:layout_marginBottom="45dp"
-		 android:textSize="36sp"
+		 android:layout_height="60dp"
+		 android:layout_marginLeft="45dp"
+		 android:layout_marginRight="45dp"
+		 android:layout_marginBottom="20dp"
+		 android:textSize="30sp"
 		 android:text="@string/login"
 		 android:textColor="#ffffffff"
          android:background="@drawable/button_green"
 		 android:onClick="onLoginButton" />
+	 
+	 <Button
+         android:layout_width="fill_parent"
+         android:layout_height="60dp"
+         android:layout_marginLeft="45dp"
+         android:layout_marginRight="45dp"
+         android:layout_marginBottom="20dp"
+         android:textSize="30sp"
+         android:text="@string/register"
+         android:textColor="#ffffffff"
+         android:background="@drawable/button_blue"
+         android:onClick="onRegisterButton" />
 	 
 </LinearLayout>

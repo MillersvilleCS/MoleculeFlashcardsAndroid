@@ -4,7 +4,8 @@
     <string name="app_name">Molecule Flashcards</string>
     <string name="error_title">Error!</string>
     <string name="empty"></string>
-     <string name="header_text">Welcome to ExSciTecH!</string>
+    <string name="header_text">Welcome to ExSciTecH!</string>
+    <string name="action_login">Login</string>
     <string name="action_logout">Logout</string>
     <string name="play_button">Play</string>
     <string name="tutorial_button">Tutorial</string>
@@ -14,6 +15,12 @@
     <string name="email_hint">Email Address</string>
     <string name="password_hint">Password</string>
     <string name="login">Login</string>
+    <string name="register">Register</string>
+    
+    <!-- Register Screen -->
+    <string name="username_hint">Username</string>
+    <string name="password_confirm_hint">Confirm Password</string>
+    <string name="register_header_text">Sign in to ExSciTecH</string>
     
     <!-- Selection Screens -->
     <string name="image_accessibility_desc">Image of Selection</string>

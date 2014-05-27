@@ -23,7 +23,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginBottom="30dp"
             android:layout_alignBottom="@id/header_image"
-            android:text="@string/header_text"
+            android:text="@string/register_header_text"
             android:textSize="32sp"
             android:textColor="#ffffff" />
     
@@ -48,21 +48,33 @@
 			android:layout_width="300dp"
 			android:layout_height="wrap_content"
 			android:layout_alignParentLeft="true"
-			android:layout_marginTop="60dp"
+			android:layout_marginTop="80dp"
 			android:layout_marginLeft="20dp"
 			android:hint="@string/password_hint"
 			android:inputType="textPassword" />
 		
 		 <Button
 			 android:layout_width="160dp"
-			 android:layout_height="70dp"
+			 android:layout_height="50dp"
 			 android:layout_alignParentRight="true"
 			 android:layout_marginRight="20dp"
-			 android:layout_marginTop="30dp"
-			 android:textSize="36sp"
+			 android:layout_marginTop="20dp"
+			 android:textSize="30sp"
 			 android:text="@string/login"
 			 android:textColor="#ffffffff"
 	         android:background="@drawable/button_green"
 			 android:onClick="onLoginButton" />
+		 
+		 <Button
+             android:layout_width="160dp"
+             android:layout_height="50dp"
+             android:layout_alignParentRight="true"
+             android:layout_marginRight="20dp"
+             android:layout_marginTop="90dp"
+             android:textSize="30sp"
+             android:text="@string/register"
+             android:textColor="#ffffffff"
+             android:background="@drawable/button_blue"
+             android:onClick="onRegisterButton" />
     </RelativeLayout>
 </LinearLayout>
