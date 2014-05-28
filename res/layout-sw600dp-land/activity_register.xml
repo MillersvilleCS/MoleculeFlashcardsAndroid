@@ -7,7 +7,7 @@
     
     <EditText
         android:id="@+id/register_email"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
@@ -16,7 +16,7 @@
     
     <EditText
         android:id="@+id/register_username"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:hint="@string/username_hint"
@@ -24,7 +24,7 @@
     
     <EditText
         android:id="@+id/register_password"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:hint="@string/password_hint"
@@ -32,17 +32,15 @@
     
     <EditText
         android:id="@+id/register_password_confirm"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="70dp"
         android:hint="@string/password_confirm_hint"
         android:inputType="textPassword" />
      
      <Button
-         android:layout_width="fill_parent"
+         android:layout_width="300dp"
          android:layout_height="60dp"
-         android:layout_marginLeft="45dp"
-         android:layout_marginRight="45dp"
          android:layout_marginBottom="20dp"
          android:textSize="30sp"
          android:text="@string/register"
@@ -51,3 +49,4 @@
          android:onClick="onRegisterButton" />
      
 </LinearLayout>
+

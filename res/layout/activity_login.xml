@@ -23,7 +23,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginBottom="30dp"
             android:layout_alignBottom="@id/header_image"
-            android:text="@string/register_header_text"
+            android:text="@string/login_header_text"
             android:textSize="32sp"
             android:textColor="#ffffff" />
     

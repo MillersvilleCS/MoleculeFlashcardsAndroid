@@ -10,17 +10,28 @@
     <string name="play_button">Play</string>
     <string name="tutorial_button">Tutorial</string>
     <string name="credits_button">Credits</string>
+    <string name="warning">Warning!</string>
+    <string name="confirm_no_score">Your scores will not be saved unless you register. Play anyway?</string>
+    <string name="confirm_logout">, are you sure you want to log out?</string>
+    
+    <!-- Confirm Dialog -->
+    <string name="confirm_positive">Yes</string>
+    <string name="confirm_negative">No</string>
     
     <!-- Login Screen -->
     <string name="email_hint">Email Address</string>
     <string name="password_hint">Password</string>
     <string name="login">Login</string>
-    <string name="register">Register</string>
+    <string name="login_message">Logging in...</string>
+    <string name="login_header_text">Sign in to ExSciTecH</string>
     
     <!-- Register Screen -->
     <string name="username_hint">Username</string>
     <string name="password_confirm_hint">Confirm Password</string>
-    <string name="register_header_text">Sign in to ExSciTecH</string>
+    <string name="register">Register</string>
+    <string name="register_message">Sending Registration...</string>
+    <string name="register_header_text">Register now to save high scores!</string>
+    <string name="password_error">Password\'s do not match!</string>
     
     <!-- Selection Screens -->
     <string name="image_accessibility_desc">Image of Selection</string>

@@ -53,7 +53,7 @@ public class LoginActivity extends Activity implements OnCommunicationListener {
 	public void onLoginButton(View view) {
 		this.progress = new ProgressDialog(this);
 		this.progress.setCanceledOnTouchOutside(false);
-		this.progress.setMessage("Logging in...");
+		this.progress.setMessage(getString(R.string.login_message));
 		this.progress.show();
 		
 		EditText emailBox = (EditText)findViewById(R.id.email);

@@ -10,12 +10,15 @@ import android.view.View;
 
 import com.millersvillecs.moleculeandroid.data.FileHandler;
 import com.millersvillecs.moleculeandroid.data.MoleculeGamePreferences;
+import com.millersvillecs.moleculeandroid.helper.ConfirmDialog;
+import com.millersvillecs.moleculeandroid.helper.OnConfirmListener;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnConfirmListener {
 	
 	private String username = "", auth = "";
-	private boolean loggedIn = false;
+	private boolean loggedIn = false, askingLogout = false;
 	private Menu mainMenu;
+	private ConfirmDialog confirmPlay, confirmLogout;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,10 +62,12 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	        case R.id.action_logout:
-	        	FileHandler fileHandler = new FileHandler(this);
-	        	fileHandler.delete("credentials");
-	        	init();
-	        	setIcon();
+	        	this.confirmLogout = 
+	        		new ConfirmDialog(this, 
+									  getString(R.string.action_logout),
+									  this.username + getString(R.string.confirm_logout));
+	        	this.confirmLogout.setListener(this);
+	        	this.askingLogout = true;
 	            return true;
 	        case R.id.action_login:
 	        	Intent intent = new Intent(this, LoginActivity.class);
@@ -79,11 +84,14 @@ public class MainActivity extends Activity {
 	}
 	
 	public void onPlayButton(View view) {
-		Intent intent = new Intent(this, CategoryActivity.class);
-		MoleculeGamePreferences preferences = new MoleculeGamePreferences(this);
-		preferences.setUsername(this.username);
-		preferences.setAuth(this.auth);
-	    startActivity(intent);
+		if(this.loggedIn == false && this.confirmPlay == null) {
+			this.confirmPlay = new ConfirmDialog(this, 
+												 getString(R.string.warning),
+												 getString(R.string.confirm_no_score));
+			this.confirmPlay.setListener(this);
+		} else {
+			startCategoryActivity();
+		}
 	}
 	
 	public void onTutorialButton(View view) {
@@ -94,5 +102,34 @@ public class MainActivity extends Activity {
 	public void onCreditsButton(View view) {
 		Intent intent = new Intent(this, CreditsActivity.class);
 		startActivity(intent);
+	}
+	
+	@Override
+	public void onConfirmResponse(int which) {
+		if(this.askingLogout) {
+			this.askingLogout = false;
+			if(which == ConfirmDialog.POSITIVE) {
+				logout();
+			}
+		} else {
+			if(which == ConfirmDialog.POSITIVE) {
+				startCategoryActivity();
+			}
+		}
+	}
+	
+	private void startCategoryActivity() {
+		Intent intent = new Intent(this, CategoryActivity.class);
+		MoleculeGamePreferences preferences = new MoleculeGamePreferences(this);
+		preferences.setUsername(this.username);
+		preferences.setAuth(this.auth);
+	    startActivity(intent);
+	}
+	
+	private void logout() {
+		FileHandler fileHandler = new FileHandler(this);
+    	fileHandler.delete("credentials");
+    	init();
+    	setIcon();
 	}
 }
