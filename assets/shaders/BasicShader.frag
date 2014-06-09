@@ -1,12 +1,13 @@
 
 varying vec4 pass_color;
 varying vec4 pass_normal;
+varying vec3 pass_lightDirection;
 
 void main(void) {
 	
 	float intensity;
 	
-	intensity = dot(vec3(1, 0, 0), pass_normal.xyz);
+	intensity = dot(pass_lightDirection, pass_normal.xyz);
 	
 	vec4 magnitudeColor = vec4(pass_color);
 	vec3 normalized = normalize(vec3(pass_color.xyz));
