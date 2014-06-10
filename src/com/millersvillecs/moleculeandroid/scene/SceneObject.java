@@ -7,9 +7,6 @@ import com.millersvillecs.moleculeandroid.graphics.Mesh;
 import com.millersvillecs.moleculeandroid.graphics.opengles.ShaderProgram;
 import com.millersvillecs.moleculeandroid.util.math.Vector3;
 
-/**
- * Created by Will on 2/7/14.
- */
 public class SceneObject extends SceneNode {
 
     protected Mesh mesh;

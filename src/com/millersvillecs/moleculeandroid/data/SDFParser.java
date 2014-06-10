@@ -2,12 +2,6 @@ package com.millersvillecs.moleculeandroid.data;
 
 import java.util.Scanner;
 
-/*
- * Reference: http://www.epa.gov/ncct/dsstox/MoreonSDF.html
- *
- * Note: Commented code is a version using StringBuilders instead of Scanners but quick tests did not show a noticeable
- *       difference between the two.
- */
 public class SDFParser {
     private static int HEADER_INDEX = 5;
 
@@ -32,80 +26,28 @@ public class SDFParser {
     }
 
     private static Atom parseAtomLine(String line) {
-        Atom atom = new Atom();
+        
         Scanner scanner  = new Scanner(line);
 
-        atom.x = scanner.nextDouble();
-        atom.y = scanner.nextDouble();
-        atom.z = scanner.nextDouble();
-        atom.setType(scanner.nextLine().substring(1, 4));
+        float x = (float) scanner.nextDouble();
+        float y = (float) scanner.nextDouble();
+        float z = (float) scanner.nextDouble();
+        String type = scanner.nextLine().substring(1, 4);
         
         scanner.close();
 
-        return atom;
+        return new Atom(x, y, z, type);
     }
     
-    private static Bond parseBondLine(String line) {
-        Bond bond = new Bond();
+    private static Bond parseBondLine(String line) {;
         Scanner scanner = new Scanner(line);
 
-        bond.from = scanner.nextInt() - 1;
-        bond.to = scanner.nextInt() - 1;
-        bond.type = scanner.nextInt();
+        int from = scanner.nextInt() - 1;
+        int to = scanner.nextInt() - 1;
+        int type = scanner.nextInt();
         
         scanner.close();
 
-        return bond;
+        return new Bond(from, to, type);
     }
-
-    /*
-    private static int nextInt(StringBuilder s) {
-        StringBuilder value = new StringBuilder();
-        boolean found = false;
-        for(int i = 0; i < s.length(); i++) {
-            if(s.charAt(i) == ' ') {
-                if(found) {
-                    s.delete(0, i);
-                    break;
-                }
-            } else {
-                value.append(s.charAt(i));
-                found = true;
-            }
-        }
-
-        return Integer.parseInt(value.toString());
-    }
-
-    private static double nextDouble(StringBuilder s) {
-        StringBuilder value = new StringBuilder();
-        boolean found = false;
-        for(int i = 0; i < s.length(); i++) {
-            if(s.charAt(i) == ' ') {
-                if(found) {
-                    s.delete(0, i);
-                    break;
-                }
-            } else {
-                value.append(s.charAt(i));
-                found = true;
-            }
-        }
-
-        return Double.parseDouble(value.toString());
-    }
-
-    private static char nextChar(StringBuilder s) {
-        for(int i = 0; i < s.length(); i++) {
-            if(s.charAt(i) != ' ') {
-                char c = s.charAt(i);
-                s.delete(0, i);
-                return c;
-            }
-        }
-
-        return ' ';
-    }
-
-    */
 }
