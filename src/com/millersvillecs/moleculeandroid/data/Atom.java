@@ -25,7 +25,7 @@ public class Atom {
     }
     
     public void setType(String type) {
-    	this.type = type.replace(" ", "").replace("\r\n", "").replace("\n", "");
+    	this.type = type.replace(" ", "").replace("\r\n", "").replace("\n", "").toUpperCase();
     }
     
     public String getType() {
