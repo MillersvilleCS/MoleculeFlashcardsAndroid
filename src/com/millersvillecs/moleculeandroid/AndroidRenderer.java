@@ -174,7 +174,6 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     
     public void manuallyRotateMolecule(float amountX, float amountY) {
     	if(this.moleculeNode != null && !this.changingMolecule) {
-    		System.out.println(amountX);
     		if(amountX < 0) {
     			autoRotateDirection = -1;
     		} else {
