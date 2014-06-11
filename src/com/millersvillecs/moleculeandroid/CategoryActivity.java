@@ -24,9 +24,9 @@ import com.millersvillecs.moleculeandroid.data.FileHandler;
 import com.millersvillecs.moleculeandroid.data.Molecule;
 import com.millersvillecs.moleculeandroid.data.MoleculeGamePreferences;
 import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
+import com.millersvillecs.moleculeandroid.helper.AlertDialog;
 import com.millersvillecs.moleculeandroid.helper.CategoryBaseAdapter;
 import com.millersvillecs.moleculeandroid.helper.CategoryItem;
-import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
 
 public class CategoryActivity extends Activity implements OnItemClickListener, 
 														  OnDismissListener, OnCommunicationListener {
@@ -83,7 +83,8 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 			
 			} catch (JSONException e) {
 				e.printStackTrace();
-				new ErrorDialog(getFragmentManager(), "Could not restore state.").show();
+				new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
+						"Could not restore state.").show();
 			}
 		}
 	}
@@ -116,7 +117,8 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 			}
 		} catch(JSONException e) {
 			e.printStackTrace();
-			new ErrorDialog(getFragmentManager(), "Could not parse games.").show();
+			new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
+					"Could not parse games.").show();
 		}
 		
 		
@@ -154,18 +156,20 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 				this.comm.downloadImage(this.urls.remove(0), 
 				                        this.fileHandler.createFileTemp(ids.get(0) + ".png"));
 			} else {
-				new ErrorDialog(getFragmentManager(), response.getString("error")).show();
+				new AlertDialog(getFragmentManager(), getString(R.string.error_title),  response.getString("error")).show();
 				this.wantedDismiss = true;
 		        this.progress.dismiss();
 			}
 		} catch(JSONException e) {
 			e.printStackTrace();
-			new ErrorDialog(getFragmentManager(), "Invalid Server Response").show();
+			new AlertDialog(getFragmentManager(), getString(R.string.error_title),  
+					"Invalid Server Response").show();
 			this.wantedDismiss = true;
 	        this.progress.dismiss();
 		} catch(NullPointerException e) {
 		    e.printStackTrace();
-            new ErrorDialog(getFragmentManager(), "Could not connect to network").show();
+            new AlertDialog(getFragmentManager(), getString(R.string.error_title),  
+            		"Could not connect to network").show();
             this.wantedDismiss = true;
             this.progress.dismiss();
 		}
@@ -184,7 +188,8 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
 		        this.urls.clear();
 		        this.wantedDismiss = true;
                 this.progress.dismiss();
-                new ErrorDialog(getFragmentManager(), "Could not connect to network!").show();
+                new AlertDialog(getFragmentManager(), getString(R.string.error_title),  
+                		"Could not connect to network!").show();
                 return;
 		    }
 		} else {
@@ -209,7 +214,8 @@ public class CategoryActivity extends Activity implements OnItemClickListener,
             										  category.getInt("ID"));
             }
         } catch(JSONException e) {
-        	new ErrorDialog(getFragmentManager(), "Invalid Categories").show();
+        	new AlertDialog(getFragmentManager(), getString(R.string.error_title),  
+        						"Invalid Categories").show();
         	if(this.progress != null) {
         		this.wantedDismiss = true;
     	        this.progress.dismiss();

@@ -15,7 +15,7 @@ import com.millersvillecs.moleculeandroid.data.CommunicationManager;
 import com.millersvillecs.moleculeandroid.data.FileHandler;
 import com.millersvillecs.moleculeandroid.data.Molecule;
 import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
-import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
+import com.millersvillecs.moleculeandroid.helper.AlertDialog;
 
 public class RegisterActivity extends Activity implements OnCommunicationListener {
 	
@@ -68,7 +68,7 @@ public class RegisterActivity extends Activity implements OnCommunicationListene
 		} else {
 			this.passwordField.setText("");
 			this.passwordConfirmField.setText("");
-			new ErrorDialog(getFragmentManager(), getString(R.string.password_error)).show();
+			new AlertDialog(getFragmentManager(), getString(R.string.error_title), getString(R.string.password_error)).show();
 		}
 	}
 
@@ -87,14 +87,17 @@ public class RegisterActivity extends Activity implements OnCommunicationListene
 				setResult(RESULT_OK);
 				finish();
 			} else {
-				new ErrorDialog(getFragmentManager(), response.getString("error")).show();
+				new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
+						response.getString("error")).show();
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
-			new ErrorDialog(getFragmentManager(), "Invalid Server Response").show();
+			new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
+					"Invalid Server Response").show();
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-			new ErrorDialog(getFragmentManager(), "Invalid Server Response").show();
+			new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
+					"Invalid Server Response").show();
 		}
 	}
 

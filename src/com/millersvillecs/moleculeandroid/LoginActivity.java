@@ -3,12 +3,6 @@ package com.millersvillecs.moleculeandroid;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.millersvillecs.moleculeandroid.data.CommunicationManager;
-import com.millersvillecs.moleculeandroid.data.FileHandler;
-import com.millersvillecs.moleculeandroid.data.Molecule;
-import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
-import com.millersvillecs.moleculeandroid.helper.ErrorDialog;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,6 +11,12 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
+import com.millersvillecs.moleculeandroid.data.CommunicationManager;
+import com.millersvillecs.moleculeandroid.data.FileHandler;
+import com.millersvillecs.moleculeandroid.data.Molecule;
+import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
+import com.millersvillecs.moleculeandroid.helper.AlertDialog;
 
 public class LoginActivity extends Activity implements OnCommunicationListener {
 	
@@ -80,14 +80,17 @@ public class LoginActivity extends Activity implements OnCommunicationListener {
 				fileHandler.write("credentials", data);
 				finish();
 			} else {
-				new ErrorDialog(getFragmentManager(), response.getString("error")).show();
+				new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
+						response.getString("error")).show();
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
-			new ErrorDialog(getFragmentManager(), "Invalid Server Response").show();
+			new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
+					"Invalid Server Response").show();
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-			new ErrorDialog(getFragmentManager(), "Invalid Server Response").show();
+			new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
+					"Invalid Server Response").show();
 		}
 	}
 

@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.millersvillecs.moleculeandroid.data.FileHandler;
 import com.millersvillecs.moleculeandroid.data.MoleculeGamePreferences;
+import com.millersvillecs.moleculeandroid.helper.AlertDialog;
 import com.millersvillecs.moleculeandroid.helper.ConfirmDialog;
 import com.millersvillecs.moleculeandroid.helper.OnConfirmListener;
 
@@ -19,16 +20,27 @@ public class MainActivity extends Activity implements OnConfirmListener {
 	private boolean loggedIn = false, askingLogout = false;
 	private Menu mainMenu;
 	private ConfirmDialog confirmPlay, confirmLogout;
+	private FileHandler fileHandler;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		init();
+		if(!this.loggedIn) {
+			String[] welcome = this.fileHandler.read("welcome");
+			if(welcome == null) {
+				String[] empty = {""};
+				this.fileHandler.write("welcome", empty);
+				new AlertDialog(getFragmentManager(),
+								getString(R.string.welcome_title),
+								getString(R.string.welcome_message)).show();
+			}
+		}
 		setContentView(R.layout.activity_main);
 	}
 	
 	private void init() {
-		FileHandler fileHandler = new FileHandler(this);
-		String[] credentials = fileHandler.read("credentials");
+		this.fileHandler = new FileHandler(this);
+		String[] credentials = this.fileHandler.read("credentials");
 		this.loggedIn = credentials != null;
 		if(loggedIn) {
 			this.username = credentials[0];
@@ -127,7 +139,7 @@ public class MainActivity extends Activity implements OnConfirmListener {
 	}
 	
 	private void logout() {
-		FileHandler fileHandler = new FileHandler(this);
+		this.fileHandler = new FileHandler(this);
     	fileHandler.delete("credentials");
     	init();
     	setIcon();

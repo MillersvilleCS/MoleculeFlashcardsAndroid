@@ -13,6 +13,13 @@
     <string name="warning">Warning!</string>
     <string name="confirm_no_score">Your scores will not be saved unless you register. Play anyway?</string>
     <string name="confirm_logout">, are you sure you want to log out?</string>
+    <string name="welcome_title">Welcome!</string>
+    <string name="welcome_message">
+        Thanks for downloading our app! Remember to log in or register by clicking the icon
+        in the upper right-hand corner of the screen. If you would like to add your own question
+        sets, just register, then visit the ExSciTecH website and use our question set editor.
+        Have fun!
+    </string>
     
     <!-- Confirm Dialog -->
     <string name="confirm_positive">Yes</string>

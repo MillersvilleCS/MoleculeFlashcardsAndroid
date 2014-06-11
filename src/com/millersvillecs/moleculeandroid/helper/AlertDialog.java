@@ -4,20 +4,22 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 
-public class ErrorDialog {
+public class AlertDialog {
 	
 	private FragmentManager fragmentManager;
-	private String message;
+	private String title, message;
 	
-	public ErrorDialog(FragmentManager fragmentManager, String message) {
+	public AlertDialog(FragmentManager fragmentManager, String title, String message) {
 		this.fragmentManager = fragmentManager;
+		this.title = title;
 		this.message = message;
 	}
 	
 	public void show() {
-		DialogFragment error = new ErrorDialogFragment();
+		DialogFragment error = new AlertDialogFragment();
 		Bundle args = new Bundle();
 		args.putString("message", this.message);
+		args.putString("title", this.title);
 		error.setArguments(args);
 	    error.show(this.fragmentManager, "error");
 	}
