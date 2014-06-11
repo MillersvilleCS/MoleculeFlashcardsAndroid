@@ -24,7 +24,7 @@ public class Atom {
     	this.radius = radius;
     }
     
-    public void setType(String type) {
+	public void setType(String type) {
     	this.type = type.replace(" ", "").replace("\r\n", "").replace("\n", "").toUpperCase();
     }
     

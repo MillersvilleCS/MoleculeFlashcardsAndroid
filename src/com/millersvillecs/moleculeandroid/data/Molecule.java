@@ -27,8 +27,4 @@ public class Molecule {
     public void addBond(Bond bond) {
         this.bonds.add(bond);
     }
-
-    public void constructGeometry() {
-        //TODO
-    }
 }
