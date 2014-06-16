@@ -75,6 +75,7 @@ public class ShaderProgram {
 	    if (compileStatus[0] == 0)
 	    {
 	        GLES20.glDeleteShader(handle);
+	        System.out.println(GLES20.glGetShaderInfoLog(handle));
 	        throw new GraphicsException("Failed to create Shader");
 	    }
 

@@ -69,7 +69,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         	if(moleculeNode != null) {
             	scene.detach(moleculeNode);
             }
-        	moleculeNode = MoleculeGeometryConstructor.construct(mol.getAtoms(), mol.getBonds(), 16, 40, shader, bondShader, colorMap);
+        	moleculeNode = MoleculeGeometryConstructor.construct(mol.getAtoms(), mol.getBonds(), 16, 40, shader, bondShader, colorMap, radiusMap);
         	
         	currentMolecule = mol;
         	scene.attach(moleculeNode);

@@ -1,4 +1,4 @@
-
+precision mediump float;
 varying vec4 pass_color;
 varying vec4 pass_normal;
 varying vec3 pass_lightDirection;
@@ -12,9 +12,9 @@ void main(void) {
 	vec4 magnitudeColor = vec4(pass_color);
 	vec3 normalized = normalize(vec3(pass_color.xyz));
 	if( (magnitudeColor.x + magnitudeColor.y + magnitudeColor.z) * 0.333 > 0.73) {
-		magnitudeColor = vec4(1,1,1,1);
+		magnitudeColor = vec4(1.0, 1.0, 1.0, 1.0);
 	} else {
-		magnitudeColor = vec4(normalized, 1);
+		magnitudeColor = vec4(normalized, 1.0);
 	}
 	
 	vec4 color;
