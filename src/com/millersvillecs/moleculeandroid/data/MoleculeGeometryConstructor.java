@@ -17,7 +17,7 @@ public class MoleculeGeometryConstructor {
 	public static SceneNode construct(ArrayList<Atom> atoms, ArrayList<Bond> bonds,int atomQuality, int bondQuality, ShaderProgram atomShader,  ShaderProgram bondShader, Map<String, Color> colorAtlas,Map<String, Float> radiusMap) {
     	SceneNode moleculeNode = new SceneNode();
     	for(Atom atom: atoms) {
-    		Color atomColor =colorAtlas.get(atom.getType());
+    		Color atomColor = colorAtlas.get(atom.getType());
     		Mesh sphere = GeometryUtils.createSphereGeometry(((float)radiusMap.get(atom.getType()) / 4), atomQuality, atomQuality, atomColor);
     		SceneObject atomObject = new SceneObject(sphere, atomShader);
     		atomObject.translate(atom.getPosition());

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -21,7 +22,6 @@ import com.millersvillecs.moleculeandroid.graphics.opengles.ShaderProgram;
 import com.millersvillecs.moleculeandroid.scene.Scene;
 import com.millersvillecs.moleculeandroid.scene.SceneNode;
 import com.millersvillecs.moleculeandroid.util.FileUtil;
-import com.millersvillecs.moleculeandroid.util.math.Vector2;
 
 public class AndroidRenderer implements GLSurfaceView.Renderer {
 	
@@ -77,7 +77,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         }
         if(moleculeNode != null && !manuallyEditing) {
         	float rotChange = deltaTime / 20f;
-        	moleculeNode.rotate(rotChange * autoRotateDirection, 0, 1, 0);
+        	moleculeNode.rotateWorld(rotChange * autoRotateDirection, 0, 1, 0);
         }
         scene.render(0, camera); // Delta Time Always 0 ???
         
@@ -179,11 +179,9 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     		} else {
     			autoRotateDirection = 1;
     		}
-    		Vector2 rotation = new Vector2(amountX,amountY);
-    		rotation.normalize();
     		if( Math.abs(amountX) < 40){
-    			this.moleculeNode.rotate(amountX, 0, 1, 0);
-    			//this.moleculeNode.rotate(amountY, 1, 0, 0);
+    			this.moleculeNode.rotateWorld(amountX, 0, 1, 0);
+    			this.moleculeNode.rotate(amountY, 1, 0, 0);
     		}
     	}
     }

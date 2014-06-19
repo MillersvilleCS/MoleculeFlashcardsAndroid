@@ -12,7 +12,7 @@ import com.millersvillecs.moleculeandroid.util.math.Vector3;
 public class SceneNode extends Node<SceneNode> {
 
 	protected float sceneTime;
-	protected Matrix4f modelMatrix, translationMatrix, rotationMatrix;
+	protected Matrix4f modelMatrix, translationMatrix, rotationMatrix, rotationWorldMatrix;
 	
 	private List<IBehavior> behaviors = new ArrayList<IBehavior>();
 	private SceneNode parent = null;
@@ -25,6 +25,7 @@ public class SceneNode extends Node<SceneNode> {
 		modelMatrix = new Matrix4f();
 		translationMatrix = new Matrix4f();
 		rotationMatrix = new Matrix4f();
+		rotationWorldMatrix = new Matrix4f();
 		setTranslation(translation);
 	}
 	
@@ -70,15 +71,24 @@ public class SceneNode extends Node<SceneNode> {
 		translationMatrix.translate(x, y, z);
 		return this;
 	}
-
+	
 	public SceneNode rotate(float angle, float x, float y, float z) {
 		rotationMatrix.rotate(angle, x, y, z);
 		return this;
 	}
 	
-	public Matrix4f getModel() {
-		modelMatrix.load(translationMatrix);
+	public SceneNode rotateWorld(float angle, float x, float y, float z) {
+		rotationWorldMatrix.rotate(angle, x, y, z);
+		return this;
+	}
+	
+	public Matrix4f getModel() {		
+		modelMatrix.load(rotationWorldMatrix);
+		modelMatrix.multiply(translationMatrix);
 		modelMatrix.multiply(rotationMatrix);
+		
+		//modelMatrix.load(translationMatrix);
+		//modelMatrix.multiply(rotationMatrix);
 		if(parent == null) {
 			return modelMatrix;
 		} else {	

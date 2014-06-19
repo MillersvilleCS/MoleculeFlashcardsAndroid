@@ -52,6 +52,10 @@ public class Atom {
     	this.radius = radius;
     }
     
+    public void setPosition(Vector3 position) {
+    	this.position = position;
+    }
+    
     public float getX() {
     	return position.x;
     }
