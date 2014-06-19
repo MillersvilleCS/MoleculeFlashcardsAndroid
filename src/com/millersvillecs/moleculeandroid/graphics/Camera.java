@@ -60,4 +60,8 @@ public class Camera {
     	Matrix.multiplyMM(temp, 0, projection, 0, view, 0);
     	return temp;
     }
+    
+    public Vector3 getTranslation() {
+    	return translation;
+    }
 }

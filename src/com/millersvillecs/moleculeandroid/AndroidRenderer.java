@@ -162,12 +162,13 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     
     public void zoomMolecule(float amount) {
     	if(this.moleculeNode != null && !this.changingMolecule) {
-    		if(amount < 0 && this.moleculeNode.getZ() < -3f) {
+    		if(amount < 0 && this.camera.getTranslation().z > -7f) {
     			//do nothing
-    		} else if(amount > 0 && this.moleculeNode.getZ() > 10f) {
+    		} else if(amount > 0 && this.camera.getTranslation().z < -15f) {
     			//do nothing
     		} else {
-    			this.moleculeNode.translate(0, 0, amount);
+    			this.camera.translate(0, 0, -amount);
+    			camera.lookAt(0, 0, 1);
     		}
     	}
     }
@@ -181,7 +182,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     		}
     		if( Math.abs(amountX) < 40){
     			this.moleculeNode.rotateWorld(amountX, 0, 1, 0);
-    			this.moleculeNode.rotate(amountY, 1, 0, 0);
+    			this.moleculeNode.rotateWorld(-amountY, 1, 0, 0);
     		}
     	}
     }

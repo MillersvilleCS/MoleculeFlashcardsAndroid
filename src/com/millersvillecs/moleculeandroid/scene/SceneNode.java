@@ -78,7 +78,11 @@ public class SceneNode extends Node<SceneNode> {
 	}
 	
 	public SceneNode rotateWorld(float angle, float x, float y, float z) {
-		rotationWorldMatrix.rotate(angle, x, y, z);
+		Matrix4f newMatrix = new Matrix4f();
+		newMatrix.loadIdentity();
+		newMatrix.rotate(angle, x, y, z);
+		newMatrix.multiply(rotationWorldMatrix);
+		rotationWorldMatrix = newMatrix;
 		return this;
 	}
 	
