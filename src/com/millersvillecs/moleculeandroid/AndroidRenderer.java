@@ -77,7 +77,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         }
         if(moleculeNode != null && !manuallyEditing) {
         	float rotChange = deltaTime / 20f;
-        	moleculeNode.rotateWorld(rotChange * autoRotateDirection, 0, 1, 0);
+        	//moleculeNode.rotateWorld(rotChange * autoRotateDirection, 0, 1, 0);
         }
         scene.render(0, camera); // Delta Time Always 0 ???
         

@@ -91,8 +91,9 @@ public class GeometryUtils {
 				float y = radius * (float) Math.cos(theta)
 						* (float) Math.sin(phi);
 				float z = radius * (float) Math.sin(theta);
-
-				Vector3 position = new Vector3(x, z, y);
+				
+				//was x z y
+				Vector3 position = new Vector3(x, y, z);
 				positions.add(position);
 				
 				normals.add(new Vector3(x, y, z).normalize());

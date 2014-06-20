@@ -131,4 +131,8 @@ public class Vector3 implements Cloneable {
 	public Float[] getElements() {
 		return new Float[] { x, y, z };
 	}
+	
+	public String toString() {
+		return x + " " + y + " " + z;
+	}
 }
