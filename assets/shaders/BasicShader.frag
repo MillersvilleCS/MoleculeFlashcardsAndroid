@@ -7,7 +7,7 @@ void main(void) {
 	
 	float intensity;
 	
-	intensity = max(dot(pass_normal, pass_lightDirection), 0.0);
+	intensity = dot(pass_normal, pass_lightDirection);
 	
 	vec4 magnitudeColor = pass_color;
 	vec3 normalized = normalize(vec3(pass_color));
@@ -24,6 +24,8 @@ void main(void) {
 		color = vec4(magnitudeColor.x * 0.9, magnitudeColor.y * 0.9, magnitudeColor.z * 0.9, 1.0);
 	else if (intensity > 0.25)
 		color = vec4(magnitudeColor.x * 0.8, magnitudeColor.y* 0.8, magnitudeColor.z* 0.8, 1.0);
+	else if (intensity < 0.05)
+        color = vec4(0.0, 0.0, 0.0, 1.0);
 	else
 		color = vec4(magnitudeColor.x* 0.7, magnitudeColor.y* 0.7, magnitudeColor.z* 0.7, 1.0);
 	gl_FragColor = color;

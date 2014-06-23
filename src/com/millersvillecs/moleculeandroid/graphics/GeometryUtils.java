@@ -85,13 +85,13 @@ public class GeometryUtils {
 			for (int horizontalIt = 0; horizontalIt < numVerticesPerRow; horizontalIt++) {
 				phi = horizontalAngularStride * horizontalIt;
 
-				// position
+				// position - switched y and z
 				float x = radius * (float) Math.cos(theta)
 						* (float) Math.cos(phi);
-				float y = radius * (float) Math.cos(theta)
+				float y = radius * (float) Math.sin(theta);
+				float z = radius * (float) Math.cos(theta)
 						* (float) Math.sin(phi);
-				float z = radius * (float) Math.sin(theta);
-				
+
 				//was x z y
 				Vector3 position = new Vector3(x, y, z);
 				positions.add(position);

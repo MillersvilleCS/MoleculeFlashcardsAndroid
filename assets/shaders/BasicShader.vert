@@ -12,7 +12,7 @@ varying vec3 pass_normal;
 varying vec3 pass_lightDirection;
 
 void main(void) {
-	pass_lightDirection = vec3(0, 1, 0);
+	pass_lightDirection = vec3(1, 0, 0);
 	gl_Position = u_projection * u_view * u_model * in_position;
 	
 	pass_color = in_color;
