@@ -1,6 +1,7 @@
 package com.millersvillecs.moleculeandroid;
 
 import java.io.IOException;
+import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -98,6 +99,16 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ZERO);
+        
+        IntBuffer range = IntBuffer.allocate(2);
+		IntBuffer precision = IntBuffer.allocate(1);
+		GLES20.glGetShaderPrecisionFormat(GLES20.GL_FRAGMENT_SHADER, 
+        								  GLES20.GL_LOW_FLOAT, range, precision);
+		
+		System.out.println(range.get(0));
+		System.out.println(range.get(1));
+		
+		System.out.println(precision.get());
        
         AssetManager assetManager = context.getAssets();
         
