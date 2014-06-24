@@ -4,8 +4,8 @@ uniform mat4 u_view;
 uniform mat4 u_model;
 
 attribute vec4 in_position;
-attribute vec4 in_normal;
 attribute vec4 in_color;
+attribute vec3 in_normal;
 
 varying vec4 pass_color;
 varying vec3 pass_normal;
@@ -17,12 +17,8 @@ void main(void) {
 	
 	pass_color = in_color;
 	
-	mat3 normalMatrix = mat3(u_model);
-	normalMatrix = inverse(normalMatrix);
+	mat3 normalMatrix = mat3(inverse(u_model));
 	normalMatrix = transpose(normalMatrix);
 	
-	pass_normal = normalMatrix * in_normal.xyz;
-	pass_normal = normalize(pass_normal);
-	
-	//pass_normal = in_normal.xyz;
+	pass_normal = normalMatrix * in_normal;
 }

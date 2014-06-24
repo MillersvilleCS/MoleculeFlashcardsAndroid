@@ -5,28 +5,14 @@ varying vec3 pass_lightDirection;
 
 void main(void) {
 	
-	float intensity;
-	
-	intensity = dot(pass_normal, pass_lightDirection);
-	
-	vec4 magnitudeColor = pass_color;
-	vec3 normalized = normalize(vec3(pass_color));
-	if( (magnitudeColor.x + magnitudeColor.y + magnitudeColor.z) * 0.333 > 0.73) {
-		magnitudeColor = vec4(1.0, 1.0, 1.0, 1.0);
-	} else {
-		magnitudeColor = vec4(normalized, 1.0);
-	}
-	
-	vec4 color;
-	if (intensity > 0.95)
-		color = vec4(magnitudeColor.x, magnitudeColor.y, magnitudeColor.z, 1.0);
-	else if (intensity > 0.5)
-		color = vec4(magnitudeColor.x * 0.9, magnitudeColor.y * 0.9, magnitudeColor.z * 0.9, 1.0);
-	else if (intensity > 0.25)
-		color = vec4(magnitudeColor.x * 0.8, magnitudeColor.y* 0.8, magnitudeColor.z* 0.8, 1.0);
-	else if (intensity < 0.05)
-        color = vec4(0.0, 0.0, 0.0, 1.0);
-	else
-		color = vec4(magnitudeColor.x* 0.7, magnitudeColor.y* 0.7, magnitudeColor.z* 0.7, 1.0);
-	gl_FragColor = color;
+	float lambertCoef = max(dot(pass_normal, pass_lightDirection), 0.0);
+        
+    vec3 diffuse      = vec3(0.7, 0.7, 0.7);
+    vec3 ambientColor = vec3(0.6, 0.6, 0.6);
+
+    vec3 lightWeighting = ambientColor + diffuse * lambertCoef;
+
+    vec3 color = pass_color.xyz * lightWeighting;
+
+    gl_FragColor = vec4(color, 1.0);
 }

@@ -1,7 +1,6 @@
 package com.millersvillecs.moleculeandroid;
 
 import java.io.IOException;
-import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -70,7 +69,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         	if(moleculeNode != null) {
             	scene.detach(moleculeNode);
             }
-        	moleculeNode = MoleculeGeometryConstructor.construct(mol.getAtoms(), mol.getBonds(), 16, 40, shader, bondShader, colorMap, radiusMap);
+        	moleculeNode = MoleculeGeometryConstructor.construct(mol.getAtoms(), mol.getBonds(), 12, 6, shader, bondShader, colorMap, radiusMap);
         	
         	currentMolecule = mol;
         	scene.attach(moleculeNode);
@@ -78,7 +77,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         }
         if(moleculeNode != null && !manuallyEditing) {
         	float rotChange = deltaTime / 20f;
-        	//moleculeNode.rotateWorld(rotChange * autoRotateDirection, 0, 1, 0);
+        	moleculeNode.rotateWorld(rotChange * autoRotateDirection, 0, 1, 0);
         }
         scene.render(0, camera); // Delta Time Always 0 ???
         
@@ -99,16 +98,6 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ZERO);
-        
-        IntBuffer range = IntBuffer.allocate(2);
-		IntBuffer precision = IntBuffer.allocate(1);
-		GLES20.glGetShaderPrecisionFormat(GLES20.GL_FRAGMENT_SHADER, 
-        								  GLES20.GL_LOW_FLOAT, range, precision);
-		
-		System.out.println(range.get(0));
-		System.out.println(range.get(1));
-		
-		System.out.println(precision.get());
        
         AssetManager assetManager = context.getAssets();
         
