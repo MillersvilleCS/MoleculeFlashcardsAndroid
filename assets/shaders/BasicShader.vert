@@ -2,6 +2,7 @@ precision highp float;
 uniform mat4 u_projection;
 uniform mat4 u_view;
 uniform mat4 u_model;
+uniform mat3 u_normalMatrix;
 
 attribute vec4 in_position;
 attribute vec4 in_color;
@@ -17,8 +18,5 @@ void main(void) {
 	
 	pass_color = in_color;
 	
-	mat3 normalMatrix = mat3(inverse(u_model));
-	normalMatrix = transpose(normalMatrix);
-	
-	pass_normal = normalMatrix * in_normal;
+	pass_normal = u_normalMatrix * in_normal;
 }
