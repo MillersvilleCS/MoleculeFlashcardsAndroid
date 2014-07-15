@@ -52,23 +52,23 @@
             android:layout_alignParentLeft="true"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="15dp"
+            android:textSize="24sp"
+            android:text="@string/tutorial_button"
+            android:textColor="#ffffffff"
+            android:background="@drawable/button_blue"
+            android:onClick="onTutorialButton" />
+	    
+	    <Button
+            android:layout_height="70dp"
+            android:layout_width="200dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="235dp"
             android:layout_marginBottom="30dp"
             android:textSize="24sp"
             android:text="@string/credits_button"
             android:textColor="#ffffffff"
             android:background="@drawable/button_blue"
             android:onClick="onCreditsButton" />
-	 
-		<Button
-			android:layout_height="70dp"
-			android:layout_width="200dp"
-			android:layout_alignParentLeft="true"
-			android:layout_marginTop="30dp"
-			android:layout_marginLeft="235dp"
-			android:textSize="24sp"
-			android:text="@string/tutorial_button"
-			android:textColor="#ffffffff"
-	        android:background="@drawable/button_blue"
-			android:onClick="onTutorialButton" />
 	</RelativeLayout>
 </LinearLayout>

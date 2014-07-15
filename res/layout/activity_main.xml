@@ -50,20 +50,20 @@
             android:layout_alignParentLeft="true"
             android:layout_margin="30dp"
             android:textSize="24sp"
+            android:text="@string/tutorial_button"
+            android:textColor="#ffffffff"
+            android:background="@drawable/button_blue"
+            android:onClick="onTutorialButton" />
+	    
+	    <Button
+            android:layout_height="70dp"
+            android:layout_width="120dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="30dp"
+            android:textSize="24sp"
             android:text="@string/credits_button"
             android:textColor="#ffffffff"
             android:background="@drawable/button_blue"
             android:onClick="onCreditsButton" />
-	 
-		<Button
-			android:layout_height="70dp"
-			android:layout_width="120dp"
-			android:layout_alignParentRight="true"
-			android:layout_margin="30dp"
-			android:textSize="24sp"
-			android:text="@string/tutorial_button"
-			android:textColor="#ffffffff"
-	        android:background="@drawable/button_blue"
-			android:onClick="onTutorialButton" />
 	</RelativeLayout>
 </LinearLayout>
