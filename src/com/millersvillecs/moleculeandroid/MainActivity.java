@@ -102,7 +102,7 @@ public class MainActivity extends Activity implements OnConfirmListener {
 												 getString(R.string.confirm_no_score));
 			this.confirmPlay.setListener(this);
 		} else {
-			startCategoryActivity();
+			startSelectionActivity();
 		}
 	}
 	
@@ -125,13 +125,13 @@ public class MainActivity extends Activity implements OnConfirmListener {
 			}
 		} else {
 			if(which == ConfirmDialog.POSITIVE) {
-				startCategoryActivity();
+				startSelectionActivity();
 			}
 		}
 	}
 	
-	private void startCategoryActivity() {
-		Intent intent = new Intent(this, CategoryActivity.class);
+	private void startSelectionActivity() {
+		Intent intent = new Intent(this, SelectionActivity.class);
 		MoleculeGamePreferences preferences = new MoleculeGamePreferences(this);
 		preferences.setUsername(this.username);
 		preferences.setAuth(this.auth);

@@ -24,12 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.millersvillecs.moleculeandroid.LoginActivity" android:label="@string/login" android:parentActivityName="com.millersvillecs.moleculeandroid.MainActivity"></activity><activity android:name="com.millersvillecs.moleculeandroid.RegisterActivity" android:label="@string/register" android:parentActivityName="com.millersvillecs.moleculeandroid.LoginActivity"></activity><activity 
-            android:name="com.millersvillecs.moleculeandroid.CategoryActivity" 
-            android:label="@string/category_header" 
-            android:parentActivityName="com.millersvillecs.moleculeandroid.MainActivity">
-        </activity>
-        <activity android:name="com.millersvillecs.moleculeandroid.SelectionActivity" android:label="@string/selection_header" android:parentActivityName="com.millersvillecs.moleculeandroid.CategoryActivity"></activity>
+        <activity android:name="com.millersvillecs.moleculeandroid.LoginActivity" android:label="@string/login" android:parentActivityName="com.millersvillecs.moleculeandroid.MainActivity"></activity><activity android:name="com.millersvillecs.moleculeandroid.RegisterActivity" android:label="@string/register" android:parentActivityName="com.millersvillecs.moleculeandroid.LoginActivity"></activity>
+        <activity android:name="com.millersvillecs.moleculeandroid.SelectionActivity" android:label="@string/selection_header" android:parentActivityName="com.millersvillecs.moleculeandroid.MainActivity"></activity>
         <activity android:name="com.millersvillecs.moleculeandroid.DescriptionActivity" android:parentActivityName="com.millersvillecs.moleculeandroid.SelectionActivity" android:label="@string/empty"></activity>
         <activity android:name="com.millersvillecs.moleculeandroid.HighScoreActivity" android:label="@string/high_scores_header" android:parentActivityName="com.millersvillecs.moleculeandroid.DescriptionActivity"></activity>
         <activity android:name="com.millersvillecs.moleculeandroid.GameActivity" android:label="@string/empty" android:parentActivityName="com.millersvillecs.moleculeandroid.DescriptionActivity"></activity>

@@ -9,8 +9,7 @@ public class MoleculeGamePreferences {
 	private static final String USERNAME = "USERNAME";
 	private static final String AUTH = "AUTH";
 	private static final String ALL_GAMES_JSON = "ALL_GAMES_JSON";
-	private static final String CATEGORICAL_GAMES_JSON = "CATEGORICAL_GAMES_JSON";
-	private static final  String POSITION = "POSITION";
+	private static final String POSITION = "POSITION";
 	
 	private SharedPreferences preferences;
 	private Editor editor;
@@ -33,10 +32,6 @@ public class MoleculeGamePreferences {
 		return this.preferences.getString(MoleculeGamePreferences.ALL_GAMES_JSON, "");
 	}
 	
-	public String getCategoricalGamesJSON() {
-		return this.preferences.getString(MoleculeGamePreferences.CATEGORICAL_GAMES_JSON, "");
-	}
-	
 	public int getPosition() {
 		return this.preferences.getInt(MoleculeGamePreferences.POSITION, -1);
 	}
@@ -53,11 +48,6 @@ public class MoleculeGamePreferences {
 	
 	public void setAllGamesJSON(String s) {
 		editor.putString(MoleculeGamePreferences.ALL_GAMES_JSON, s);
-		editor.commit();
-	}
-	
-	public void setCategoricalGamesJSON(String s) {
-		editor.putString(MoleculeGamePreferences.CATEGORICAL_GAMES_JSON, s);
 		editor.commit();
 	}
 	
