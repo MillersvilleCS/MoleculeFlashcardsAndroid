@@ -153,7 +153,8 @@ public class GeometryUtils {
 	    	normals.add(new Vector3(vert1, 0, vert2).normalize());
 	    	normals.add(new Vector3(vert1, 0, vert2).normalize());
 	    	colors.add(color2);
-	    	colors.add(color1);
+	    	//colors.add(color1);
+	    	colors.add(color2);
 	    	
 	    	
 	    	if(i+2 < resolution) {

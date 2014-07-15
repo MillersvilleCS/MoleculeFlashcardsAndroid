@@ -25,7 +25,7 @@ public class DescriptionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		MoleculeGamePreferences preferences = new MoleculeGamePreferences(this);
+		MoleculeGamePreferences preferences = new MoleculeGamePreferences(this);		
 		this.position = preferences.getPosition();
 		String gamesJSONText = preferences.getAllGamesJSON();
 		
