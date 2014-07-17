@@ -46,7 +46,7 @@ public class MainActivity extends Activity implements OnConfirmListener {
 			this.username = credentials[0];
 			this.auth = credentials[1];
 		} else {
-			this.username = "guest";
+			this.username = "Guest (Not Saved)";
 			this.auth = null;
 		}
 	}

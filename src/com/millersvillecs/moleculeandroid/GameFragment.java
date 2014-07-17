@@ -12,8 +12,7 @@ public class GameFragment extends Fragment {
 	private Question[] questions;
 	private int[] buttonStates;
 	private String gameSessionId;
-	private double score, scoreChange;
-	private int currentIndex, lastIndex, rank;
+	private int currentIndex, lastIndex, rank, score, scoreChange;
 	private long timeLimit, timeStart;
 	
 	@Override
@@ -36,11 +35,11 @@ public class GameFragment extends Fragment {
 		this.gameSessionId = gameSessionId;
 	}
 	
-	public void setScore(double score) {
+	public void setScore(int score) {
 		this.score = score;
 	}
 	
-	public void setScoreChange(double scoreChange) {
+	public void setScoreChange(int scoreChange) {
 		this.scoreChange = scoreChange;
 	}
 	
@@ -80,11 +79,11 @@ public class GameFragment extends Fragment {
 		return this.gameSessionId;
 	}
 	
-	public double getScore() {
+	public int getScore() {
 		return this.score;
 	}
 	
-	public double getScoreChange() {
+	public int getScoreChange() {
 		return this.scoreChange;
 	}
 	

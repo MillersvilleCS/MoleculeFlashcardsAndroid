@@ -34,8 +34,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 	private Handler timerHandler;
 	private Runnable timerRunnable;
 	private String auth, gameId, gameSessionId;
-	private double score, scoreChange;
-	private int currentQuestion = 0, lastAnswerIndex = -1, gameState, rank;
+	private int currentQuestion = 0, lastAnswerIndex = -1, gameState, rank, score, scoreChange;
 	private long timeLimit, timeStart;
 	private boolean wantedDismiss = false;
 	
@@ -196,8 +195,8 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
             
         } else if(this.gameState == GameLogic.PLAYING) {
             try{
-            	this.scoreChange = response.getDouble("score") - this.score;
-                this.score = response.getDouble("score");
+            	this.scoreChange = response.getInt("score") - this.score;
+                this.score = response.getInt("score");
                 this.gameUIPieces.updateScore(this.score);
                 this.gameUIPieces.updateScoreChange(this.scoreChange, true);
                 boolean correct = response.getBoolean("correct");
@@ -222,7 +221,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
             }
         } else {
             try{
-                this.score = response.getDouble("final_score");
+                this.score = response.getInt("final_score");
                 this.rank = response.getInt("rank");
                 updateHighScores(this.rank);
                 this.gameUIPieces.displayFinishScreen(this.score, this.rank);
