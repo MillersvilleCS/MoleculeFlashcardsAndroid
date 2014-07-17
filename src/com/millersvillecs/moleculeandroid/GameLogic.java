@@ -221,6 +221,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
             }
         } else {
             try{
+            	System.out.println(response.toString(4));
                 this.score = response.getInt("final_score");
                 this.rank = response.getInt("rank");
                 updateHighScores(this.rank);
@@ -343,6 +344,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         if(this.currentQuestion < this.questions.length) {
         	this.gameActivity.unlockOrientation();
             Question question = this.questions[this.currentQuestion];
+            this.gameUIPieces.setProgress(((double)(this.currentQuestion + 1) / (double)this.questions.length) * 100);
             this.gameUIPieces.displayQuestionText(question.getQuestionText());
             this.gameUIPieces.resetButtons();
             Answer[] answers = question.getAnswers();
@@ -356,12 +358,10 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
     }
 	
 	private void timeRanOut() {
-		this.progress.setMessage("Time ran out...");
-		this.progress.show();
+		//Note: Current bug with time out causes high score to be invalid rank
 		this.gameState = GameLogic.FINISHING;
         this.comm.endFlashcardGame(this.auth, this.gameSessionId, getTimeElapsed());
         this.wantedDismiss = true;
-        this.progress.dismiss();
 	}
 	
 	private void startUpdatingTime() {
@@ -389,6 +389,6 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 		if(currTime > this.timeLimit) {
 			time = this.timeLimit - this.timeStart;
 		}
-		return time;
+		return time - 15000; //Temp fix for server time differences, TODO: Change when server fixed
 	}
 }

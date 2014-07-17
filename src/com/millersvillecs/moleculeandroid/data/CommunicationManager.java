@@ -93,6 +93,7 @@ public class CommunicationManager {
 	}
 	
 	public void endFlashcardGame(String auth, String gameSessionId, long gameTime) {
+		System.out.println(gameTime);
 		Request request = new Request();
 		request.url = this.REQUEST_HANDLER_URL;
 		try {

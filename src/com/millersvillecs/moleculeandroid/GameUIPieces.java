@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ public class GameUIPieces {
     private GameActivity gameActivity;
     private Button[] buttons;
     private TextView questionText, scoreText, scoreChangeText, timeLimit;
+    private ProgressBar progressBar;
     private ScrollView scrollView;
     private Animation animation, scoreChangeAnimation, scoreChangeInstant;
     private Drawable defaultBackground, correctBackground, wrongBackground;
@@ -42,6 +44,8 @@ public class GameUIPieces {
         this.scoreChangeText = (TextView) gameActivity.findViewById(R.id.game_score_change);
         this.scoreChangeText.setText("0");
         this.timeLimit = (TextView) gameActivity.findViewById(R.id.game_time);
+        this.progressBar = (ProgressBar) gameActivity.findViewById(R.id.progress_bar);
+        this.progressBar.setProgress(0);
         
         this.scrollView = (ScrollView) gameActivity.findViewById(R.id.question_scrollbar);
         //this.scrollView.setScrollBarStyle(ScrollView.SCROLLBARS_INSIDE_INSET);
@@ -145,6 +149,10 @@ public class GameUIPieces {
     	}
     	
     	return states;
+    }
+    
+    public void setProgress(double amount) {
+    	this.progressBar.setProgress((int)amount);
     }
     
     public void updateScore(double score) {

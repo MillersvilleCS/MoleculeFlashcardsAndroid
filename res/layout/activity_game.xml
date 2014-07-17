@@ -49,6 +49,15 @@
 		android:paddingLeft="20dp"
 		android:paddingRight="20dp"
 		android:layout_marginBottom="175dp" />
+	
+	<ProgressBar
+	     android:id="@+id/progress_bar"
+	     style="@android:style/Widget.ProgressBar.Horizontal"
+	     android:progressDrawable="@drawable/progress_bar_custom"
+	     android:layout_gravity="bottom"
+         android:layout_width="match_parent"
+         android:layout_height="5dp"
+         android:layout_marginBottom="165dp" />
 
 	<ScrollView
 		android:id="@+id/question_scrollbar"
