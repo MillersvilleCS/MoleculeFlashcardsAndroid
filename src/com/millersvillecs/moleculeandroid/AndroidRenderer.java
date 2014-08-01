@@ -42,7 +42,7 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     boolean manuallyEditing = false;
         
 	public AndroidRenderer(Context context) {
-		camera = new Camera(50, 50, 1, 100);
+		camera = new Camera(50, 50, 0.001f, 100f);
 		camera.setTranslation(0, 0, -10);
 		camera.lookAt(0, 0, 1);
 		scene = new Scene();
@@ -162,9 +162,9 @@ public class AndroidRenderer implements GLSurfaceView.Renderer {
     
     public void zoomMolecule(float amount) {
     	if(this.moleculeNode != null && !this.changingMolecule) {
-    		if(amount < 0 && this.camera.getTranslation().z > -7f) {
+    		if(amount < 0 && this.camera.getTranslation().z > -4f) {
     			//do nothing
-    		} else if(amount > 0 && this.camera.getTranslation().z < -15f) {
+    		} else if(amount > 0 && this.camera.getTranslation().z < -20f) {
     			//do nothing
     		} else {
     			this.camera.translate(0, 0, -amount);

@@ -10,6 +10,13 @@ import android.widget.TextView;
 
 import com.millersvillecs.moleculeandroid.R;
 
+/**
+ * 
+ * @author connor
+ * 
+ * Custom implementation of a ListViewAdapter for our High Scores screen.
+ * 
+ */
 public class ScoreBaseAdapter extends BaseAdapter{
     
     private Context context;

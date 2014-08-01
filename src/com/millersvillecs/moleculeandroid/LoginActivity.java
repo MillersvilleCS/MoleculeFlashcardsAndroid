@@ -38,18 +38,29 @@ public class LoginActivity extends Activity implements OnCommunicationListener {
         return super.onOptionsItemSelected(item);
     }
 	
+	/**
+	 * Registration was done successfully, and now we must go all the way back to
+	 * the main menu - finish this activity.
+	 */
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode != RESULT_CANCELED) {
-			//register completed and not backed out of, go all the way back to main
 			finish();
 		}
 	}
 	
+	/**
+	 * Start the registration activity
+	 * @param view - button view pressed
+	 */
 	public void onRegisterButton(View view) {
 		Intent intent = new Intent(this, RegisterActivity.class);
 		startActivityForResult(intent, 1);
 	}
 	
+	/**
+	 * Show a progress dialog while the login request completes.
+	 * @param view - button view pressed
+	 */
 	public void onLoginButton(View view) {
 		this.progress = new ProgressDialog(this);
 		this.progress.setCanceledOnTouchOutside(false);
@@ -65,7 +76,11 @@ public class LoginActivity extends Activity implements OnCommunicationListener {
 		CommunicationManager communication = new CommunicationManager(this);
 		communication.login(email, password);
 	}
-
+	
+	/**
+	 * If we login successfully, write the auth and username to file.
+	 * If we do not, display the error the server returned.
+	 */
 	@Override
 	public void onRequestResponse(JSONObject response) {
 		this.progress.dismiss();
@@ -80,17 +95,20 @@ public class LoginActivity extends Activity implements OnCommunicationListener {
 				fileHandler.write("credentials", data);
 				finish();
 			} else {
-				new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
-						response.getString("error")).show();
+				new AlertDialog(this, 
+								getString(R.string.error_title), 
+								response.getString("error")).show();
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
-			new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
-					"Invalid Server Response").show();
+			new AlertDialog(this, 
+							getString(R.string.error_title), 
+							"Invalid Server Response").show();
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-			new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
-					"Invalid Server Response").show();
+			new AlertDialog(this,
+							getString(R.string.error_title), 
+							"Invalid Server Response").show();
 		}
 	}
 

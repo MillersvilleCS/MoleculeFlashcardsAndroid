@@ -8,6 +8,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 
+/**
+ * 
+ * @author connor
+ * 
+ * Convenience class for displaying a confirm dialog.
+ * 
+ */
 public class ConfirmDialog implements OnClickListener{
 	
 	public static final int POSITIVE = AlertDialog.BUTTON_POSITIVE,

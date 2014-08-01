@@ -21,9 +21,10 @@
         Have fun!
     </string>
     
-    <!-- Confirm Dialog -->
+    <!-- Dialogs -->
     <string name="confirm_positive">Yes</string>
     <string name="confirm_negative">No</string>
+    <string name="alert_ok">OK</string>
     
     <!-- Login Screen -->
     <string name="email_hint">Email Address</string>
@@ -65,11 +66,11 @@
         <![CDATA[
             <b>Primary Developers:</b><br/>
                 - <a href="http://connormahaffey.com/">Connor Mahaffey</a><br/>
-                - William Gervasio<br/>
+                - <a href="https://github.com/GameGeazer">Will Gervasio</a><br/>
             <b>Primary Contributors:</b><br/>
                 - <a href="http://samschlachter.com">Sam Schlachter</a><br/>
             <b>Project Leads:</b><br/>
-                - Gary Zoppetti<br/>
+                - <a href="http://cs.millersville.edu/fs/gzoppetti/">Gary Zoppetti</a><br/>
                 - <a href="http://gcl.cis.udel.edu/personal/taufer/index.php">Michela Taufer</a><br/><br/>
             <i>This project was made possible through the support of the
                National Science Foundation.</i>

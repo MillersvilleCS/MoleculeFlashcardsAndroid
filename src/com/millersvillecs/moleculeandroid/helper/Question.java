@@ -1,5 +1,13 @@
 package com.millersvillecs.moleculeandroid.helper;
 
+/**
+ * 
+ * @author connor
+ * 
+ * Convenience class for storing everything related to
+ * a given question.
+ * 
+ */
 public class Question {
     
     private String id, questionText;

@@ -32,7 +32,11 @@ public class GameActivity extends Activity implements OnTouchListener {
 	private GestureDetector gestureDetector;
 	
 	private int orientation;
-
+	
+	/**
+	 * Set up our GLES 2.0 Render and get a copy of our game state,
+	 * which is null if we starting the game for the first time.
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -82,6 +86,9 @@ public class GameActivity extends Activity implements OnTouchListener {
 		
     }
 	
+	/**
+	 * Handle gestures that let us rotate or zoom in on a molecule.
+	 */
 	private void initGestureDetectors() {
 		this.scaleGestureDetector = new ScaleGestureDetector(this, new OnScaleGestureListener() {
 
@@ -141,6 +148,10 @@ public class GameActivity extends Activity implements OnTouchListener {
 		});
 	}
 	
+	/**
+	 * Pass touch events to our gesture detector - let our renderer
+	 * know if we are moving it ourselves or if it should be auto-rotating.
+	 */
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		if(event.getPointerCount() >= 2) {
@@ -154,12 +165,22 @@ public class GameActivity extends Activity implements OnTouchListener {
 		return true;
 	}
 	
+	/**
+	 * Cancel the game if the user presses back.
+	 */
 	@Override
 	public void onBackPressed() {
 		this.gameLogic.cancel();
 	    finish();
 	}
 	
+	/**
+	 * If the user shuts off the screen and causes a pause, stop the game.
+	 * 
+	 * Pause is also called on a rotation change - if THAT is the case, we should
+	 * not cancel the game. If these two variables share the same orientation, this
+	 * pause was not caused by a rotation.
+	 */
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -169,6 +190,9 @@ public class GameActivity extends Activity implements OnTouchListener {
 		}
 	}
 	
+	/**
+	 * Save our state before a rotation.
+	 */
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -177,10 +201,18 @@ public class GameActivity extends Activity implements OnTouchListener {
 		}
 	}
     
+	/**
+	 * Handle the "Back" button on the finish screen.
+	 * @param view - button view pressed
+	 */
     public void onFinishBack(View view) {
         finish();
     }
     
+    /**
+     * Pass our button event to the game logic
+     * @param view - button pressed
+     */
     public void onAnswerButton(View view) {
     	this.gameLogic.onAnswerButton(view);
     }

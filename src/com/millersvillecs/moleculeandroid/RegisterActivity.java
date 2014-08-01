@@ -54,6 +54,10 @@ public class RegisterActivity extends Activity implements OnCommunicationListene
 		finish();
 	}
 	
+	/**
+	 * Get our information and register if the password's equal eachother.
+	 * @param view button view that was clicked
+	 */
 	public void onRegisterButton(View view) {
 		String email = this.emailField.getText().toString();
 		String username = this.usernameField.getText().toString();
@@ -68,10 +72,14 @@ public class RegisterActivity extends Activity implements OnCommunicationListene
 		} else {
 			this.passwordField.setText("");
 			this.passwordConfirmField.setText("");
-			new AlertDialog(getFragmentManager(), getString(R.string.error_title), getString(R.string.password_error)).show();
+			new AlertDialog(this, getString(R.string.error_title), getString(R.string.password_error)).show();
 		}
 	}
-
+	
+	/**
+	 * The result of a successful registration is an auth key. Save this to file
+	 * then go back to the main menu.
+	 */
 	@Override
 	public void onRequestResponse(JSONObject response) {
 		this.progress.dismiss();
@@ -87,17 +95,20 @@ public class RegisterActivity extends Activity implements OnCommunicationListene
 				setResult(RESULT_OK);
 				finish();
 			} else {
-				new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
-						response.getString("error")).show();
+				new AlertDialog(this,
+								getString(R.string.error_title), 
+								response.getString("error")).show();
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
-			new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
-					"Invalid Server Response").show();
+			new AlertDialog(this, 
+							getString(R.string.error_title), 
+							"Invalid Server Response").show();
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-			new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
-					"Invalid Server Response").show();
+			new AlertDialog(this,
+							getString(R.string.error_title), 
+							"Invalid Server Response").show();
 		}
 	}
 

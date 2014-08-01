@@ -1,6 +1,12 @@
 package com.millersvillecs.moleculeandroid.helper;
 
-
+/**
+ * 
+ * @author connor
+ * 
+ * Convenience class for storing a single high score item.
+ * 
+ */
 public class ScoreItem {
     
     private String rank, username, score;

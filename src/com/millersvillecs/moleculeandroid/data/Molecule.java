@@ -2,6 +2,14 @@ package com.millersvillecs.moleculeandroid.data;
 
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author connor
+ * 
+ * A collection of atoms and bonds - a convenience container for the
+ * geometry constructor.
+ * 
+ */
 public class Molecule {
 
     private ArrayList<Atom> atoms;

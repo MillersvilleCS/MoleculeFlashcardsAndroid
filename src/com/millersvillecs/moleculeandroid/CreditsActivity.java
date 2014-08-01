@@ -17,6 +17,7 @@ public class CreditsActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_credits);
 		
+		//Main body is just HTML, need to set it here instead of the XML
 		TextView body = (TextView) findViewById(R.id.credits_body_view);
 		Spanned formattedText = Html.fromHtml(getString(R.string.credits_body));
 		body.setText(formattedText);

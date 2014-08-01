@@ -1,5 +1,12 @@
 package com.millersvillecs.moleculeandroid.helper;
 
+/**
+ * 
+ * @author connor
+ * 
+ * Convenience class for storing answers to the game
+ * 
+ */
 public class Answer {
     
     private String id, text;

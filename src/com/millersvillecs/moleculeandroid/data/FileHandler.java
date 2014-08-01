@@ -13,6 +13,18 @@ import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+/**
+ * 
+ * @author connor
+ * 
+ * Handles reading/writing text files and images, in both permanent (data)
+ * and temporary (cache) file space.
+ * 
+ * Both data and cache can be erased by the user. Cache is more likely to be erased.
+ * 
+ * We stare our credentials in data, and our images in cache.
+ * 
+ */
 public class FileHandler {
 	
 	public static final String IMAGE_PNG = Bitmap.CompressFormat.PNG.name(),

@@ -2,6 +2,13 @@ package com.millersvillecs.moleculeandroid.helper;
 
 import android.graphics.Bitmap;
 
+/**
+ * 
+ * @author connor
+ * 
+ * Convenience class for storing a Game Selection Item.
+ * 
+ */
 public class SelectionItem {
 	
 	private Bitmap image;

@@ -25,6 +25,13 @@ import org.json.JSONException;
 
 import android.os.AsyncTask;
 
+/**
+ * 
+ * @author connor
+ * 
+ * Download and parse an SDF file.
+ * 
+ */
 public class ExecuteMoleculeDownload extends AsyncTask<Request, Void, Molecule>{
 	
 	private CommunicationManager commRef;

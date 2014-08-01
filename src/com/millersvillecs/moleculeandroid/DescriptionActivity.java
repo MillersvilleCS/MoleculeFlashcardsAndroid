@@ -22,6 +22,9 @@ public class DescriptionActivity extends Activity {
 	private int position;
 	private JSONArray fullGameJSON;
 	
+	/**
+	 * Using our stored game JSON, read the info and set it to the screen.
+	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		

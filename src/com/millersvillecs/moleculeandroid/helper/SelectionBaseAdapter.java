@@ -11,6 +11,13 @@ import android.widget.TextView;
 
 import com.millersvillecs.moleculeandroid.R;
 
+/**
+ * 
+ * @author connor
+ * 
+ * Custom implementation of a ListViewAdapter for our Game Selection screen.
+ * 
+ */
 public class SelectionBaseAdapter extends BaseAdapter{
 	
 	private Context context;

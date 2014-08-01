@@ -5,6 +5,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+/**
+ * 
+ * @author connor
+ * 
+ * Stores game preferences across all activities in our class.
+ * 
+ */
 public class MoleculeGamePreferences {
 	private static final String USERNAME = "USERNAME";
 	private static final String AUTH = "AUTH";

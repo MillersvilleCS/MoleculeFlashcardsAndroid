@@ -27,6 +27,13 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
+/**
+ * 
+ * @author connor
+ * 
+ * Execute a post statement - aka all of the API calls to ExSciTecH
+ * 
+ */
 //http://www.androidsnippets.com/executing-a-http-post-request-with-httpclient
 public class ExecutePost extends AsyncTask<Request, Void, JSONObject>{
 	

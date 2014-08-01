@@ -10,6 +10,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
+/**
+ * 
+ * @author connor
+ * 
+ * Download the images for the selection screen.
+ * 
+ * Check the header with a local copy of the file - do not
+ * download the whole image if our cache is up to date.
+ * 
+ */
 public class ExecuteImageDownload extends AsyncTask<String, Void, Bitmap>{
 	
 	private CommunicationManager commRef;

@@ -15,10 +15,24 @@ import com.millersvillecs.moleculeandroid.data.CommunicationManager;
 import com.millersvillecs.moleculeandroid.data.Molecule;
 import com.millersvillecs.moleculeandroid.data.MoleculeGamePreferences;
 import com.millersvillecs.moleculeandroid.data.OnCommunicationListener;
+import com.millersvillecs.moleculeandroid.helper.AlertDialog;
 import com.millersvillecs.moleculeandroid.helper.Answer;
+import com.millersvillecs.moleculeandroid.helper.OnConfirmListener;
 import com.millersvillecs.moleculeandroid.helper.Question;
 
-public class GameLogic implements OnDismissListener, OnCommunicationListener {
+/**
+ * 
+ * @author connor
+ * 
+ * This class handles all the logic of the game. The biggest and most repetitive section is saving
+ * or resuming the state of the game. This is necessary because rotations in Android destroy the
+ * current activity.
+ * 
+ * Android's rotations are locked while an item is animating, but any other time it can be rotated by
+ * the user.
+ * 
+ */
+public class GameLogic implements OnDismissListener, OnCommunicationListener, OnConfirmListener {
 	
 	private static int LOADING = 1, PLAYING = 2, FINISHING = 3;
 	
@@ -36,13 +50,21 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 	private String auth, gameId, gameSessionId;
 	private int currentQuestion = 0, lastAnswerIndex = -1, gameState, rank, score, scoreChange;
 	private long timeLimit, timeStart;
-	private boolean wantedDismiss = false;
+	private boolean wantedDismiss = false, timerStop = false;
 	
+	/**
+	 * Get our game preferences and save a reference to our parent.
+	 * 
+	 * @param gameActivity - parent activity - need to lock orientation, set title, etc.
+	 */
 	public GameLogic(GameActivity gameActivity) {
 		this.gameActivity = gameActivity;
 		this.preferences = new MoleculeGamePreferences(gameActivity);
 	}
 	
+	/**
+	 * Start our game for the first time - need to load our flashcard JSON.
+	 */
 	public void start() {
 		this.gameActivity.lockOrientation();
 		this.progress = new ProgressDialog(this.gameActivity);
@@ -66,6 +88,13 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         this.comm.loadFlashcardGame(this.auth, this.gameId);
 	}
 	
+	/**
+	 * Reload our game from a saved state.
+	 * 
+	 * If we rotated while on the ending screen be sure to display that instead.
+	 * 
+	 * @param state - the state of key variables in our game
+	 */
 	public void reload(GameFragment state) {
 		
 		this.questions = state.getQuestions();
@@ -116,6 +145,11 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         }
 	}
 	
+	/**
+	 * Save our state to reload after a rotation.
+	 * 
+	 * @param state - a reference to a state we can save to
+	 */
 	public void save(GameFragment state) {
 		this.timerHandler.removeCallbacks(this.timerRunnable);
 		state.setMolecules(this.molecules);
@@ -131,11 +165,18 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 		state.setButtonStates(this.gameUIPieces.getButtonStates());
 	}
 	
+	/**
+	 * Cancel the game/request/loading bar
+	 */
 	public void cancel() {
 		this.progress.dismiss();
 		this.comm.cancel();
 	}
 	
+	/**
+	 * Get some key information from our saved Game JSON such
+	 * as the title of the game to display in the application bar.
+	 */
 	private void init() {
 		this.auth = this.preferences.getAuth();
         int position = this.preferences.getPosition();
@@ -154,6 +195,9 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         }
 	}
 	
+	/**
+	 * Handler for dismissing the loading (progress) bar
+	 */
 	@Override
 	public void onDismiss(DialogInterface dialog) {
         if(this.wantedDismiss) {
@@ -162,12 +206,25 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
             this.gameActivity.finish();
         }
 	}
-
+	
+	/**
+	 * If we are in the loading state, the response given is the JSON
+	 * for a specific game, such as the text of the questions, the answers
+	 * and the molecule we'll need. Build data structures to store these,
+	 * then load the molecule models.
+	 * 
+	 * If we are in the playing state, the response given is a change and score
+	 * and whether our answer was right or wrong. After we change the button state
+	 * we should unlock the orientation again.
+	 * 
+	 * Otherwise we are ending the game, and should update our local copy of this
+	 * game's highscores, then display the final screen.
+	 */
 	@Override
 	public void onRequestResponse(JSONObject response) {
-		 if(this.gameState == GameLogic.LOADING) {
-			 try{
-                this.gameSessionId = response.getString("game_session_id");
+		if(this.gameState == GameLogic.LOADING) {
+			try{
+				this.gameSessionId = response.getString("game_session_id");
                 JSONArray jQuestions = response.getJSONArray("questions");
                 this.questions = new Question[jQuestions.length()];
                 this.molecules = new Molecule[jQuestions.length()];
@@ -184,9 +241,11 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
                                                      answers);
                 }
             } catch(JSONException e) {
-                e.printStackTrace();
-                this.gameActivity.finish();
-                return;
+            	showErrorMessage("Invalid server response.");
+            	return;
+            } catch(NullPointerException e) {
+            	showErrorMessage("Could not connect to the internet.");
+            	return;
             }
             
             this.currentQuestion = 0;
@@ -216,24 +275,35 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
                     this.gameActivity.unlockOrientation();
                 }
             } catch(JSONException e) {
-                e.printStackTrace();
-                this.gameActivity.finish();
+            	showErrorMessage("Invalid server response.");
+            	return;
+            } catch(NullPointerException e) {
+            	showErrorMessage("Could not connect to the internet.");
+            	return;
             }
         } else {
             try{
-            	System.out.println(response.toString(4));
                 this.score = response.getInt("final_score");
                 this.rank = response.getInt("rank");
                 updateHighScores(this.rank);
                 this.gameUIPieces.displayFinishScreen(this.score, this.rank);
                 this.gameActivity.unlockOrientation();
             } catch(JSONException e) {
-                e.printStackTrace();
-                this.gameActivity.finish();
+            	showErrorMessage("Invalid server response.");
+            	return;
+            } catch(NullPointerException e) {
+            	showErrorMessage("Could not connect to the internet.");
+            	return;
             }
         }
 	}
-
+	
+	/**
+	 * Store the molecules we downloaded and parsed.
+	 * 
+	 * If we are finished downloading them, we can dismiss
+	 * the loading screen and start playing the game.
+	 */
 	@Override
 	public void onMoleculeResponse(Molecule molecule) {
 		this.molecules[this.currentQuestion] = molecule;
@@ -254,6 +324,12 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         }
 	}
 	
+	/**
+	 * Get which button we pressed, then make an API call to see if it is right.
+	 * Lock the orientation while the call is happening so our state is not reset.
+	 * 
+	 * @param view - button view
+	 */
 	public void onAnswerButton(View view) {
 		if(this.lastAnswerIndex == -1 &&
 		   this.currentQuestion < this.questions.length &&
@@ -299,6 +375,11 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 	@Override
 	public void onImageResponse(Bitmap bitmap, boolean error) {}
 	
+	/**
+	 * Let the renderer get the current molecule.
+	 * 
+	 * @return - the molecule for the current question
+	 */
 	public Molecule getCurrentMolecule() {
 		if(this.gameState == GameLogic.PLAYING && this.currentQuestion != -1) {
             return this.molecules[this.currentQuestion];
@@ -307,6 +388,11 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         }
 	}
 	
+	/**
+	 * Update our local high scores data so we don't have to make another API call.
+	 * 
+	 * @param rank - which rank we are updating/inserting
+	 */
 	private void updateHighScores(int rank) {
     	try{
             JSONArray gamesJSON = new JSONArray(this.preferences.getAllGamesJSON());
@@ -338,6 +424,10 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         }
     }
 	
+	/**
+	 * Advance to the next question in the game or end the game if this
+	 * was the last question.
+	 */
 	private void nextQuestion() {
         this.currentQuestion++;
         
@@ -357,6 +447,9 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         }
     }
 	
+	/**
+	 * End the game because the time ran out.
+	 */
 	private void timeRanOut() {
 		//Note: Current bug with time out causes high score to be invalid rank
 		this.gameState = GameLogic.FINISHING;
@@ -364,12 +457,19 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
         this.wantedDismiss = true;
 	}
 	
+	/**
+	 * Start our timer - have it update once per second
+	 */
 	private void startUpdatingTime() {
 		this.timerHandler = new Handler();
 		
 		this.timerRunnable = new Runnable() {
 			@Override
 			public void run() {
+				if(timerStop) {
+					return;
+				}
+				
 				long time = timeLimit - System.currentTimeMillis();
 				gameUIPieces.updateTime(time);
 				if(time <= 0) {
@@ -383,6 +483,11 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 		this.timerHandler.postDelayed(timerRunnable, 0);
 	}
 	
+	/**
+	 * Calculated elapsed time.
+	 * 
+	 * @return milliseconds elapsed
+	 */
 	private long getTimeElapsed() {
 		long currTime = System.currentTimeMillis();
 		long time = currTime - this.timeStart;
@@ -390,5 +495,18 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener {
 			time = this.timeLimit - this.timeStart;
 		}
 		return time - 15000; //Temp fix for server time differences, TODO: Change when server fixed
+	}
+	
+	private void showErrorMessage(String message) {
+		this.timerStop = true;
+		
+		AlertDialog error = new AlertDialog(this.gameActivity, "Error!", message);
+		error.setListener(this);
+		error.show();
+	}
+
+	@Override
+	public void onConfirmResponse(int which) {
+		this.gameActivity.finish();
 	}
 }

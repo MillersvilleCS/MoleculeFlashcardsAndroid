@@ -7,6 +7,19 @@ import org.json.JSONObject;
 
 import android.graphics.Bitmap;
 
+/**
+ * 
+ * @author connor
+ * 
+ * This class implements Sam's API. Android async functions are called
+ * to perform the web requests. When these functions complete, they
+ * contact the CommunicationManager, which in turn, calls the original
+ * class.
+ * 
+ * The async functions on Android have specific parameters, which is why
+ * the CommunicationManager class acts as a middleman between them.
+ * 
+ */
 public class CommunicationManager {
 	
 	private final String REQUEST_HANDLER_URL = "https://exscitech.org/request_handler.php",
@@ -14,6 +27,9 @@ public class CommunicationManager {
 	private OnCommunicationListener callback;
 	private boolean cancelled = false;
 	
+	/**
+	 * @param callback - class to send results to
+	 */
 	public CommunicationManager(OnCommunicationListener callback) {
 		this.callback = callback;
 	}

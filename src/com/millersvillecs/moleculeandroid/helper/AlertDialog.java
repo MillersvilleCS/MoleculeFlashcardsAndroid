@@ -1,27 +1,53 @@
 package com.millersvillecs.moleculeandroid.helper;
 
-import android.app.DialogFragment;
-import android.app.FragmentManager;
-import android.os.Bundle;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
-public class AlertDialog {
+import com.millersvillecs.moleculeandroid.R;
+
+/**
+ * 
+ * @author connor
+ * 
+ * Convenience class for showing dialogs.
+ * 
+ */
+public class AlertDialog implements OnClickListener {
 	
-	private FragmentManager fragmentManager;
-	private String title, message;
+	private android.app.AlertDialog alert;
+	private OnConfirmListener listener;
 	
-	public AlertDialog(FragmentManager fragmentManager, String title, String message) {
-		this.fragmentManager = fragmentManager;
-		this.title = title;
-		this.message = message;
+	public AlertDialog(Context context, String title, String message) {
+		Builder builder = new Builder(context);
+		
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setPositiveButton(R.string.alert_ok, this);
+        
+        alert = builder.create();
+        alert.show();
+	}
+
+	@Override
+	public void onClick(DialogInterface dialog, int which) {
+		if(this.listener != null) {
+			this.listener.onConfirmResponse(which);
+		}
+		alert.dismiss();
 	}
 	
 	public void show() {
-		DialogFragment error = new AlertDialogFragment();
-		Bundle args = new Bundle();
-		args.putString("message", this.message);
-		args.putString("title", this.title);
-		error.setArguments(args);
-	    error.show(this.fragmentManager, "error");
+		alert.show();
+	}
+	
+	public void dismiss() {
+		alert.dismiss();
+	}
+	
+	public void setListener(OnConfirmListener listener) {
+		this.listener = listener;
 	}
 }
 

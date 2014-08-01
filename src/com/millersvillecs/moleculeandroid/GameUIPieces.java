@@ -22,6 +22,13 @@ public class GameUIPieces {
     private Animation animation, scoreChangeAnimation, scoreChangeInstant;
     private Drawable defaultBackground, correctBackground, wrongBackground;
     
+    /**
+     * Get references to all our buttons, their background resources, the question,
+     * score, and score change text labels, the progress bar, the scroll view, and
+     * all our animations.
+     *  
+     * @param gameActivity - a reference to the parent activity class which we need to get our resources
+     */
     public GameUIPieces (GameActivity gameActivity) {
         this.gameActivity = gameActivity;
         this.buttons = new Button[8];
@@ -59,6 +66,13 @@ public class GameUIPieces {
         hideQuestionText();
     }
     
+    /**
+     * Reset our button states (i.e. at the beginning of a new question)
+     * 
+     * This method is deprecated, but the new version is only in API level 16+ - we use 15
+     * 
+     * @param force - even if the button is not being shown, change its properties
+     */
     @SuppressWarnings("deprecation")
     public void resetButtons(boolean force) {
     	for(int i = 0; i < this.buttons.length; i++) {
@@ -77,6 +91,14 @@ public class GameUIPieces {
         resetButtons(false);
     }
     
+    /**
+     * Set the text of a given button and make it visible.
+     * 
+     * If we use more than 6 buttons enable the scroll view display.
+     * 
+     * @param index - button index to use
+     * @param message - the text to set on the button
+     */
     public void displayButton(int index, String message) {
         this.buttons[index].setText(message);
         this.buttons[index].setVisibility(View.VISIBLE);
@@ -87,13 +109,26 @@ public class GameUIPieces {
         }
     }
     
+    /**
+     * Do our fade-in/fade-out animation
+     * 
+     * @param index - button index
+     */
     public void markWorking(int index) {
     	this.buttons[index].startAnimation(this.animation);
     }
     
+    /**
+     * Change our button to correct (green background, white text color)
+     * 
+     * Disable all other buttons till next question, fade them to show they
+     * are unpressable.
+     * 
+     * @param index - button index
+     */
     @SuppressWarnings("deprecation")
 	public void markCorrect(int index) {
-    	this.buttons[index].setBackgroundDrawable(this.correctBackground);//new version is above our min-level
+    	this.buttons[index].setBackgroundDrawable(this.correctBackground);
     	this.buttons[index].setTextColor(Color.WHITE);
     	for(int i = 0; i < this.buttons.length; i++) {
     		if(i != index && this.buttons[i].isShown()) {
@@ -103,6 +138,11 @@ public class GameUIPieces {
     	}
     }
     
+    /**
+     * Mark an answer as wrong and stop animating it.
+     * 
+     * @param index - button index
+     */
     @SuppressWarnings("deprecation")
     public void markWrong(int index) {
     	this.buttons[index].clearAnimation();
@@ -126,6 +166,14 @@ public class GameUIPieces {
         }
     }
     
+    /**
+     * Set our activity view to the finish screen. We don't use a separate
+     * activity here, since when we are done, we want to go back to the
+     * description screen.
+     * 
+     * @param score - our final score
+     * @param rank - our final rank
+     */
     public void displayFinishScreen(double score, int rank) {
         this.gameActivity.setContentView(R.layout.activity_game_finish);
         
@@ -136,6 +184,11 @@ public class GameUIPieces {
         rankView.setText("Rank: #" + rank);
     }
     
+    /**
+     * Get our button states so we can save and resume them if necessary.
+     * 
+     * @return an int array representing the state of each button
+     */
     public int[] getButtonStates() {
     	int[] states = new int[this.buttons.length];
     	for(int i = 0; i < states.length; i++) {
@@ -164,6 +217,12 @@ public class GameUIPieces {
     	this.scoreText.setText((int)score + "");
     }
     
+    /**
+     * Set our score change text, color, and animate it.
+     * 
+     * @param scoreChange - how much the score changed
+     * @param doAnimation - do the animation flag
+     */
     public void updateScoreChange(double scoreChange, boolean doAnimation) {
     	this.scoreChangeText.clearAnimation();
     	if(doAnimation) {
@@ -181,6 +240,12 @@ public class GameUIPieces {
     	}
     }
     
+    /**
+     * Update our timer - take the long value passed back and convert it to a string,
+     * set the text in the UI.
+     * 
+     * @param timeLong - the time in milliseconds
+     */
     public void updateTime(long timeLong) {
     	if(timeLong < 0) {
     		timeLong = 0;

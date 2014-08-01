@@ -43,6 +43,10 @@ public class SelectionActivity extends Activity implements OnItemClickListener,
 	private JSONArray gamesJSON;
 	private boolean wantedDismiss = false;
 	
+	/**
+	 * If we are seeing this page for the first time, pull the categories from the internet.
+	 * Otherwise load them from the saved state
+	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
@@ -75,8 +79,9 @@ public class SelectionActivity extends Activity implements OnItemClickListener,
 				
 			} catch (JSONException e) {
 				e.printStackTrace();
-				new AlertDialog(getFragmentManager(), getString(R.string.error_title), 
-						"Could not restore state.").show();
+				new AlertDialog(this,
+								getString(R.string.error_title), 
+								"Could not restore state.").show();
 			}
 		}
 	}
@@ -94,7 +99,11 @@ public class SelectionActivity extends Activity implements OnItemClickListener,
         }
         return super.onOptionsItemSelected(item);
     }
-
+	
+	/**
+	 * Get the game clicked, and use that ID to set the index inside the JSON where
+	 * that game resides. Set it in our preferences to pass to the next activity.
+	 */
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		try{
@@ -117,7 +126,10 @@ public class SelectionActivity extends Activity implements OnItemClickListener,
 	    Intent intent = new Intent(this, DescriptionActivity.class);
 	    startActivity(intent);
 	}
-
+	
+	/**
+	 * Get the JSON response that lists all the games and store it. Begin downloading images.
+	 */
 	@Override
 	public void onRequestResponse(JSONObject response) {
 		try{
@@ -135,20 +147,22 @@ public class SelectionActivity extends Activity implements OnItemClickListener,
 				this.comm.downloadImage(this.urls.remove(0), 
 				                        this.fileHandler.createFileTemp(ids.get(0) + ".png"));
 			} else {
-				new AlertDialog(getFragmentManager(), getString(R.string.error_title),  response.getString("error")).show();
+				new AlertDialog(this, getString(R.string.error_title),  response.getString("error")).show();
 				this.wantedDismiss = true;
 		        this.progress.dismiss();
 			}
 		} catch(JSONException e) {
 			e.printStackTrace();
-			new AlertDialog(getFragmentManager(), getString(R.string.error_title),  
-					"Invalid Server Response").show();
+			new AlertDialog(this,
+							getString(R.string.error_title),  
+							"Invalid Server Response").show();
 			this.wantedDismiss = true;
 	        this.progress.dismiss();
 		} catch(NullPointerException e) {
 		    e.printStackTrace();
-            new AlertDialog(getFragmentManager(), getString(R.string.error_title),  
-            		"Could not connect to network").show();
+            new AlertDialog(this,
+            				getString(R.string.error_title),  
+            				"Could not connect to network").show();
             this.wantedDismiss = true;
             this.progress.dismiss();
 		}
@@ -156,7 +170,14 @@ public class SelectionActivity extends Activity implements OnItemClickListener,
 
 	@Override
 	public void onMoleculeResponse(Molecule molecule) {}
-
+	
+	/**
+	 * Get the images downloaded and save them. If the bitmap is null, there was
+	 * either an error (in which case display it) or the copy in our cache is the
+	 * same as the server and it doesn't need re-downloaded.
+	 * 
+	 * Once we have our images we can create the listview
+	 */
 	@Override
 	public void onImageResponse(Bitmap bitmap, boolean error) {
 		String id = this.ids.remove(0);
@@ -166,8 +187,9 @@ public class SelectionActivity extends Activity implements OnItemClickListener,
 		        this.urls.clear();
 		        this.wantedDismiss = true;
                 this.progress.dismiss();
-                new AlertDialog(getFragmentManager(), getString(R.string.error_title),  
-                		"Could not connect to network!").show();
+                new AlertDialog(this,
+                				getString(R.string.error_title),  
+                				"Could not connect to network!").show();
                 return;
 		    }
 		} else {
@@ -181,7 +203,9 @@ public class SelectionActivity extends Activity implements OnItemClickListener,
                                     this.fileHandler.createFileTemp(ids.get(0) + ".png"));
         }
 	}
-
+	/**
+	 * Dialog dismiss handler.
+	 */
 	@Override
 	public void onDismiss(DialogInterface dialog) {
 		if(this.wantedDismiss) {
@@ -191,6 +215,13 @@ public class SelectionActivity extends Activity implements OnItemClickListener,
 		}
 	}
 	
+	/**
+	 * ListViews in Android must be overridden by a custom class. Our custom class
+	 * takes SelectionItem objects. Create these with the data from our JSON request
+	 * and the images we just got done loading
+	 * 
+	 * Create our listview and set the adapter to be this class.
+	 */
 	private void createGameSelections() {
 		this.games = new SelectionItem[this.gamesJSON.length()];
         try{
@@ -204,8 +235,9 @@ public class SelectionActivity extends Activity implements OnItemClickListener,
             									  game.getInt("id"));
             }
         } catch(JSONException e) {
-        	new AlertDialog(getFragmentManager(), getString(R.string.error_title),  
-        						"Invalid Game List").show();
+        	new AlertDialog(this,
+        					getString(R.string.error_title),  
+        					"Invalid Game List").show();
         	if(this.progress != null) {
         		this.wantedDismiss = true;
     	        this.progress.dismiss();
@@ -224,6 +256,9 @@ public class SelectionActivity extends Activity implements OnItemClickListener,
         }
 	}
 	
+	/**
+	 * If the is about to sleep, dismiss the progress dialog.
+	 */
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -233,6 +268,9 @@ public class SelectionActivity extends Activity implements OnItemClickListener,
         }
 	}
 	
+	/**
+	 * Put our JSON in the instance state to get back on rotations
+	 */
 	@Override
 	protected void onSaveInstanceState (Bundle outState) {
 		outState.putString("fullGameJSON", this.fullGameJSON.toString());

@@ -14,7 +14,10 @@ import com.millersvillecs.moleculeandroid.helper.ScoreBaseAdapter;
 import com.millersvillecs.moleculeandroid.helper.ScoreItem;
 
 public class HighScoreActivity extends Activity {
-
+	
+	/**
+	 * Initialize our list view from the JSON stored in our Game Preferences object.
+	 */
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         

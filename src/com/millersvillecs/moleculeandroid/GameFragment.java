@@ -6,6 +6,17 @@ import android.os.Bundle;
 import com.millersvillecs.moleculeandroid.data.Molecule;
 import com.millersvillecs.moleculeandroid.helper.Question;
 
+
+/**
+ * 
+ * @author connor
+ * 
+ * This class stores all data necessary to reload a game after a rotation.
+ * 
+ * Never store references to an Activity or UI component here. Since this fragment
+ * is marked to not be garbage collected while the rest of the activity is on rotation,
+ * storing a reference to one of those components here will cause a memory leak.
+ */
 public class GameFragment extends Fragment {
 	
 	private Molecule[] molecules;

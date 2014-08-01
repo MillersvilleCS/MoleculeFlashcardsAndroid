@@ -22,6 +22,15 @@ public class MainActivity extends Activity implements OnConfirmListener {
 	private ConfirmDialog confirmPlay, confirmLogout;
 	private FileHandler fileHandler;
 	
+	/**
+	 * If we aren't logged in, and the welcome denoting file is missing, display
+	 * our one-time welcome message (after writing the welcome file so it never)
+	 * displays again.
+	 * 
+	 * The first "if" statement prevents us from reading from the file system twice if
+	 * we don't need to. Someone that has logged in is guaranteed to have already seen
+	 * the welcome message.
+	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		init();
@@ -30,7 +39,7 @@ public class MainActivity extends Activity implements OnConfirmListener {
 			if(welcome == null) {
 				String[] empty = {""};
 				this.fileHandler.write("welcome", empty);
-				new AlertDialog(getFragmentManager(),
+				new AlertDialog(this,
 								getString(R.string.welcome_title),
 								getString(R.string.welcome_message)).show();
 			}
@@ -38,6 +47,9 @@ public class MainActivity extends Activity implements OnConfirmListener {
 		setContentView(R.layout.activity_main);
 	}
 	
+	/**
+	 * See if we have an auth code saved.
+	 */
 	private void init() {
 		this.fileHandler = new FileHandler(this);
 		String[] credentials = this.fileHandler.read("credentials");
@@ -51,6 +63,9 @@ public class MainActivity extends Activity implements OnConfirmListener {
 		}
 	}
 	
+	/**
+	 * Put the proper icon in the upper right - either login or logout
+	 */
 	private void setIcon() {
 		this.mainMenu.clear();
 		MenuInflater inflater = getMenuInflater();
@@ -61,6 +76,10 @@ public class MainActivity extends Activity implements OnConfirmListener {
 	    }
 	}
 	
+	/**
+	 * Android API call that creates the options menu - override to
+	 * add the correct icon.
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    // Inflate the menu items for use in the action bar
@@ -70,6 +89,9 @@ public class MainActivity extends Activity implements OnConfirmListener {
 	    return super.onCreateOptionsMenu(menu);
 	}
 	
+	/**
+	 * Do the correct action depending on which icon button is pressed.
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
@@ -90,11 +112,19 @@ public class MainActivity extends Activity implements OnConfirmListener {
 	    }
 	}
 	
+	/**
+	 * Logging in or registering returns a result to this activity. This means
+	 * we are now logged in and need to set our icon.
+	 */
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		init();//reset icon
 		setIcon();
 	}
 	
+	/**
+	 * Play unless we are not logged in, in which case warn the user.
+	 * @param view
+	 */
 	public void onPlayButton(View view) {
 		if(this.loggedIn == false && this.confirmPlay == null) {
 			this.confirmPlay = new ConfirmDialog(this, 
@@ -116,6 +146,13 @@ public class MainActivity extends Activity implements OnConfirmListener {
 		startActivity(intent);
 	}
 	
+	/**
+	 * Handler for our confirm dialogs:
+	 * Are you sure you want to log out?
+	 * Are you sure you want to play without being logged in?
+	 * 
+	 * Both of these prompts do nothing if the user hits no or back.
+	 */
 	@Override
 	public void onConfirmResponse(int which) {
 		if(this.askingLogout) {
@@ -130,6 +167,10 @@ public class MainActivity extends Activity implements OnConfirmListener {
 		}
 	}
 	
+	/**
+	 * Get our preferences and set our credential information in them. Start the
+	 * Selection Activity.
+	 */
 	private void startSelectionActivity() {
 		Intent intent = new Intent(this, SelectionActivity.class);
 		MoleculeGamePreferences preferences = new MoleculeGamePreferences(this);
@@ -138,6 +179,9 @@ public class MainActivity extends Activity implements OnConfirmListener {
 	    startActivity(intent);
 	}
 	
+	/**
+	 * Delete the credentials file and reset our icon.
+	 */
 	private void logout() {
 		this.fileHandler = new FileHandler(this);
     	fileHandler.delete("credentials");
