@@ -74,7 +74,7 @@ public class ExecuteMoleculeDownload extends AsyncTask<Request, Void, Molecule>{
 			/* TODO: Switch to passing StringBuffer and using in-line scanning methods? - Performance? */
             StringBuffer content = new StringBuffer();
             String line = " ";
-            while(line != null && !line.contains("M  END")){
+            while(line != null && !line.contains("M  END") && !line.contains("M  CHG")){
                 content.append(line);
                 content.append("\n");
                 line = reader.readLine();

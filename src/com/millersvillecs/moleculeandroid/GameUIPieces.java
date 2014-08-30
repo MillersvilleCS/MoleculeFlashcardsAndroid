@@ -2,6 +2,7 @@ package com.millersvillecs.moleculeandroid;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.text.Html;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -161,8 +162,13 @@ public class GameUIPieces {
     
     public void displayQuestionText(String message) {
         if(!message.equals("")) {
-            this.questionText.setText(message);
+        	message = message.replace("<sub>", "<sub><small><small>");
+        	message = message.replace("</sub>", "</small></small></sub>");
+            this.questionText.setText(Html.fromHtml(message));
             this.questionText.setVisibility(View.VISIBLE);
+        } else {
+        	this.questionText.setText("");
+            this.questionText.setVisibility(View.INVISIBLE);
         }
     }
     

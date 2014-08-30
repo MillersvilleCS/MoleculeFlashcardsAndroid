@@ -79,11 +79,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener, On
         
         this.scoreChange = 0;
         this.gameState = GameLogic.LOADING;
-        //has to be here
-        this.timeStart = System.currentTimeMillis();
-    	this.timeLimit = timeStart + this.timeLimit;
-    	startUpdatingTime();
-    	//
+        
         this.comm = new CommunicationManager(this);
         this.comm.loadFlashcardGame(this.auth, this.gameId);
 	}
@@ -311,11 +307,10 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener, On
         if(this.currentQuestion < this.molecules.length) {
             this.comm.getMedia(this.gameSessionId, 0, this.questions[this.currentQuestion].getId());
         } else {
-        	/* - should be here
         	this.timeStart = System.currentTimeMillis();
         	this.timeLimit = timeStart + this.timeLimit;
         	startUpdatingTime();
-        	*/
+        	
             this.wantedDismiss = true;
             this.progress.dismiss();
             this.currentQuestion = -1;
@@ -494,7 +489,7 @@ public class GameLogic implements OnDismissListener, OnCommunicationListener, On
 		if(currTime > this.timeLimit) {
 			time = this.timeLimit - this.timeStart;
 		}
-		return time - 15000; //Temp fix for server time differences, TODO: Change when server fixed
+		return time;
 	}
 	
 	private void showErrorMessage(String message) {
